@@ -1,5 +1,7 @@
+"use client";
+
 import React from "react";
-import { Helmet } from "react-helmet-async";
+import Head from "next/head";
 
 interface SEOProps {
   title?: string;
@@ -40,7 +42,7 @@ const SEO: React.FC<SEOProps> = ({
     : `https://lominic.com${image}`;
 
   return (
-    <Helmet>
+    <Head>
       {/* Primary Meta Tags */}
       <title>{title}</title>
       <meta name="title" content={title} />
@@ -91,7 +93,7 @@ const SEO: React.FC<SEOProps> = ({
       {/* Additional Meta Tags */}
       <meta name="theme-color" content="#FE5C02" />
       <meta name="msapplication-TileColor" content="#FE5C02" />
-    </Helmet>
+    </Head>
   );
 };
 
