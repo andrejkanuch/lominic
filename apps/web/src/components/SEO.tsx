@@ -49,7 +49,11 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="author" content={author} />
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
+      <meta
+        name="robots"
+        content={noindex ? "noindex, nofollow" : "index, follow"}
+      />
+      <meta name="revisit-after" content="7 days" />
 
       {/* Canonical URL */}
       <link rel="canonical" href={fullUrl} />
@@ -83,16 +87,21 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="twitter:description" content={description} />
       <meta property="twitter:image" content={fullImageUrl} />
 
+      {/* Additional Meta Tags */}
+      <meta name="theme-color" content="#FE5C02" />
+      <meta name="msapplication-TileColor" content="#FE5C02" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      <meta name="apple-mobile-web-app-title" content="Lominic" />
+      <meta name="application-name" content="Lominic" />
+      <meta name="mobile-web-app-capable" content="yes" />
+
       {/* Structured Data */}
       {structuredData && (
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>
       )}
-
-      {/* Additional Meta Tags */}
-      <meta name="theme-color" content="#FE5C02" />
-      <meta name="msapplication-TileColor" content="#FE5C02" />
     </Head>
   );
 };
