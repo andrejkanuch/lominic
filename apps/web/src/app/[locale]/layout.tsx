@@ -1,6 +1,9 @@
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -70,13 +73,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function LocaleLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  // Ensure that the incoming `locale` is valid
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -165,7 +176,9 @@ export default function RootLayout({
           <TooltipProvider>
             <Toaster />
             <Sonner />
-            {children}
+            <NextIntlClientProvider locale={locale}>
+              {children}
+            </NextIntlClientProvider>
           </TooltipProvider>
         </Providers>
       </body>
