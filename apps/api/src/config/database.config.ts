@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
-import { Test } from "../entities/test.entity";
 import { User } from "../entities/user.entity";
 
 @Injectable()
@@ -34,7 +33,7 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       username,
       password: this.configService.get("DB_PASSWORD", "lominic_password"),
       database,
-      entities: [Test, User],
+      entities: [User],
       migrations: [__dirname + "/../migrations/*{.ts,.js}"],
       synchronize: nodeEnv !== "production",
       logging: nodeEnv === "development",

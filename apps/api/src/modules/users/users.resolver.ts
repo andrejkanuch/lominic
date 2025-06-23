@@ -1,28 +1,8 @@
 import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
-import { Test } from "../../entities/test.entity";
 import { User } from "../../entities/user.entity";
 import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
-
-@Resolver(() => Test)
-export class TestResolver {
-  constructor(private readonly usersService: UsersService) {
-    console.log("🔍 TestResolver initialized");
-  }
-
-  @Query(() => [Test], { name: "tests" })
-  findAllTests() {
-    console.log("📋 GraphQL: Finding all tests");
-    return this.usersService.findAllTests();
-  }
-
-  @Query(() => Test, { name: "test" })
-  findOneTest(@Args("id", { type: () => ID }) id: string) {
-    console.log(`🔍 GraphQL: Finding test with id: ${id}`);
-    return this.usersService.findOneTest(id);
-  }
-}
 
 @Resolver(() => User)
 export class UsersResolver {
