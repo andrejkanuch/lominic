@@ -1,0 +1,14 @@
+# Development
+pnpm dev                    # Start both web and API
+pnpm start:web             # Start only web app
+pnpm start:api             # Start only API
+
+# Database
+pnpm db:up                 # Start PostgreSQL
+pnpm db:down               # Stop PostgreSQL
+pnpm db:reset              # Reset database
+
+# Build & Deploy
+pnpm build                 # Build all apps
+pnpm lint                  # Lint all apps
+pnpm test                  # Test all apps

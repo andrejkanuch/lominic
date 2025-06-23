@@ -1,16 +1,27 @@
 {
   "name": "lominic",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lominic monorepo with web frontend and NestJS API",
   "main": "index.js",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "start:api": "turbo run start:dev --filter=@lominic/api",
+    "start:web": "turbo run dev --filter=@lominic/web",
+    "db:up": "cd apps/api && docker-compose up -d",
+    "db:down": "cd apps/api && docker-compose down",
+    "db:reset": "cd apps/api && docker-compose down -v && docker-compose up -d"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "monorepo",
+    "nextjs",
+    "nestjs",
+    "graphql",
+    "postgresql"
+  ],
+  "author": "Andrej",
   "license": "ISC",
   "packageManager": "pnpm@10.10.0",
   "engines": {

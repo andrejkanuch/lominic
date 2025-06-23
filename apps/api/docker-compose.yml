@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  # PostgreSQL database
+  postgres:
+    image: postgres:15-alpine
+    container_name: lominic_postgres_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lominic_dev
+      POSTGRES_USER: lominic_user
+      POSTGRES_PASSWORD: lominic_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - lominic_network
+
+  # pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: lominic_pgadmin_ui
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@lominic.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - lominic_network
+
+volumes:
+  postgres_data:
+    name: lominic_postgres_data
+
+networks:
+  lominic_network:
+    name: lominic_network
+    driver: bridge

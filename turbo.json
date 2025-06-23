@@ -10,7 +10,23 @@
       "cache": false,
       "persistent": true
     },
+    "start:dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "start:prod": {
+      "dependsOn": ["build"]
+    },
     "lint": {},
-    "test": {}
+    "test": {},
+    "migration:generate": {
+      "cache": false
+    },
+    "migration:run": {
+      "cache": false
+    },
+    "schema:sync": {
+      "cache": false
+    }
   }
 }
