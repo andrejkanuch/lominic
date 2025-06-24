@@ -81,7 +81,6 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: "me" })
-  @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
   @RequirePermissions(Permission.READ_OWN_PROFILE)
   async getCurrentUser(@CurrentUser() currentUser: User): Promise<User> {
     return this.usersService.findOneUser(currentUser.id, currentUser);

@@ -41,10 +41,14 @@ export interface GraphQLContext {
       sortSchema: true,
       playground: process.env.NODE_ENV !== "production",
       introspection: process.env.NODE_ENV !== "production",
-      context: ({ req }): GraphQLContext => ({
-        req,
-        user: req.user,
-      }),
+      context: ({ req }): GraphQLContext => {
+        console.log("🔍 GraphQL Context - req.user:", req.user);
+        console.log("🔍 GraphQL Context - req.headers:", req.headers);
+        return {
+          req,
+          user: req.user,
+        };
+      },
     }),
 
     // Feature modules
@@ -52,17 +56,7 @@ export interface GraphQLContext {
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: PermissionsGuard,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {
   constructor() {

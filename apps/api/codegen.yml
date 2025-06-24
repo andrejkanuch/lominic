@@ -6,8 +6,6 @@ generates:
       - "typescript"
       - "typescript-resolvers"
     config:
-      mappers:
-        User: "../entities/user.entity#User"
       contextType: "../app.module#GraphQLContext"
       useIndexSignature: true
       enumsAsTypes: true

@@ -15,18 +15,23 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
       secretOrKey: configService.get("JWT_SECRET", "your-secret-key"),
     });
+    console.log("🔐 JwtStrategy initialized");
   }
 
   async validate(payload: any) {
+    console.log("🔐 JwtStrategy.validate called with payload:", payload);
+
     // For JWT validation, we'll create a minimal user object with the payload data
     // This avoids the permission check in findOneUser for JWT validation
     const user = await this.usersService.findByEmail(payload.email);
     if (!user) {
+      console.log("❌ JwtStrategy - User not found for email:", payload.email);
       throw new UnauthorizedException();
     }
 
     // Return user without password
     const { password, ...result } = user;
+    console.log("✅ JwtStrategy - User validated:", result);
     return result;
   }
 }
