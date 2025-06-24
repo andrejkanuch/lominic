@@ -8,6 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useRBAC, Permission } from "@/hooks/use-rbac";
+import {
+  useUpdateOwnProfileMutation,
+  GetCurrentUserDocument,
+} from "@/generated/graphql";
+import { useApolloClient } from "@apollo/client";
 import { RoleBasedComponent } from "@/components/RoleBasedComponent";
 
 export function UserProfile() {
@@ -19,6 +24,9 @@ export function UserProfile() {
     email: user?.email || "",
   });
 
+  const [updateProfile, { loading: saving }] = useUpdateOwnProfileMutation();
+  const apolloClient = useApolloClient();
+
   const handleSave = async () => {
     if (!hasPermission(Permission.UPDATE_OWN_PROFILE)) {
       toast.error("You don't have permission to update your profile");
@@ -26,7 +34,17 @@ export function UserProfile() {
     }
 
     try {
-      // TODO: Implement updateOwnProfile mutation
+      await updateProfile({
+        variables: {
+          updateUserInput: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+          },
+        },
+      });
+
+      await apolloClient.refetchQueries({ include: [GetCurrentUserDocument] });
+
       toast.success("Profile updated successfully!");
       setIsEditing(false);
     } catch (error) {
@@ -150,8 +168,10 @@ export function UserProfile() {
 
           {isEditing && (
             <div className="flex gap-2">
-              <Button onClick={handleSave}>Save Changes</Button>
-              <Button variant="outline" onClick={handleCancel}>
+              <Button onClick={handleSave} disabled={saving}>
+                {saving ? "Saving..." : "Save Changes"}
+              </Button>
+              <Button variant="outline" onClick={handleCancel} disabled={saving}>
                 Cancel
               </Button>
             </div>

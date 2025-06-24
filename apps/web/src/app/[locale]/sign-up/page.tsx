@@ -6,26 +6,86 @@ import Footer from "@/components/Footer";
 import { ArrowRight, Eye, EyeOff, Check } from "lucide-react";
 import { useRegisterMutation } from "@/generated/graphql";
 import { useRouter } from "next/navigation";
+import { useFormik } from "formik";
+import { z } from "zod";
+
+const SignUpSchema = z
+  .object({
+    firstName: z.string().nonempty("First name is required"),
+    lastName: z.string().nonempty("Last name is required"),
+    email: z.string().email("Please enter a valid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+    agreeToTerms: z.literal(true, {
+      errorMap: () => ({ message: "You must agree to the terms and conditions" }),
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+type SignUpValues = z.infer<typeof SignUpSchema>;
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-
   const [register, { loading }] = useRegisterMutation();
   const router = useRouter();
   const [registerError, setRegisterError] = useState("");
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    agreeToTerms: false,
+  const formik = useFormik<SignUpValues>({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      agreeToTerms: false,
+    },
+    validate: (values) => {
+      const result = SignUpSchema.safeParse(values);
+      if (result.success) return {};
+      const errors: Record<string, string> = {};
+      for (const issue of result.error.issues) {
+        const key = issue.path[0] as string;
+        if (!errors[key]) errors[key] = issue.message;
+      }
+      return errors;
+    },
+    onSubmit: async (values) => {
+      setRegisterError("");
+      try {
+        const { data } = await register({
+          variables: {
+            email: values.email,
+            password: values.password,
+            firstName: values.firstName,
+            lastName: values.lastName,
+          },
+        });
+        if (data?.register?.access_token) {
+          localStorage.setItem("access_token", data.register.access_token);
+          router.push("/profile");
+        } else {
+          setRegisterError("Registration failed");
+        }
+      } catch (error: any) {
+        if (error.graphQLErrors) {
+          error.graphQLErrors.forEach((err: any) => {
+            if (err.message.includes("already exists")) {
+              formik.setFieldError("email", "User with this email already exists");
+            }
+          });
+        }
+        setRegisterError(
+          error?.graphQLErrors?.[0]?.message ||
+            "Registration failed. Please try again."
+        );
+      }
+    },
   });
 
-  // Initialize intersection observer to detect when elements enter viewport
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -47,93 +107,6 @@ export default function SignUpPage() {
     };
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-
-    // Clear error when user starts typing
-    if (formErrors[name]) {
-      setFormErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-
-  const validateForm = () => {
-    const errors: Record<string, string> = {};
-
-    if (!formData.firstName.trim()) {
-      errors.firstName = "First name is required";
-    }
-
-    if (!formData.lastName.trim()) {
-      errors.lastName = "Last name is required";
-    }
-
-    if (!formData.email.trim()) {
-      errors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = "Please enter a valid email address";
-    }
-
-    if (!formData.password) {
-      errors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      errors.password = "Password must be at least 6 characters";
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = "Passwords do not match";
-    }
-
-    if (!formData.agreeToTerms) {
-      errors.agreeToTerms = "You must agree to the terms and conditions";
-    }
-
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setRegisterError("");
-    if (!validateForm()) {
-      return;
-    }
-    try {
-      const { data } = await register({
-        variables: {
-          email: formData.email,
-          password: formData.password,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        },
-      });
-      if (data?.register?.access_token) {
-        localStorage.setItem("access_token", data.register.access_token);
-        router.push("/profile");
-      } else {
-        setRegisterError("Registration failed");
-      }
-    } catch (error: any) {
-      if (error.graphQLErrors) {
-        error.graphQLErrors.forEach((err: any) => {
-          if (err.message.includes("already exists")) {
-            setFormErrors((prev) => ({
-              ...prev,
-              email: "User with this email already exists",
-            }));
-          }
-        });
-      }
-      setRegisterError(
-        error?.graphQLErrors?.[0]?.message ||
-          "Registration failed. Please try again."
-      );
-    }
-  };
-
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -147,126 +120,86 @@ export default function SignUpPage() {
           }}
         >
           <div className="absolute -top-[10%] -right-[5%] w-1/2 h-[70%] bg-pulse-gradient opacity-20 blur-3xl rounded-full"></div>
-
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-md mx-auto">
-              <div
-                className="pulse-chip mb-6 opacity-0 animate-fade-in"
-                style={{ animationDelay: "0.1s" }}
-              >
+              <div className="pulse-chip mb-6 opacity-0 animate-fade-in" style={{ animationDelay: "0.1s" }}>
                 <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-pulse-500 text-white mr-2">
                   <Check className="w-3 h-3" />
                 </span>
                 <span>Join Lominic</span>
               </div>
-
-              <h1
-                className="section-title text-3xl sm:text-4xl leading-tight opacity-0 animate-fade-in text-center"
-                style={{ animationDelay: "0.3s" }}
-              >
+              <h1 className="section-title text-3xl sm:text-4xl leading-tight opacity-0 animate-fade-in text-center" style={{ animationDelay: "0.3s" }}>
                 Create Your Account
               </h1>
-
-              <p
-                style={{ animationDelay: "0.5s" }}
-                className="section-subtitle mt-4 mb-8 leading-relaxed opacity-0 animate-fade-in text-gray-950 font-normal text-base text-center"
-              >
+              <p className="section-subtitle mt-4 mb-8 leading-relaxed opacity-0 animate-fade-in text-gray-950 font-normal text-base text-center" style={{ animationDelay: "0.5s" }}>
                 Start your AI-powered training journey today
               </p>
-
-              <div
-                className="glass-card p-6 sm:p-8 opacity-0 animate-fade-in"
-                style={{ animationDelay: "0.7s" }}
-              >
-                <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="glass-card p-6 sm:p-8 opacity-0 animate-fade-in" style={{ animationDelay: "0.7s" }}>
+                <form onSubmit={formik.handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label
-                        htmlFor="firstName"
-                        className="block text-sm font-medium text-gray-700 mb-2"
-                      >
+                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
                         First Name
                       </label>
                       <input
                         type="text"
                         id="firstName"
                         name="firstName"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        required
+                        value={formik.values.firstName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                          formErrors.firstName
-                            ? "border-red-500"
-                            : "border-gray-300"
+                          formik.touched.firstName && formik.errors.firstName ? "border-red-500" : "border-gray-300"
                         }`}
                         placeholder="John"
                       />
-                      {formErrors.firstName && (
-                        <p className="mt-1 text-sm text-red-600">
-                          {formErrors.firstName}
-                        </p>
+                      {formik.touched.firstName && formik.errors.firstName && (
+                        <p className="mt-1 text-sm text-red-600">{formik.errors.firstName}</p>
                       )}
                     </div>
                     <div>
-                      <label
-                        htmlFor="lastName"
-                        className="block text-sm font-medium text-gray-700 mb-2"
-                      >
+                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
                         Last Name
                       </label>
                       <input
                         type="text"
                         id="lastName"
                         name="lastName"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        required
+                        value={formik.values.lastName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                          formErrors.lastName
-                            ? "border-red-500"
-                            : "border-gray-300"
+                          formik.touched.lastName && formik.errors.lastName ? "border-red-500" : "border-gray-300"
                         }`}
                         placeholder="Doe"
                       />
-                      {formErrors.lastName && (
-                        <p className="mt-1 text-sm text-red-600">
-                          {formErrors.lastName}
-                        </p>
+                      {formik.touched.lastName && formik.errors.lastName && (
+                        <p className="mt-1 text-sm text-red-600">{formik.errors.lastName}</p>
                       )}
                     </div>
                   </div>
-
                   <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-700 mb-2"
-                    >
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                       Email Address
                     </label>
                     <input
                       type="email"
                       id="email"
                       name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
+                      value={formik.values.email}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                        formErrors.email ? "border-red-500" : "border-gray-300"
+                        formik.touched.email && formik.errors.email ? "border-red-500" : "border-gray-300"
                       }`}
                       placeholder="john@example.com"
                     />
-                    {formErrors.email && (
-                      <p className="mt-1 text-sm text-red-600">
-                        {formErrors.email}
-                      </p>
+                    {formik.touched.email && formik.errors.email && (
+                      <p className="mt-1 text-sm text-red-600">{formik.errors.email}</p>
                     )}
                   </div>
-
                   <div>
-                    <label
-                      htmlFor="password"
-                      className="block text-sm font-medium text-gray-700 mb-2"
-                    >
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                       Password
                     </label>
                     <div className="relative">
@@ -274,13 +207,11 @@ export default function SignUpPage() {
                         type={showPassword ? "text" : "password"}
                         id="password"
                         name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        required
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                          formErrors.password
-                            ? "border-red-500"
-                            : "border-gray-300"
+                          formik.touched.password && formik.errors.password ? "border-red-500" : "border-gray-300"
                         }`}
                         placeholder="••••••••"
                       />
@@ -289,25 +220,15 @@ export default function SignUpPage() {
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                       >
-                        {showPassword ? (
-                          <EyeOff className="w-5 h-5" />
-                        ) : (
-                          <Eye className="w-5 h-5" />
-                        )}
+                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </button>
                     </div>
-                    {formErrors.password && (
-                      <p className="mt-1 text-sm text-red-600">
-                        {formErrors.password}
-                      </p>
+                    {formik.touched.password && formik.errors.password && (
+                      <p className="mt-1 text-sm text-red-600">{formik.errors.password}</p>
                     )}
                   </div>
-
                   <div>
-                    <label
-                      htmlFor="confirmPassword"
-                      className="block text-sm font-medium text-gray-700 mb-2"
-                    >
+                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                       Confirm Password
                     </label>
                     <div className="relative">
@@ -315,79 +236,47 @@ export default function SignUpPage() {
                         type={showConfirmPassword ? "text" : "password"}
                         id="confirmPassword"
                         name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleInputChange}
-                        required
+                        value={formik.values.confirmPassword}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                          formErrors.confirmPassword
-                            ? "border-red-500"
-                            : "border-gray-300"
+                          formik.touched.confirmPassword && formik.errors.confirmPassword ? "border-red-500" : "border-gray-300"
                         }`}
                         placeholder="••••••••"
                       />
                       <button
                         type="button"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                       >
-                        {showConfirmPassword ? (
-                          <EyeOff className="w-5 h-5" />
-                        ) : (
-                          <Eye className="w-5 h-5" />
-                        )}
+                        {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </button>
                     </div>
-                    {formErrors.confirmPassword && (
-                      <p className="mt-1 text-sm text-red-600">
-                        {formErrors.confirmPassword}
-                      </p>
+                    {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                      <p className="mt-1 text-sm text-red-600">{formik.errors.confirmPassword}</p>
                     )}
                   </div>
-
                   <div className="flex items-start space-x-3">
                     <input
                       type="checkbox"
                       id="agreeToTerms"
                       name="agreeToTerms"
-                      checked={formData.agreeToTerms}
-                      onChange={handleInputChange}
-                      required
+                      checked={formik.values.agreeToTerms}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       className="mt-1 h-4 w-4 text-pulse-600 focus:ring-pulse-500 border-gray-300 rounded"
                     />
-                    <label
-                      htmlFor="agreeToTerms"
-                      className="text-sm text-gray-600"
-                    >
-                      I agree to the{" "}
-                      <a
-                        href="#"
-                        className="text-pulse-600 hover:text-pulse-700 underline"
-                      >
-                        Terms of Service
-                      </a>{" "}
-                      and{" "}
-                      <a
-                        href="#"
-                        className="text-pulse-600 hover:text-pulse-700 underline"
-                      >
-                        Privacy Policy
-                      </a>
+                    <label htmlFor="agreeToTerms" className="text-sm text-gray-600">
+                      I agree to the <a href="#" className="text-pulse-600 hover:text-pulse-700 underline">Terms of Service</a> and{' '}
+                      <a href="#" className="text-pulse-600 hover:text-pulse-700 underline">Privacy Policy</a>
                     </label>
                   </div>
-                  {formErrors.agreeToTerms && (
-                    <p className="text-sm text-red-600">
-                      {formErrors.agreeToTerms}
-                    </p>
+                  {formik.touched.agreeToTerms && formik.errors.agreeToTerms && (
+                    <p className="text-sm text-red-600">{formik.errors.agreeToTerms}</p>
                   )}
-
                   {registerError && (
-                    <p className="text-sm text-red-600 text-center">
-                      {registerError}
-                    </p>
+                    <p className="text-sm text-red-600 text-center">{registerError}</p>
                   )}
-
                   <button
                     type="submit"
                     disabled={loading}
@@ -408,14 +297,10 @@ export default function SignUpPage() {
                     <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </button>
                 </form>
-
                 <div className="mt-6 text-center">
                   <p className="text-sm text-gray-600">
-                    Already have an account?{" "}
-                    <a
-                      href="/login"
-                      className="text-pulse-600 hover:text-pulse-700 font-medium"
-                    >
+                    Already have an account?{' '}
+                    <a href="/login" className="text-pulse-600 hover:text-pulse-700 font-medium">
                       Sign in
                     </a>
                   </p>
@@ -423,11 +308,7 @@ export default function SignUpPage() {
               </div>
             </div>
           </div>
-
-          <div
-            className="hidden lg:block absolute bottom-0 left-1/4 w-64 h-64 bg-pulse-100/30 rounded-full blur-3xl -z-10 parallax"
-            data-speed="0.05"
-          ></div>
+          <div className="hidden lg:block absolute bottom-0 left-1/4 w-64 h-64 bg-pulse-100/30 rounded-full blur-3xl -z-10 parallax" data-speed="0.05"></div>
         </section>
       </main>
       <Footer />
