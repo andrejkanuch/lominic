@@ -6,7 +6,7 @@ import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
 import { RolesGuard } from "../../common/guards/roles.guard";
 import { PermissionsGuard } from "../../common/guards/permissions.guard";
-import { JwtAuthGuard } from "../../common/guards/jwt.guard";
+import { GqlAuthGuard } from "../../common/guards/gql-auth.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { RequirePermissions } from "../../common/decorators/permissions.decorator";
 import { CurrentUser } from "../../common/decorators/current-user.decorator";
@@ -15,6 +15,7 @@ import { Permission } from "../../common/enums/permissions.enum";
 import { Public } from "../../common/decorators/public.decorator";
 
 @Resolver(() => User)
+@UseGuards(GqlAuthGuard, RolesGuard, PermissionsGuard)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {
     console.log("👥 UsersResolver initialized");
