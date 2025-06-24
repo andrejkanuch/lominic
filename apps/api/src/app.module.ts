@@ -14,6 +14,7 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
 import { RolesGuard } from "./common/guards/roles.guard";
 import { PermissionsGuard } from "./common/guards/permissions.guard";
+import { JwtAuthGuard } from "./common/guards/jwt.guard";
 
 export interface GraphQLContext {
   req: Request;

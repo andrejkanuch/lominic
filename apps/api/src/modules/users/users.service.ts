@@ -85,6 +85,8 @@ export class UsersService {
         "password",
         "role",
         "isEmailVerified",
+        "createdAt",
+        "updatedAt",
       ],
     });
   }

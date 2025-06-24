@@ -24,19 +24,6 @@ query GetUser($id: ID!) {
   }
 }
 
-mutation SignUp($createUserInput: CreateUserInput!) {
-  signUp(createUserInput: $createUserInput) {
-    id
-    email
-    firstName
-    lastName
-    role
-    isEmailVerified
-    createdAt
-    updatedAt
-  }
-}
-
 mutation CreateUser($createUserInput: CreateUserInput!) {
   createUser(createUserInput: $createUserInput) {
     id

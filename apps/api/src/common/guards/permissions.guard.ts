@@ -22,14 +22,26 @@ export class PermissionsGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
     const { user } = ctx.getContext();
 
+    console.log(
+      "🔍 PermissionsGuard - Required permissions:",
+      requiredPermissions
+    );
+    console.log("🔍 PermissionsGuard - User:", user);
+    console.log("🔍 PermissionsGuard - User role:", user?.role);
+
     if (!user) {
+      console.log("❌ PermissionsGuard - No user found");
       return false;
     }
 
     const userPermissions = ROLE_PERMISSIONS[user.role] || [];
+    console.log("🔍 PermissionsGuard - User permissions:", userPermissions);
 
-    return requiredPermissions.every((permission) =>
+    const hasPermission = requiredPermissions.every((permission) =>
       userPermissions.includes(permission)
     );
+
+    console.log("🔍 PermissionsGuard - Has permission:", hasPermission);
+    return hasPermission;
   }
 }

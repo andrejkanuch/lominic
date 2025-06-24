@@ -4,14 +4,17 @@ import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ArrowRight, Eye, EyeOff, Check } from "lucide-react";
-import { useSignUpMutation } from "@/generated/graphql";
+import { useRegisterMutation } from "@/generated/graphql";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
-  const [signUp, { loading, error }] = useSignUpMutation();
+  const [register, { loading }] = useRegisterMutation();
+  const router = useRouter();
+  const [registerError, setRegisterError] = useState("");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -94,31 +97,26 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setRegisterError("");
     if (!validateForm()) {
       return;
     }
-
     try {
-      const { data } = await signUp({
+      const { data } = await register({
         variables: {
-          createUserInput: {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            password: formData.password,
-          },
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
         },
       });
-
-      if (data?.signUp) {
-        // Redirect to login page or dashboard
-        window.location.href = "/login";
+      if (data?.register?.access_token) {
+        localStorage.setItem("access_token", data.register.access_token);
+        router.push("/profile");
+      } else {
+        setRegisterError("Registration failed");
       }
     } catch (error: any) {
-      console.error("Error creating user:", error);
-
-      // Handle specific GraphQL errors
       if (error.graphQLErrors) {
         error.graphQLErrors.forEach((err: any) => {
           if (err.message.includes("already exists")) {
@@ -129,6 +127,10 @@ export default function SignUpPage() {
           }
         });
       }
+      setRegisterError(
+        error?.graphQLErrors?.[0]?.message ||
+          "Registration failed. Please try again."
+      );
     }
   };
 
@@ -377,6 +379,12 @@ export default function SignUpPage() {
                   {formErrors.agreeToTerms && (
                     <p className="text-sm text-red-600">
                       {formErrors.agreeToTerms}
+                    </p>
+                  )}
+
+                  {registerError && (
+                    <p className="text-sm text-red-600 text-center">
+                      {registerError}
                     </p>
                   )}
 
