@@ -17,7 +17,8 @@
     "start:web": "turbo run dev --filter=@lominic/web",
     "db:up": "cd apps/api && docker-compose up -d",
     "db:down": "cd apps/api && docker-compose down",
-    "db:reset": "cd apps/api && docker-compose down -v && docker-compose up -d"
+    "db:reset": "cd apps/api && docker-compose down -v && docker-compose up -d",
+    "db:run": "cd apps/api && pnpm migration:run"
   },
   "keywords": [
     "monorepo",
