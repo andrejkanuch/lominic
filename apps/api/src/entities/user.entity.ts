@@ -7,8 +7,14 @@ import {
   BeforeInsert,
   BeforeUpdate,
 } from "typeorm";
-import { Field, ObjectType, ID } from "@nestjs/graphql";
+import { Field, ObjectType, ID, registerEnumType } from "@nestjs/graphql";
 import * as bcrypt from "bcryptjs";
+import { Role } from "../common/enums/roles.enum";
+
+registerEnumType(Role, {
+  name: "Role",
+  description: "User roles",
+});
 
 @ObjectType()
 @Entity("users")
@@ -36,9 +42,9 @@ export class User {
   @Column({ default: false })
   isEmailVerified: boolean;
 
-  @Field()
-  @Column({ default: "user" })
-  role: string;
+  @Field(() => Role)
+  @Column({ type: "enum", enum: Role, default: Role.USER })
+  role: Role;
 
   @Field()
   @CreateDateColumn()

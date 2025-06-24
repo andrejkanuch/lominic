@@ -5,15 +5,19 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { join } from "path";
 import { Request } from "express";
+import { APP_GUARD } from "@nestjs/core";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DatabaseConfig } from "./config/database.config";
 import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
+import { RolesGuard } from "./common/guards/roles.guard";
+import { PermissionsGuard } from "./common/guards/permissions.guard";
 
 export interface GraphQLContext {
   req: Request;
+  user?: any;
 }
 
 @Module({
@@ -36,7 +40,10 @@ export interface GraphQLContext {
       sortSchema: true,
       playground: process.env.NODE_ENV !== "production",
       introspection: process.env.NODE_ENV !== "production",
-      context: ({ req }): GraphQLContext => ({ req }),
+      context: ({ req }): GraphQLContext => ({
+        req,
+        user: req.user,
+      }),
     }),
 
     // Feature modules
@@ -44,7 +51,17 @@ export interface GraphQLContext {
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
+    },
+  ],
 })
 export class AppModule {
   constructor() {

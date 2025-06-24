@@ -4,6 +4,8 @@ query GetUsers {
     email
     firstName
     lastName
+    role
+    isEmailVerified
     createdAt
     updatedAt
   }
@@ -15,6 +17,21 @@ query GetUser($id: ID!) {
     email
     firstName
     lastName
+    role
+    isEmailVerified
+    createdAt
+    updatedAt
+  }
+}
+
+mutation SignUp($createUserInput: CreateUserInput!) {
+  signUp(createUserInput: $createUserInput) {
+    id
+    email
+    firstName
+    lastName
+    role
+    isEmailVerified
     createdAt
     updatedAt
   }
@@ -26,6 +43,8 @@ mutation CreateUser($createUserInput: CreateUserInput!) {
     email
     firstName
     lastName
+    role
+    isEmailVerified
     createdAt
     updatedAt
   }
@@ -37,6 +56,21 @@ mutation UpdateUser($id: ID!, $updateUserInput: UpdateUserInput!) {
     email
     firstName
     lastName
+    role
+    isEmailVerified
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateOwnProfile($updateUserInput: UpdateUserInput!) {
+  updateOwnProfile(updateUserInput: $updateUserInput) {
+    id
+    email
+    firstName
+    lastName
+    role
+    isEmailVerified
     createdAt
     updatedAt
   }
@@ -48,6 +82,21 @@ mutation RemoveUser($id: ID!) {
     email
     firstName
     lastName
+    role
+    isEmailVerified
+    createdAt
+    updatedAt
+  }
+}
+
+query Me {
+  me {
+    id
+    email
+    firstName
+    lastName
+    role
+    isEmailVerified
     createdAt
     updatedAt
   }

@@ -3,6 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { LoginInput } from "./dto/login.input";
 import { RegisterInput } from "./dto/register.input";
+import { Role } from "../../common/enums/roles.enum";
 
 @Injectable()
 export class AuthService {
@@ -41,7 +42,9 @@ export class AuthService {
       throw new UnauthorizedException("User already exists");
     }
 
-    const user = await this.usersService.createUser(registerInput);
+    // Assign default role (USER) to new registrations
+    const userData = { ...registerInput, role: Role.USER };
+    const user = await this.usersService.createUser(userData);
     const { password, ...result } = user;
 
     const payload = { email: user.email, sub: user.id, role: user.role };

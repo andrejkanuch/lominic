@@ -1,27 +1,58 @@
-mutation Login($loginInput: LoginInput!) {
-  login(loginInput: $loginInput) {
+# Auth mutations
+mutation Login($email: String!, $password: String!) {
+  login(loginInput: { email: $email, password: $password }) {
+    access_token
     user {
       id
       email
       firstName
       lastName
+      role
+      isEmailVerified
       createdAt
       updatedAt
     }
-    access_token
   }
 }
 
-mutation Register($registerInput: RegisterInput!) {
-  register(registerInput: $registerInput) {
+mutation Register(
+  $email: String!
+  $password: String!
+  $firstName: String!
+  $lastName: String!
+) {
+  register(
+    registerInput: {
+      email: $email
+      password: $password
+      firstName: $firstName
+      lastName: $lastName
+    }
+  ) {
+    access_token
     user {
       id
       email
       firstName
       lastName
+      role
+      isEmailVerified
       createdAt
       updatedAt
     }
-    access_token
+  }
+}
+
+# Get current user
+query GetCurrentUser {
+  me {
+    id
+    email
+    firstName
+    lastName
+    role
+    isEmailVerified
+    createdAt
+    updatedAt
   }
 }

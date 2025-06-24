@@ -18,10 +18,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const user = await this.usersService.findOneUser(payload.sub);
+    // For JWT validation, we'll create a minimal user object with the payload data
+    // This avoids the permission check in findOneUser for JWT validation
+    const user = await this.usersService.findByEmail(payload.email);
     if (!user) {
       throw new UnauthorizedException();
     }
-    return user;
+
+    // Return user without password
+    const { password, ...result } = user;
+    return result;
   }
 }
