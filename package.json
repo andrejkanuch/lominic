@@ -1,12 +1,17 @@
 {
   "name": "lominic",
-  "version": "1.0.0",
+  "version": "0.0.0",
+  "private": true,
   "description": "Lominic monorepo with web frontend and NestJS API",
   "main": "index.js",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "codegen": "turbo run codegen",
+    "codegen:watch": "turbo run codegen:watch",
+    "install:all": "pnpm install && cd apps/api && pnpm install && cd ../web && pnpm install",
     "test": "turbo run test",
     "start:api": "turbo run start:dev --filter=@lominic/api",
     "start:web": "turbo run dev --filter=@lominic/web",
@@ -23,11 +28,12 @@
   ],
   "author": "Andrej",
   "license": "ISC",
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@8.6.0",
   "engines": {
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "turbo": "^2.5.4"
+    "prettier": "^3.0.0",
+    "turbo": "^1.10.0"
   }
 }

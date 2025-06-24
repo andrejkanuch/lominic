@@ -4,12 +4,17 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { join } from "path";
+import { Request } from "express";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DatabaseConfig } from "./config/database.config";
 import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
+
+export interface GraphQLContext {
+  req: Request;
+}
 
 @Module({
   imports: [
@@ -31,7 +36,7 @@ import { UsersModule } from "./modules/users/users.module";
       sortSchema: true,
       playground: process.env.NODE_ENV !== "production",
       introspection: process.env.NODE_ENV !== "production",
-      context: ({ req }) => ({ req }),
+      context: ({ req }): GraphQLContext => ({ req }),
     }),
 
     // Feature modules

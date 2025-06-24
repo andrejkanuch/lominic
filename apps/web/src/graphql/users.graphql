@@ -1,0 +1,54 @@
+query GetUsers {
+  users {
+    id
+    email
+    firstName
+    lastName
+    createdAt
+    updatedAt
+  }
+}
+
+query GetUser($id: ID!) {
+  user(id: $id) {
+    id
+    email
+    firstName
+    lastName
+    createdAt
+    updatedAt
+  }
+}
+
+mutation CreateUser($createUserInput: CreateUserInput!) {
+  createUser(createUserInput: $createUserInput) {
+    id
+    email
+    firstName
+    lastName
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateUser($id: ID!, $updateUserInput: UpdateUserInput!) {
+  updateUser(id: $id, updateUserInput: $updateUserInput) {
+    id
+    email
+    firstName
+    lastName
+    createdAt
+    updatedAt
+  }
+}
+
+mutation RemoveUser($id: ID!) {
+  removeUser(id: $id) {
+    id
+    email
+    firstName
+    lastName
+    createdAt
+    updatedAt
+  }
+}

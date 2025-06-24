@@ -1,12 +1,20 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "tasks": {
+  "pipeline": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
+    "lint": {},
     "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "codegen": {
+      "cache": false
+    },
+    "codegen:watch": {
       "cache": false,
       "persistent": true
     },
@@ -14,15 +22,19 @@
       "cache": false,
       "persistent": true
     },
-    "start:prod": {
+    "test": {
       "dependsOn": ["build"]
     },
-    "lint": {},
-    "test": {},
     "migration:generate": {
       "cache": false
     },
     "migration:run": {
+      "cache": false
+    },
+    "migration:revert": {
+      "cache": false
+    },
+    "schema:drop": {
       "cache": false
     },
     "schema:sync": {

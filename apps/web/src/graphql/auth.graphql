@@ -1,0 +1,27 @@
+mutation Login($loginInput: LoginInput!) {
+  login(loginInput: $loginInput) {
+    user {
+      id
+      email
+      firstName
+      lastName
+      createdAt
+      updatedAt
+    }
+    access_token
+  }
+}
+
+mutation Register($registerInput: RegisterInput!) {
+  register(registerInput: $registerInput) {
+    user {
+      id
+      email
+      firstName
+      lastName
+      createdAt
+      updatedAt
+    }
+    access_token
+  }
+}

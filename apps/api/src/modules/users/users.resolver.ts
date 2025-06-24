@@ -11,30 +11,32 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  createUser(@Args("createUserInput") createUserInput: CreateUserInput) {
+  async createUser(
+    @Args("createUserInput") createUserInput: CreateUserInput
+  ): Promise<User> {
     return this.usersService.createUser(createUserInput);
   }
 
   @Query(() => [User], { name: "users" })
-  findAllUsers() {
+  async users(): Promise<User[]> {
     return this.usersService.findAllUsers();
   }
 
   @Query(() => User, { name: "user" })
-  findOneUser(@Args("id", { type: () => ID }) id: string) {
+  async user(@Args("id", { type: () => ID }) id: string): Promise<User> {
     return this.usersService.findOneUser(id);
   }
 
   @Mutation(() => User)
-  updateUser(
+  async updateUser(
     @Args("id", { type: () => ID }) id: string,
     @Args("updateUserInput") updateUserInput: UpdateUserInput
-  ) {
+  ): Promise<User> {
     return this.usersService.updateUser(id, updateUserInput);
   }
 
   @Mutation(() => User)
-  removeUser(@Args("id", { type: () => ID }) id: string) {
+  async removeUser(@Args("id", { type: () => ID }) id: string): Promise<User> {
     return this.usersService.removeUser(id);
   }
 }
