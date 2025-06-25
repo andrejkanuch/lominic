@@ -84,6 +84,39 @@ This document outlines tasks for adding Strava API support to the Lominic projec
 - Display a calendar view with each day's activities.
 - Selecting an entry shows the activity description.
 
+## 9. Activities List View
+
+The following tasks describe how to surface activities fetched from Strava in a
+traditional list view. The goal is a simple page showing all activities with
+their key metrics and description.
+
+1. **Expose activities through GraphQL**
+   - Extend the API schema with `Activity` and `Query.activities` types.
+   - Add a resolver in `apps/api/src/modules` that returns activities from the
+     database ordered by `startDate`.
+   - Include fields such as `id`, `name`, `distance`, `movingTime`, `startDate`,
+     and `description`.
+
+2. **Create a dedicated Activities page in the web app**
+   - Under `apps/web/src/app/[locale]/activities`, add `page.tsx` for the list
+     view route.
+   - Fetch data with `useGetActivitiesQuery` generated from the GraphQL schema.
+
+3. **Build an `ActivitiesList` component**
+   - Render each activity in a table or card list with columns for date,
+     name, distance, and moving time.
+   - Clicking a row opens a detail modal or navigates to
+     `/activities/[id]` where the full description is shown.
+
+4. **Hook up the list to the existing Strava sync**
+   - Ensure the sync job populates the `Activity` table so the GraphQL query
+     returns up‑to‑date results.
+   - Provide a manual "Sync Now" button on the page that triggers an API route
+     if the user wants to refresh immediately.
+
+These steps complete the first user‑visible feature for browsing Strava
+activities in Lominic.
+
 ---
 This roadmap provides the base tasks to implement Strava connectivity in the API. Once these are complete, we will have an MVP capable of importing activities from Strava and exposing them through GraphQL.
 
