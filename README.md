@@ -78,6 +78,12 @@ This document outlines tasks for adding Strava API support to the Lominic projec
 - Add additional GraphQL queries for analytics.
 - Introduce frontend components after the API is stable.
 
+## 8. Initial Frontend Task
+
+- Add an **Activities** tab in the sidebar.
+- Display a calendar view with each day's activities.
+- Selecting an entry shows the activity description.
+
 ---
 This roadmap provides the base tasks to implement Strava connectivity in the API. Once these are complete, we will have an MVP capable of importing activities from Strava and exposing them through GraphQL.
 
