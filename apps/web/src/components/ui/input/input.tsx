@@ -65,7 +65,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {icon && (
             <div
               className={cn(
-                "text-slate-500 ps-4 h-full flex items-center justify-center bg-slate-50 shrink-0",
+                "text-slate-500 ps-4 h-full flex items-center justify-center bg-white shrink-0",
                 "dark:text-slate-400 dark:bg-slate-900",
                 disabled && "bg-slate-100"
               )}
@@ -84,7 +84,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               "focus-visible:outline-none",
               "dark:text-white dark:bg-slate-900 dark:disabled:placeholder-slate-500 dark:disabled:text-slate-500 dark:placeholder:text-slate-500",
               "disabled:placeholder-slate-400 disabled:text-slate-400 disabled:cursor-not-allowed input-autofill",
-              disabled ? "bg-slate-100" : "bg-slate-50",
+              disabled ? "bg-slate-100" : "bg-white",
               icon && "ps-2.5",
               rightAddon && "pr-2.5",
               className
@@ -95,7 +95,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {rightAddon && (
             <div
               className={cn(
-                "text-slate-500 pr-4 h-full flex items-center justify-center bg-slate-50 shrink-0",
+                "text-slate-500 pr-4 h-full flex items-center justify-center bg-white shrink-0",
                 "dark:text-slate-400 dark:bg-slate-900"
               )}
             >
@@ -105,7 +105,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {clearable && value && (
             <div
               className={cn(
-                "text-slate-500 pe-4 h-full flex items-center justify-center bg-slate-50 shrink-0",
+                "text-slate-500 pe-4 h-full flex items-center justify-center bg-white shrink-0",
                 "dark:text-slate-400 dark:bg-slate-900"
               )}
             >

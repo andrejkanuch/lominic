@@ -117,7 +117,7 @@ export default function SignUpPage() {
       <Navbar />
       <main className="pt-20">
         <section
-          className="overflow-hidden relative bg-cover"
+          className="overflow-hidden relative bg-cover min-h-screen flex items-center"
           style={{
             backgroundImage: 'url("/Header-background.webp")',
             backgroundPosition: "center 30%",
@@ -168,7 +168,7 @@ export default function SignUpPage() {
                         value={formik.values.firstName}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
+                        className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
                           formik.touched.firstName && formik.errors.firstName
                             ? "border-red-500"
                             : "border-gray-300"
@@ -195,7 +195,7 @@ export default function SignUpPage() {
                         value={formik.values.lastName}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
+                        className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
                           formik.touched.lastName && formik.errors.lastName
                             ? "border-red-500"
                             : "border-gray-300"
@@ -223,7 +223,7 @@ export default function SignUpPage() {
                       value={formik.values.email}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
+                      className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
                         formik.touched.email && formik.errors.email
                           ? "border-red-500"
                           : "border-gray-300"
@@ -251,7 +251,7 @@ export default function SignUpPage() {
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
+                        className={`w-full px-4 py-3 pr-12 border rounded-lg bg-white focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
                           formik.touched.password && formik.errors.password
                             ? "border-red-500"
                             : "border-gray-300"
@@ -291,7 +291,7 @@ export default function SignUpPage() {
                         value={formik.values.confirmPassword}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
+                        className={`w-full px-4 py-3 pr-12 border rounded-lg bg-white focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
                           formik.touched.confirmPassword &&
                           formik.errors.confirmPassword
                             ? "border-red-500"

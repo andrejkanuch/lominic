@@ -57,7 +57,7 @@ const SidebarItem = React.forwardRef<HTMLDivElement, SidebarItemProps>(
     return (
       <div
         className={cn(
-          "flex flex-row justify-center gap-3 rounded-[4px] sm:justify-start items-center sm:px-3 sm:py-2 sm:hover:bg-slate-50 cursor-pointer",
+          "flex flex-row justify-center gap-3 rounded-[4px] sm:justify-start items-center sm:px-3 sm:py-2 sm:hover:bg-slate-50 cursor-pointer transition-colors duration-200",
           isActive
             ? "sm:border-[var(--role-color)] sm:bg-slate-50 sm:border-l-4"
             : "sm:border-transparent sm:hover:border-slate-50 sm:border-l-4",
