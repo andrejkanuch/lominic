@@ -75,7 +75,7 @@ export default function LoginPage() {
       <Navbar />
       <main className="pt-20">
         <section
-          className="overflow-hidden relative bg-cover"
+          className="overflow-hidden relative bg-cover min-h-screen flex items-center"
           style={{
             backgroundImage: 'url("/Header-background.webp")',
             backgroundPosition: "center 30%",
