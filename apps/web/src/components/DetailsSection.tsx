@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "sonner";
 import emailjs from "@emailjs/browser";
+import { Input } from "./ui/input/input";
 
 const DetailsSection = () => {
   const [formData, setFormData] = useState({
@@ -279,42 +280,39 @@ This request was submitted from the Lominic website.`,
             >
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 <div>
-                  <input
+                  <Input
                     type="text"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
                     placeholder="Full name"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pulse-500 focus:border-transparent"
                     required
                   />
                 </div>
 
                 <div>
-                  <input
+                  <Input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Email address"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pulse-500 focus:border-transparent"
                     required
                   />
                 </div>
 
                 <div>
-                  <input
+                  <Input
                     type="text"
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
                     placeholder="Sport/Activity (optional)"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pulse-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <textarea
+                  <Input
                     name="message"
                     value={formData.message}
                     onChange={handleChange}

@@ -54,20 +54,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <div>
         <div
           className={cn(
-            "flex items-center overflow-hidden border rounded-md border-slate-200",
-            "dark:border-slate-600 dark:focus-within:border-streamBlue",
-            "focus-within:border-streamBlue bg-white",
-            invalid &&
-              "border-streamRed focus-within:border-streamRed dark:focus-within:border-streamRed font-normal",
+            "flex items-center overflow-hidden border rounded-lg bg-white",
+            "focus-within:ring-2 focus-within:ring-pulse-500 focus-within:border-transparent transition-all duration-300",
+            invalid
+              ? "border-red-500 focus-within:ring-red-500"
+              : "border-gray-300",
+            disabled && "bg-gray-100 cursor-not-allowed",
             inputWrapperVariants({ size })
           )}
         >
           {icon && (
             <div
               className={cn(
-                "text-slate-500 ps-4 h-full flex items-center justify-center bg-white shrink-0",
-                "dark:text-slate-400 dark:bg-slate-900",
-                disabled && "bg-slate-100"
+                "text-gray-500 ps-4 h-full flex items-center justify-center bg-white shrink-0",
+                disabled && "bg-gray-100"
               )}
             >
               {icon}
@@ -79,12 +79,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             disabled={disabled}
             className={cn(
-              "text-base",
-              "flex w-full h-full text-slate-900 px-4 py-2 placeholder:text-slate-400",
+              "w-full px-4 py-3 text-gray-900 placeholder:text-gray-400",
               "focus-visible:outline-none",
-              "dark:text-white dark:bg-slate-900 dark:disabled:placeholder-slate-500 dark:disabled:text-slate-500 dark:placeholder:text-slate-500",
-              "disabled:placeholder-slate-400 disabled:text-slate-400 disabled:cursor-not-allowed input-autofill",
-              disabled ? "bg-slate-100" : "bg-white",
+              "disabled:placeholder-gray-400 disabled:text-gray-400 disabled:cursor-not-allowed",
+              "bg-white",
               icon && "ps-2.5",
               rightAddon && "pr-2.5",
               className
@@ -95,8 +93,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {rightAddon && (
             <div
               className={cn(
-                "text-slate-500 pr-4 h-full flex items-center justify-center bg-white shrink-0",
-                "dark:text-slate-400 dark:bg-slate-900"
+                "text-gray-500 pr-4 h-full flex items-center justify-center bg-white shrink-0"
               )}
             >
               {rightAddon}
@@ -105,13 +102,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {clearable && value && (
             <div
               className={cn(
-                "text-slate-500 pe-4 h-full flex items-center justify-center bg-white shrink-0",
-                "dark:text-slate-400 dark:bg-slate-900"
+                "text-gray-500 pe-4 h-full flex items-center justify-center bg-white shrink-0"
               )}
             >
               <X
                 onClick={handleClear}
-                className="size-5 shrink-0 cursor-pointer text-slate-500 dark:text-slate-400"
+                className="size-5 shrink-0 cursor-pointer text-gray-500 hover:text-gray-600 transition-colors"
               />
             </div>
           )}
