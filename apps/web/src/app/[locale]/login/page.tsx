@@ -7,6 +7,8 @@ import { useLoginMutation } from "@/generated/graphql";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input/input";
 
 const LoginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -85,42 +87,52 @@ export default function LoginPage() {
               <h1 className="section-title text-3xl sm:text-4xl mb-6 opacity-0 animate-fade-in text-center">
                 Welcome Back
               </h1>
-              <div className="glass-card p-6 sm:p-8 opacity-0 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+              <div
+                className="glass-card p-6 sm:p-8 opacity-0 animate-fade-in"
+                style={{ animationDelay: "0.2s" }}
+              >
                 <form onSubmit={formik.handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Email
                     </label>
-                    <input
+                    <Input
                       type="email"
                       id="email"
                       name="email"
                       value={formik.values.email}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                        formik.touched.email && formik.errors.email ? "border-red-500" : "border-gray-300"
-                      }`}
                       placeholder="you@example.com"
                     />
                     {formik.touched.email && formik.errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{formik.errors.email}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {formik.errors.email}
+                      </p>
                     )}
                   </div>
                   <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Password
                     </label>
                     <div className="relative">
-                      <input
+                      <Input
                         type={showPassword ? "text" : "password"}
                         id="password"
                         name="password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                          formik.touched.password && formik.errors.password ? "border-red-500" : "border-gray-300"
+                        className={` transition-all duration-300 ${
+                          formik.touched.password && formik.errors.password
+                            ? "border-red-500"
+                            : "border-gray-300"
                         }`}
                         placeholder="••••••••"
                       />
@@ -129,15 +141,23 @@ export default function LoginPage() {
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                       >
-                        {showPassword ? <span className="sr-only">Hide</span> : <span className="sr-only">Show</span>}
+                        {showPassword ? (
+                          <span className="sr-only">Hide</span>
+                        ) : (
+                          <span className="sr-only">Show</span>
+                        )}
                       </button>
                     </div>
                     {formik.touched.password && formik.errors.password && (
-                      <p className="mt-1 text-sm text-red-600">{formik.errors.password}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {formik.errors.password}
+                      </p>
                     )}
                   </div>
-                  {error && <p className="text-red-500 text-sm">{error.message}</p>}
-                  <button
+                  {error && (
+                    <p className="text-red-500 text-sm">{error.message}</p>
+                  )}
+                  <Button
                     type="submit"
                     disabled={loading}
                     className="flex items-center justify-center group w-full text-center disabled:opacity-50 disabled:cursor-not-allowed"
@@ -154,7 +174,7 @@ export default function LoginPage() {
                     }}
                   >
                     {loading ? "Logging in..." : "Login"}
-                  </button>
+                  </Button>
                 </form>
               </div>
             </div>

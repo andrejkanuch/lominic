@@ -17,7 +17,9 @@ const SignUpSchema = z
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
     agreeToTerms: z.literal(true, {
-      errorMap: () => ({ message: "You must agree to the terms and conditions" }),
+      errorMap: () => ({
+        message: "You must agree to the terms and conditions",
+      }),
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -41,7 +43,7 @@ export default function SignUpPage() {
       email: "",
       password: "",
       confirmPassword: "",
-      agreeToTerms: false,
+      agreeToTerms: true,
     },
     validate: (values) => {
       const result = SignUpSchema.safeParse(values);
@@ -74,7 +76,10 @@ export default function SignUpPage() {
         if (error.graphQLErrors) {
           error.graphQLErrors.forEach((err: any) => {
             if (err.message.includes("already exists")) {
-              formik.setFieldError("email", "User with this email already exists");
+              formik.setFieldError(
+                "email",
+                "User with this email already exists"
+              );
             }
           });
         }
@@ -122,23 +127,38 @@ export default function SignUpPage() {
           <div className="absolute -top-[10%] -right-[5%] w-1/2 h-[70%] bg-pulse-gradient opacity-20 blur-3xl rounded-full"></div>
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-md mx-auto">
-              <div className="pulse-chip mb-6 opacity-0 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+              <div
+                className="pulse-chip mb-6 opacity-0 animate-fade-in"
+                style={{ animationDelay: "0.1s" }}
+              >
                 <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-pulse-500 text-white mr-2">
                   <Check className="w-3 h-3" />
                 </span>
                 <span>Join Lominic</span>
               </div>
-              <h1 className="section-title text-3xl sm:text-4xl leading-tight opacity-0 animate-fade-in text-center" style={{ animationDelay: "0.3s" }}>
+              <h1
+                className="section-title text-3xl sm:text-4xl leading-tight opacity-0 animate-fade-in text-center"
+                style={{ animationDelay: "0.3s" }}
+              >
                 Create Your Account
               </h1>
-              <p className="section-subtitle mt-4 mb-8 leading-relaxed opacity-0 animate-fade-in text-gray-950 font-normal text-base text-center" style={{ animationDelay: "0.5s" }}>
+              <p
+                className="section-subtitle mt-4 mb-8 leading-relaxed opacity-0 animate-fade-in text-gray-950 font-normal text-base text-center"
+                style={{ animationDelay: "0.5s" }}
+              >
                 Start your AI-powered training journey today
               </p>
-              <div className="glass-card p-6 sm:p-8 opacity-0 animate-fade-in" style={{ animationDelay: "0.7s" }}>
+              <div
+                className="glass-card p-6 sm:p-8 opacity-0 animate-fade-in"
+                style={{ animationDelay: "0.7s" }}
+              >
                 <form onSubmit={formik.handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="firstName"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
                         First Name
                       </label>
                       <input
@@ -149,16 +169,23 @@ export default function SignUpPage() {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                          formik.touched.firstName && formik.errors.firstName ? "border-red-500" : "border-gray-300"
+                          formik.touched.firstName && formik.errors.firstName
+                            ? "border-red-500"
+                            : "border-gray-300"
                         }`}
                         placeholder="John"
                       />
                       {formik.touched.firstName && formik.errors.firstName && (
-                        <p className="mt-1 text-sm text-red-600">{formik.errors.firstName}</p>
+                        <p className="mt-1 text-sm text-red-600">
+                          {formik.errors.firstName}
+                        </p>
                       )}
                     </div>
                     <div>
-                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="lastName"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
                         Last Name
                       </label>
                       <input
@@ -169,17 +196,24 @@ export default function SignUpPage() {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                          formik.touched.lastName && formik.errors.lastName ? "border-red-500" : "border-gray-300"
+                          formik.touched.lastName && formik.errors.lastName
+                            ? "border-red-500"
+                            : "border-gray-300"
                         }`}
                         placeholder="Doe"
                       />
                       {formik.touched.lastName && formik.errors.lastName && (
-                        <p className="mt-1 text-sm text-red-600">{formik.errors.lastName}</p>
+                        <p className="mt-1 text-sm text-red-600">
+                          {formik.errors.lastName}
+                        </p>
                       )}
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Email Address
                     </label>
                     <input
@@ -190,16 +224,23 @@ export default function SignUpPage() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                        formik.touched.email && formik.errors.email ? "border-red-500" : "border-gray-300"
+                        formik.touched.email && formik.errors.email
+                          ? "border-red-500"
+                          : "border-gray-300"
                       }`}
                       placeholder="john@example.com"
                     />
                     {formik.touched.email && formik.errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{formik.errors.email}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {formik.errors.email}
+                      </p>
                     )}
                   </div>
                   <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Password
                     </label>
                     <div className="relative">
@@ -211,7 +252,9 @@ export default function SignUpPage() {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                          formik.touched.password && formik.errors.password ? "border-red-500" : "border-gray-300"
+                          formik.touched.password && formik.errors.password
+                            ? "border-red-500"
+                            : "border-gray-300"
                         }`}
                         placeholder="••••••••"
                       />
@@ -220,15 +263,24 @@ export default function SignUpPage() {
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                       >
-                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        {showPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
                       </button>
                     </div>
                     {formik.touched.password && formik.errors.password && (
-                      <p className="mt-1 text-sm text-red-600">{formik.errors.password}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {formik.errors.password}
+                      </p>
                     )}
                   </div>
                   <div>
-                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="confirmPassword"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Confirm Password
                     </label>
                     <div className="relative">
@@ -240,21 +292,33 @@ export default function SignUpPage() {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
-                          formik.touched.confirmPassword && formik.errors.confirmPassword ? "border-red-500" : "border-gray-300"
+                          formik.touched.confirmPassword &&
+                          formik.errors.confirmPassword
+                            ? "border-red-500"
+                            : "border-gray-300"
                         }`}
                         placeholder="••••••••"
                       />
                       <button
                         type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                       >
-                        {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        {showConfirmPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
                       </button>
                     </div>
-                    {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                      <p className="mt-1 text-sm text-red-600">{formik.errors.confirmPassword}</p>
-                    )}
+                    {formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {formik.errors.confirmPassword}
+                        </p>
+                      )}
                   </div>
                   <div className="flex items-start space-x-3">
                     <input
@@ -266,16 +330,36 @@ export default function SignUpPage() {
                       onBlur={formik.handleBlur}
                       className="mt-1 h-4 w-4 text-pulse-600 focus:ring-pulse-500 border-gray-300 rounded"
                     />
-                    <label htmlFor="agreeToTerms" className="text-sm text-gray-600">
-                      I agree to the <a href="#" className="text-pulse-600 hover:text-pulse-700 underline">Terms of Service</a> and{' '}
-                      <a href="#" className="text-pulse-600 hover:text-pulse-700 underline">Privacy Policy</a>
+                    <label
+                      htmlFor="agreeToTerms"
+                      className="text-sm text-gray-600"
+                    >
+                      I agree to the{" "}
+                      <a
+                        href="#"
+                        className="text-pulse-600 hover:text-pulse-700 underline"
+                      >
+                        Terms of Service
+                      </a>{" "}
+                      and{" "}
+                      <a
+                        href="#"
+                        className="text-pulse-600 hover:text-pulse-700 underline"
+                      >
+                        Privacy Policy
+                      </a>
                     </label>
                   </div>
-                  {formik.touched.agreeToTerms && formik.errors.agreeToTerms && (
-                    <p className="text-sm text-red-600">{formik.errors.agreeToTerms}</p>
-                  )}
+                  {formik.touched.agreeToTerms &&
+                    formik.errors.agreeToTerms && (
+                      <p className="text-sm text-red-600">
+                        {formik.errors.agreeToTerms}
+                      </p>
+                    )}
                   {registerError && (
-                    <p className="text-sm text-red-600 text-center">{registerError}</p>
+                    <p className="text-sm text-red-600 text-center">
+                      {registerError}
+                    </p>
                   )}
                   <button
                     type="submit"
@@ -299,8 +383,11 @@ export default function SignUpPage() {
                 </form>
                 <div className="mt-6 text-center">
                   <p className="text-sm text-gray-600">
-                    Already have an account?{' '}
-                    <a href="/login" className="text-pulse-600 hover:text-pulse-700 font-medium">
+                    Already have an account?{" "}
+                    <a
+                      href="/login"
+                      className="text-pulse-600 hover:text-pulse-700 font-medium"
+                    >
                       Sign in
                     </a>
                   </p>
@@ -308,7 +395,10 @@ export default function SignUpPage() {
               </div>
             </div>
           </div>
-          <div className="hidden lg:block absolute bottom-0 left-1/4 w-64 h-64 bg-pulse-100/30 rounded-full blur-3xl -z-10 parallax" data-speed="0.05"></div>
+          <div
+            className="hidden lg:block absolute bottom-0 left-1/4 w-64 h-64 bg-pulse-100/30 rounded-full blur-3xl -z-10 parallax"
+            data-speed="0.05"
+          ></div>
         </section>
       </main>
       <Footer />
