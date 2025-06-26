@@ -12,6 +12,7 @@ import { AppService } from "./app.service";
 import { DatabaseConfig } from "./config/database.config";
 import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
+import { StravaModule } from "./modules/strava/strava.module";
 
 
 
@@ -54,6 +55,7 @@ export interface GraphQLContext {
     // Feature modules
     AuthModule,
     UsersModule,
+    StravaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
