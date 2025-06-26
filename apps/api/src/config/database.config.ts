@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
 import { User } from "../entities/user.entity";
+import { StravaAccount } from "../entities/strava-account.entity";
 
 @Injectable()
 export class DatabaseConfig implements TypeOrmOptionsFactory {
@@ -33,7 +34,7 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       username,
       password: this.configService.get("DB_PASSWORD", "lominic_password"),
       database,
-      entities: [User],
+      entities: [User, StravaAccount],
       migrations: [__dirname + "/../migrations/*{.ts,.js}"],
       synchronize: nodeEnv !== "production",
       logging: nodeEnv === "development",

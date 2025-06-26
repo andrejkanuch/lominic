@@ -1,0 +1,10 @@
+query GetStravaActivities($limit: Int!) {
+  getStravaActivities(limit: $limit) {
+    id
+    name
+    distance
+    movingTime
+    startDate
+    description
+  }
+}
