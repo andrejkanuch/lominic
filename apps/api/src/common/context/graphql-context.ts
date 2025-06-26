@@ -3,7 +3,7 @@ import { GqlExecutionContext } from "@nestjs/graphql";
 import { User } from "../../entities/user.entity";
 
 export interface GraphQLContext {
-  req: any;
+  req: Request;
   user?: User;
 }
 

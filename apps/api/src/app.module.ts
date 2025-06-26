@@ -5,20 +5,20 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { join } from "path";
 import { Request } from "express";
-import { APP_GUARD } from "@nestjs/core";
+
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DatabaseConfig } from "./config/database.config";
 import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
-import { RolesGuard } from "./common/guards/roles.guard";
-import { PermissionsGuard } from "./common/guards/permissions.guard";
-import { JwtAuthGuard } from "./common/guards/jwt.guard";
+
+
+
 
 export interface GraphQLContext {
   req: Request;
-  user?: any;
+  user?: unknown;
 }
 
 @Module({
