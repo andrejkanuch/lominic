@@ -6,10 +6,12 @@ import {
   UpdateDateColumn,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from 'typeorm'
 import { Field, ObjectType, ID, registerEnumType } from '@nestjs/graphql'
 import * as bcrypt from 'bcryptjs'
 import { Role } from '../common/enums/roles.enum'
+import { StravaAccount } from './strava-account.entity'
 
 registerEnumType(Role, {
   name: 'Role',
@@ -53,6 +55,9 @@ export class User {
   @Field()
   @UpdateDateColumn()
   updatedAt: Date
+
+  @OneToMany(() => StravaAccount, (account) => account.user)
+  stravaAccounts: StravaAccount[]
 
   @BeforeInsert()
   @BeforeUpdate()
