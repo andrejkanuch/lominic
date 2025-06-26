@@ -91,11 +91,16 @@ export type Query = {
   me: User;
   user: User;
   users: Array<User>;
+  getStravaActivities: Array<StravaActivity>;
 };
 
 
 export type QueryUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryGetStravaActivitiesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type RegisterInput = {
@@ -129,6 +134,16 @@ export type User = {
   lastName: Scalars['String']['output'];
   role: Role;
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type StravaActivity = {
+  __typename?: 'StravaActivity';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  distance: Scalars['Int']['output'];
+  movingTime: Scalars['Int']['output'];
+  startDate: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
 };
 
 export type LoginMutationVariables = Exact<{
@@ -199,6 +214,12 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: Role, isEmailVerified: boolean, createdAt: string, updatedAt: string } };
+
+export type GetStravaActivitiesQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+}>;
+
+export type GetStravaActivitiesQuery = { __typename?: 'Query', getStravaActivities: Array<{ __typename?: 'StravaActivity', id: string, name: string, distance: number, movingTime: number, startDate: string, description?: string | null }> };
 
 
 export const LoginDocument = gql`
@@ -639,3 +660,48 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
 export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
+export const GetStravaActivitiesDocument = gql`
+    query GetStravaActivities($limit: Int!) {
+  getStravaActivities(limit: $limit) {
+    id
+    name
+    distance
+    movingTime
+    startDate
+    description
+  }
+}
+    `;
+
+/**
+ * __useGetStravaActivitiesQuery__
+ *
+ * To run a query within a React component, call `useGetStravaActivitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStravaActivitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStravaActivitiesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetStravaActivitiesQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables> & ({ variables: GetStravaActivitiesQueryVariables; skip?: boolean; } | { skip: boolean; })) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>(GetStravaActivitiesDocument, options);
+      }
+export function useGetStravaActivitiesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>(GetStravaActivitiesDocument, options);
+        }
+export function useGetStravaActivitiesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>(GetStravaActivitiesDocument, options);
+        }
+export type GetStravaActivitiesQueryHookResult = ReturnType<typeof useGetStravaActivitiesQuery>;
+export type GetStravaActivitiesLazyQueryHookResult = ReturnType<typeof useGetStravaActivitiesLazyQuery>;
+export type GetStravaActivitiesSuspenseQueryHookResult = ReturnType<typeof useGetStravaActivitiesSuspenseQuery>;
+export type GetStravaActivitiesQueryResult = ApolloReactCommon.QueryResult<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>;
