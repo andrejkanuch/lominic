@@ -1,89 +1,89 @@
-import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "../globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Providers } from "@/components/providers";
+import { NextIntlClientProvider, hasLocale } from 'next-intl'
+import { notFound } from 'next/navigation'
+import { routing } from '@/i18n/routing'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import '../globals.css'
+import { Toaster } from '@/components/ui/toaster'
+import { Toaster as Sonner } from '@/components/ui/sonner'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import { Providers } from '@/components/providers'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "Lominic - AI-Powered Workout Insights & Training Partner",
+  title: 'Lominic - AI-Powered Workout Insights & Training Partner',
   description:
-    "Upload workouts from Garmin, Apple Watch or Strava and get instant, AI-generated insights in plain language. Your training partner with a brain.",
+    'Upload workouts from Garmin, Apple Watch or Strava and get instant, AI-generated insights in plain language. Your training partner with a brain.',
   keywords:
-    "AI workout analysis, fitness tracking, Garmin, Apple Watch, Strava, training insights, workout optimization, fitness app, AI training partner",
-  authors: [{ name: "Lominic" }],
-  robots: "index, follow",
-  metadataBase: new URL("https://lominic.com"),
+    'AI workout analysis, fitness tracking, Garmin, Apple Watch, Strava, training insights, workout optimization, fitness app, AI training partner',
+  authors: [{ name: 'Lominic' }],
+  robots: 'index, follow',
+  metadataBase: new URL('https://lominic.com'),
   alternates: {
-    canonical: "/",
+    canonical: '/',
   },
   openGraph: {
-    type: "website",
-    url: "https://lominic.com/",
-    title: "Lominic - AI-Powered Workout Insights & Training Partner",
+    type: 'website',
+    url: 'https://lominic.com/',
+    title: 'Lominic - AI-Powered Workout Insights & Training Partner',
     description:
-      "Upload workouts from Garmin, Apple Watch or Strava and get instant, AI-generated insights in plain language. Your training partner with a brain.",
+      'Upload workouts from Garmin, Apple Watch or Strava and get instant, AI-generated insights in plain language. Your training partner with a brain.',
     images: [
       {
-        url: "/og-image-update.png",
+        url: '/og-image-update.png',
         width: 1200,
         height: 630,
-        alt: "Lominic - AI-Powered Workout Insights",
+        alt: 'Lominic - AI-Powered Workout Insights',
       },
     ],
-    siteName: "Lominic",
-    locale: "en_US",
+    siteName: 'Lominic',
+    locale: 'en_US',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Lominic - AI-Powered Workout Insights & Training Partner",
+    card: 'summary_large_image',
+    title: 'Lominic - AI-Powered Workout Insights & Training Partner',
     description:
-      "Upload workouts from Garmin, Apple Watch or Strava and get instant, AI-generated insights in plain language.",
-    images: ["/og-image-update.png"],
+      'Upload workouts from Garmin, Apple Watch or Strava and get instant, AI-generated insights in plain language.',
+    images: ['/og-image-update.png'],
   },
   other: {
-    "theme-color": "#FE5C02",
-    "msapplication-TileColor": "#FE5C02",
-    "apple-mobile-web-app-capable": "yes",
-    "apple-mobile-web-app-status-bar-style": "default",
-    "apple-mobile-web-app-title": "Lominic",
-    "application-name": "Lominic",
-    "mobile-web-app-capable": "yes",
-    "revisit-after": "7 days",
+    'theme-color': '#FE5C02',
+    'msapplication-TileColor': '#FE5C02',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'apple-mobile-web-app-title': 'Lominic',
+    'application-name': 'Lominic',
+    'mobile-web-app-capable': 'yes',
+    'revisit-after': '7 days',
   },
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: '/favicon.ico' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
     ],
     apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
-  manifest: "/site.webmanifest",
+  manifest: '/site.webmanifest',
   verification: {
-    google: "G-V996SESB0H",
+    google: 'G-V996SESB0H',
   },
-};
+}
 
 export default async function LocaleLayout({
   children,
   params,
 }: {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
 }) {
   // Ensure that the incoming `locale` is valid
-  const { locale } = await params;
+  const { locale } = await params
   if (!hasLocale(routing.locales, locale)) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -98,13 +98,18 @@ export default async function LocaleLayout({
         />
 
         {/* Google Analytics */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-V996SESB0H"
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
+
+        {process.env.NODE_ENV === 'production' && (
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-V996SESB0H"
+          />
+        )}
+
+        {process.env.NODE_ENV === 'production' && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag() {
                 dataLayer.push(arguments);
@@ -112,40 +117,41 @@ export default async function LocaleLayout({
               gtag("js", new Date());
               gtag("config", "G-V996SESB0H");
             `,
-          }}
-        />
+            }}
+          />
+        )}
 
         {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
-              name: "Lominic",
+              '@context': 'https://schema.org',
+              '@type': 'SoftwareApplication',
+              name: 'Lominic',
               description:
-                "AI-powered workout analysis and training insights app",
-              url: "https://lominic.com",
-              applicationCategory: "HealthApplication",
-              operatingSystem: "Web",
+                'AI-powered workout analysis and training insights app',
+              url: 'https://lominic.com',
+              applicationCategory: 'HealthApplication',
+              operatingSystem: 'Web',
               offers: {
-                "@type": "Offer",
-                price: "0",
-                priceCurrency: "USD",
-                description: "Free trial available",
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'USD',
+                description: 'Free trial available',
               },
               aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: "4.8",
-                ratingCount: "1250",
+                '@type': 'AggregateRating',
+                ratingValue: '4.8',
+                ratingCount: '1250',
               },
               featureList: [
-                "AI workout analysis",
-                "Garmin integration",
-                "Apple Watch integration",
-                "Strava integration",
-                "Training insights",
-                "Workout optimization",
+                'AI workout analysis',
+                'Garmin integration',
+                'Apple Watch integration',
+                'Strava integration',
+                'Training insights',
+                'Workout optimization',
               ],
             }),
           }}
@@ -156,16 +162,16 @@ export default async function LocaleLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "Lominic",
-              url: "https://lominic.com",
-              logo: "https://lominic.com/logo.svg",
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Lominic',
+              url: 'https://lominic.com',
+              logo: 'https://lominic.com/logo.svg',
               description:
-                "AI-powered fitness training and workout analysis platform",
+                'AI-powered fitness training and workout analysis platform',
               sameAs: [
-                "https://twitter.com/lominic",
-                "https://linkedin.com/company/lominic",
+                'https://twitter.com/lominic',
+                'https://linkedin.com/company/lominic',
               ],
             }),
           }}
@@ -183,5 +189,5 @@ export default async function LocaleLayout({
         </Providers>
       </body>
     </html>
-  );
+  )
 }
