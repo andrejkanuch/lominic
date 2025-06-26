@@ -8,33 +8,52 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint:fix": "turbo run lint:fix",
+    "format": "turbo run format",
+    "format:check": "turbo run format:check",
+    "type-check": "turbo run type-check",
     "codegen": "turbo run codegen",
     "codegen:watch": "turbo run codegen:watch",
-    "install:all": "pnpm install && cd apps/api && pnpm install && cd ../web && pnpm install",
     "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "test:coverage": "turbo run test:coverage",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "clean:all": "turbo run clean:all && rm -rf node_modules",
     "start:api": "turbo run start:dev --filter=@lominic/api",
     "start:web": "turbo run dev --filter=@lominic/web",
     "db:up": "cd apps/api && docker-compose up -d",
     "db:down": "cd apps/api && docker-compose down",
     "db:reset": "cd apps/api && docker-compose down -v && docker-compose up -d",
-    "db:run": "cd apps/api && pnpm migration:run"
+    "db:migrate": "turbo run migration:run --filter=@lominic/api",
+    "db:generate": "turbo run migration:generate --filter=@lominic/api",
+    "db:revert": "turbo run migration:revert --filter=@lominic/api",
+    "db:sync": "turbo run schema:sync --filter=@lominic/api",
+    "db:drop": "turbo run schema:drop --filter=@lominic/api"
   },
   "keywords": [
     "monorepo",
     "nextjs",
     "nestjs",
     "graphql",
-    "postgresql"
+    "postgresql",
+    "turbo"
   ],
   "author": "Andrej",
   "license": "ISC",
   "packageManager": "pnpm@8.6.0",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
+    "eslint": "^8.42.0",
     "prettier": "^3.0.0",
-    "turbo": "^1.10.0"
-  }
+    "turbo": "^1.10.0",
+    "typescript": "^5.1.3"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

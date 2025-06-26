@@ -1,44 +1,102 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
+  "globalDependencies": ["**/.env.*local", "**/.env"],
+  "globalEnv": ["NODE_ENV", "CI", "VERCEL", "TURBO_TEAM", "TURBO_TOKEN"],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**",
+        "build/**",
+        ".output/**"
+      ]
     },
-    "lint": {},
+    "lint": {
+      "dependsOn": ["^lint"],
+      "outputs": []
+    },
+    "lint:fix": {
+      "dependsOn": ["^lint:fix"],
+      "outputs": []
+    },
+    "format": {
+      "dependsOn": ["^format"],
+      "outputs": []
+    },
+    "format:check": {
+      "dependsOn": ["^format:check"],
+      "outputs": []
+    },
+    "type-check": {
+      "dependsOn": ["^type-check"],
+      "outputs": []
+    },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["^build"]
     },
-    "codegen": {
-      "cache": false
-    },
-    "codegen:watch": {
+    "start": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["build"]
     },
     "start:dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "codegen": {
+      "cache": false,
+      "dependsOn": ["^codegen"]
+    },
+    "codegen:watch": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^codegen"]
     },
     "test": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage/**"]
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true,
       "dependsOn": ["build"]
     },
+    "test:coverage": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage/**"]
+    },
+    "clean": {
+      "cache": false,
+      "outputs": []
+    },
+    "clean:all": {
+      "cache": false,
+      "outputs": []
+    },
     "migration:generate": {
-      "cache": false
+      "cache": false,
+      "outputs": []
     },
     "migration:run": {
-      "cache": false
+      "cache": false,
+      "outputs": []
     },
     "migration:revert": {
-      "cache": false
+      "cache": false,
+      "outputs": []
     },
     "schema:drop": {
-      "cache": false
+      "cache": false,
+      "outputs": []
     },
     "schema:sync": {
-      "cache": false
+      "cache": false,
+      "outputs": []
     }
   }
 }
