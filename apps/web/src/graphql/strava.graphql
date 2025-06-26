@@ -1,5 +1,5 @@
-query GetStravaActivities($limit: Int!) {
-  getStravaActivities(limit: $limit) {
+query getStravaActivities {
+  getStravaActivities {
     id
     name
     distance
