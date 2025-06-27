@@ -30,10 +30,10 @@ import {
 } from '@/components/ui/sidebar'
 
 const healthItems = [
-  { title: 'Dashboard', url: '/client/dashboard', icon: Monitor },
-  { title: 'Health Metrics', url: '/client/health', icon: HeartPulse },
-  { title: 'Vital Signs', url: '/client/vitals', icon: Thermometer },
-  { title: 'Heart Rate', url: '/client/heart-rate', icon: Heart },
+  { title: 'Dashboard', url: '/client/dashboard', icon: Monitor, disabled: true, comingSoon: true },
+  { title: 'Health Metrics', url: '/client/health', icon: HeartPulse, disabled: true, comingSoon: true },
+  { title: 'Vital Signs', url: '/client/vitals', icon: Thermometer, disabled: true, comingSoon: true },
+  { title: 'Heart Rate', url: '/client/heart-rate', icon: Heart, disabled: true, comingSoon: true },
 ]
 
 const trackingItems = [
@@ -56,18 +56,20 @@ export function ClientSidebar() {
 
   const isActive = (path: string) => currentPath === path
 
-  const getNavClass = (path: string) =>
+  const getNavClass = (path: string, isDisabled?: boolean) =>
     isActive(path)
-      ? 'bg-pulse-100 text-pulse-700 border-r-2 border-pulse-500'
-      : 'text-gray-700 hover:bg-pulse-50 hover:text-pulse-600'
+      ? 'bg-primary/10 text-primary border-r-2 border-primary'
+      : isDisabled
+      ? 'text-muted-foreground'
+      : 'text-foreground hover:bg-muted hover:text-foreground'
 
   return (
     <Sidebar
-      className={`border-r border-gray-200 bg-white ${
+      className={`border-r border-border bg-background ${
         isCollapsed ? 'w-16' : 'w-64'
       }`}
     >
-      <SidebarHeader className="border-b border-gray-200 p-4">
+      <SidebarHeader className="border-b border-border p-4">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-pulse-500 rounded-lg flex items-center justify-center">
             <Activity className="w-5 h-5 text-white" />
@@ -91,13 +93,17 @@ export function ClientSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {healthItems.map(item => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.title} disabled={item.disabled}>
                   <SidebarMenuButton asChild>
                     <Link
                       href={item.url}
-                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${getNavClass(
-                        item.url
-                      )}`}
+                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                        item.disabled
+                          ? 'text-muted-foreground cursor-not-allowed'
+                          : getNavClass(item.url)
+                      }`}
+                      aria-disabled={item.disabled}
+                      tabIndex={item.disabled ? -1 : undefined}
                     >
                       <item.icon
                         className={`${
@@ -107,6 +113,11 @@ export function ClientSidebar() {
                       {!isCollapsed && (
                         <span className="text-sm font-medium">
                           {item.title}
+                        </span>
+                      )}
+                      {item.comingSoon && !isCollapsed && (
+                        <span className="ml-auto px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                          Soon
                         </span>
                       )}
                     </Link>
@@ -184,14 +195,14 @@ export function ClientSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-gray-200 p-4">
+      <SidebarFooter className="border-t border-border p-4">
         {!isCollapsed && (
           <div className="text-center">
-            <div className="bg-pulse-50 rounded-lg p-3">
-              <p className="text-xs text-pulse-600 font-medium">
+            <div className="bg-muted rounded-lg p-3">
+              <p className="text-xs text-primary font-medium">
                 Track your progress
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Stay consistent with your health goals
               </p>
             </div>

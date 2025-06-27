@@ -498,7 +498,9 @@ SidebarMenu.displayName = 'SidebarMenu'
 
 const SidebarMenuItem = React.forwardRef<
   HTMLLIElement,
-  React.ComponentProps<'li'>
+  React.ComponentProps<'li'> & {
+    disabled?: boolean
+  }
 >(({ className, ...props }, ref) => (
   <li
     ref={ref}
