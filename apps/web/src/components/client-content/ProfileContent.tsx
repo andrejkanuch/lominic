@@ -1,8 +1,8 @@
-import React from 'react';
-import DummyContent from './DummyContent';
+import React from 'react'
+import { UserProfile } from '../UserProfile'
 
 const ProfileContent: React.FC = () => {
-  return <DummyContent title="Profile" />;
-};
+  return <UserProfile />
+}
 
-export default ProfileContent;
+export default ProfileContent

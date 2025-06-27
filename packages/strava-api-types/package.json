@@ -1,0 +1,17 @@
+{
+  "name": "@lominic/strava-api-types",
+  "version": "1.0.0",
+  "description": "TypeScript types for Strava API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

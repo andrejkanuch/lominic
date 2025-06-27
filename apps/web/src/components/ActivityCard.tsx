@@ -6,27 +6,15 @@ import {
   Clock,
   MapPin,
   Zap,
-  Heart,
+  //   Heart,
   Mountain,
   Timer,
   ThumbsUp,
 } from 'lucide-react'
+import { GetStravaActivitiesQuery } from '@/generated/graphql'
 
 interface ActivityCardProps {
-  activity: {
-    id: number
-    name: string
-    type: string
-    sport_type: string
-    date: string
-    distance: number
-    moving_time: number
-    total_elevation_gain: number
-    average_speed: number
-    average_heartrate?: number
-    kudos_count: number
-    description: string
-  }
+  activity: GetStravaActivitiesQuery['getStravaActivities'][number]
   onClick: () => void
 }
 
@@ -87,7 +75,7 @@ export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
               <div className="flex items-center space-x-2 mt-1">
                 <Calendar className="w-4 h-4 text-gray-500" />
                 <span className="text-sm text-gray-500">
-                  {formatDate(activity.date)}
+                  {formatDate(activity.start_date)}
                 </span>
               </div>
             </div>
@@ -142,14 +130,14 @@ export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
 
           {/* Bottom row */}
           <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-            {activity.average_heartrate && (
+            {/* {activity.average_heartrate && (
               <div className="flex items-center space-x-1">
                 <Heart className="w-4 h-4 text-red-500" />
                 <span className="text-sm text-gray-600">
                   {activity.average_heartrate} BPM
                 </span>
               </div>
-            )}
+            )} */}
 
             <div className="flex items-center space-x-1">
               <ThumbsUp className="w-4 h-4 text-pulse-500" />

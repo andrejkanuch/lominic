@@ -18,6 +18,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: string; output: string; }
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: { input: Record<string, any>; output: Record<string, any>; }
 };
 
 export type AuthResponse = {
@@ -120,12 +122,64 @@ export type Role =
 
 export type StravaActivityDto = {
   __typename?: 'StravaActivityDto';
+  achievement_count: Scalars['Int']['output'];
+  athlete_count: Scalars['Int']['output'];
+  average_cadence: Maybe<Scalars['Float']['output']>;
+  average_heartrate: Maybe<Scalars['Float']['output']>;
+  average_speed: Scalars['Float']['output'];
+  average_temp: Maybe<Scalars['Float']['output']>;
+  average_watts: Maybe<Scalars['Float']['output']>;
+  calories: Maybe<Scalars['Float']['output']>;
+  comment_count: Scalars['Int']['output'];
+  commute: Scalars['Boolean']['output'];
   description: Maybe<Scalars['String']['output']>;
+  device_watts: Maybe<Scalars['Boolean']['output']>;
+  display_hide_heartrate_option: Maybe<Scalars['Boolean']['output']>;
   distance: Scalars['Float']['output'];
+  elapsed_time: Scalars['Int']['output'];
+  elev_high: Maybe<Scalars['Float']['output']>;
+  elev_low: Maybe<Scalars['Float']['output']>;
+  end_latlng: Maybe<Scalars['JSON']['output']>;
+  external_id: Maybe<Scalars['String']['output']>;
+  flagged: Scalars['Boolean']['output'];
+  from_accepted_tag: Scalars['Boolean']['output'];
+  gear_id: Maybe<Scalars['String']['output']>;
+  has_heartrate: Scalars['Boolean']['output'];
+  has_kudoed: Scalars['Boolean']['output'];
+  heartrate_opt_out: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
-  movingTime: Scalars['Int']['output'];
+  kilojoules: Maybe<Scalars['Float']['output']>;
+  kudos_count: Scalars['Int']['output'];
+  location_city: Maybe<Scalars['String']['output']>;
+  location_country: Maybe<Scalars['String']['output']>;
+  location_state: Maybe<Scalars['String']['output']>;
+  manual: Scalars['Boolean']['output'];
+  max_heartrate: Maybe<Scalars['Float']['output']>;
+  max_speed: Scalars['Float']['output'];
+  max_watts: Maybe<Scalars['Float']['output']>;
+  moving_time: Scalars['Int']['output'];
   name: Scalars['String']['output'];
-  startDate: Scalars['String']['output'];
+  photo_count: Scalars['Int']['output'];
+  polyline: Maybe<Scalars['JSON']['output']>;
+  pr_count: Scalars['Int']['output'];
+  private: Scalars['Boolean']['output'];
+  resource_state: Maybe<Scalars['Int']['output']>;
+  sport_type: Scalars['String']['output'];
+  start_date: Scalars['String']['output'];
+  start_date_local: Scalars['String']['output'];
+  start_latlng: Maybe<Scalars['JSON']['output']>;
+  suffer_score: Maybe<Scalars['Int']['output']>;
+  timezone: Scalars['String']['output'];
+  total_elevation_gain: Scalars['Float']['output'];
+  total_photo_count: Scalars['Int']['output'];
+  trainer: Scalars['Boolean']['output'];
+  type: Scalars['String']['output'];
+  upload_id: Maybe<Scalars['Int']['output']>;
+  upload_id_str: Maybe<Scalars['String']['output']>;
+  utc_offset: Scalars['Int']['output'];
+  visibility: Maybe<Scalars['String']['output']>;
+  weighted_average_watts: Maybe<Scalars['Float']['output']>;
+  workout_type: Maybe<Scalars['Int']['output']>;
 };
 
 export type UpdateUserInput = {
@@ -176,7 +230,7 @@ export type GetStravaActivitiesQueryVariables = Exact<{
 }>;
 
 
-export type GetStravaActivitiesQuery = { __typename?: 'Query', getStravaActivities: Array<{ __typename?: 'StravaActivityDto', id: string, name: string, distance: number, movingTime: number, startDate: string, description: string | null }> };
+export type GetStravaActivitiesQuery = { __typename?: 'Query', getStravaActivities: Array<{ __typename?: 'StravaActivityDto', id: string, name: string, type: string, sport_type: string, distance: number, moving_time: number, elapsed_time: number, total_elevation_gain: number, start_date: string, start_date_local: string, timezone: string, utc_offset: number, start_latlng: Record<string, any> | null, end_latlng: Record<string, any> | null, achievement_count: number, kudos_count: number, comment_count: number, athlete_count: number, photo_count: number, trainer: boolean, commute: boolean, manual: boolean, private: boolean, flagged: boolean, gear_id: string | null, from_accepted_tag: boolean, average_speed: number, max_speed: number, average_cadence: number | null, average_temp: number | null, average_watts: number | null, weighted_average_watts: number | null, kilojoules: number | null, device_watts: boolean | null, has_heartrate: boolean, max_watts: number | null, elev_high: number | null, elev_low: number | null, pr_count: number, total_photo_count: number, has_kudoed: boolean, workout_type: number | null, suffer_score: number | null, description: string | null, calories: number | null, polyline: Record<string, any> | null }> };
 
 export type CreateTestStravaAccountMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -373,10 +427,50 @@ export const GetStravaActivitiesDocument = gql`
   getStravaActivities(limit: $limit) {
     id
     name
+    type
+    sport_type
     distance
-    movingTime
-    startDate
+    moving_time
+    elapsed_time
+    total_elevation_gain
+    start_date
+    start_date_local
+    timezone
+    utc_offset
+    start_latlng
+    end_latlng
+    achievement_count
+    kudos_count
+    comment_count
+    athlete_count
+    photo_count
+    trainer
+    commute
+    manual
+    private
+    flagged
+    gear_id
+    from_accepted_tag
+    average_speed
+    max_speed
+    average_cadence
+    average_temp
+    average_watts
+    weighted_average_watts
+    kilojoules
+    device_watts
+    has_heartrate
+    max_watts
+    elev_high
+    elev_low
+    pr_count
+    total_photo_count
+    has_kudoed
+    workout_type
+    suffer_score
     description
+    calories
+    polyline
   }
 }
     `;

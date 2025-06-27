@@ -5,6 +5,7 @@ import { Repository } from 'typeorm'
 import fetch from 'node-fetch'
 import { StravaAccount } from '../../entities/strava-account.entity'
 import { StravaActivityDto } from './dto/strava-activity.dto'
+import { Activity, DetailedAthlete } from '@lominic/strava-api-types'
 
 @Injectable()
 export class StravaService {
@@ -188,25 +189,77 @@ export class StravaService {
       throw new Error(`Failed to fetch activities: ${text}`)
     }
 
-    const data = (await res.json()) as {
-      id: number
-      name: string
-      distance: number
-      moving_time: number
-      start_date: string
-      description: string
-    }[]
+    const activities = (await res.json()) as Activity[]
     this.logger.log(
-      `Successfully fetched ${data.length} activities for user: ${userId}`
+      `Successfully fetched ${activities.length} activities for user: ${userId}`
     )
 
-    return data.map(a => ({
-      id: a.id.toString(),
-      name: a.name,
-      distance: a.distance,
-      movingTime: a.moving_time,
-      startDate: a.start_date,
-      description: a.description,
+    console.log(activities[0])
+
+    return activities.map(activity => ({
+      id: activity.id.toString(),
+      name: activity.name,
+      type: activity.type,
+      sport_type: activity.sport_type,
+      distance: activity.distance,
+      moving_time: activity.moving_time,
+      elapsed_time: activity.elapsed_time,
+      total_elevation_gain: activity.total_elevation_gain,
+      start_date: activity.start_date,
+      start_date_local: activity.start_date_local,
+      timezone: activity.timezone,
+      utc_offset: activity.utc_offset,
+      start_latlng: activity.start_latlng
+        ? [activity.start_latlng[0], activity.start_latlng[1]]
+        : undefined,
+      end_latlng: activity.end_latlng
+        ? [activity.end_latlng[0], activity.end_latlng[1]]
+        : undefined,
+      achievement_count: activity.achievement_count,
+      kudos_count: activity.kudos_count,
+      comment_count: activity.comment_count,
+      athlete_count: activity.athlete_count,
+      photo_count: activity.photo_count,
+      trainer: activity.trainer,
+      commute: activity.commute,
+      manual: activity.manual,
+      private: activity.private,
+      flagged: activity.flagged,
+      gear_id: activity.gear_id,
+      from_accepted_tag: activity.from_accepted_tag,
+      average_speed: activity.average_speed,
+      max_speed: activity.max_speed,
+      average_cadence: activity.average_cadence,
+      average_temp: activity.average_temp,
+      average_watts: activity.average_watts,
+      weighted_average_watts: activity.weighted_average_watts,
+      kilojoules: activity.kilojoules,
+      device_watts: activity.device_watts,
+      has_heartrate: activity.has_heartrate,
+      max_watts: activity.max_watts,
+      elev_high: activity.elev_high,
+      elev_low: activity.elev_low,
+      pr_count: activity.pr_count,
+      total_photo_count: activity.total_photo_count,
+      has_kudoed: activity.has_kudoed,
+      workout_type: activity.workout_type,
+      suffer_score: activity.suffer_score,
+      description: activity.description,
+      calories: activity.calories,
+      polyline: activity.map?.summary_polyline,
+      // Additional fields from actual API response
+      resource_state: activity.resource_state,
+      external_id: activity.external_id,
+      upload_id: activity.upload_id,
+      upload_id_str: activity.upload_id_str,
+      location_city: activity.location_city,
+      location_state: activity.location_state,
+      location_country: activity.location_country,
+      visibility: activity.visibility,
+      average_heartrate: activity.average_heartrate,
+      max_heartrate: activity.max_heartrate,
+      heartrate_opt_out: activity.heartrate_opt_out,
+      display_hide_heartrate_option: activity.display_hide_heartrate_option,
     }))
   }
 
@@ -234,5 +287,46 @@ export class StravaService {
     account.athleteId = 56926193 // Updated with real athlete ID from test
 
     return this.accounts.save(account)
+  }
+
+  /**
+   * Gets the authenticated athlete's profile from the Strava API.
+   * @param userId - The ID of the user.
+   * @returns The detailed athlete profile.
+   */
+  async getAthlete(userId: string): Promise<DetailedAthlete> {
+    const account = await this.findAccountByUserId(userId)
+    if (!account) {
+      this.logger.warn(`No Strava account found for user: ${userId}`)
+      throw new NotFoundException(
+        'Strava account not found. Please connect your Strava account first.'
+      )
+    }
+
+    try {
+      await this.refreshTokenIfNeeded(account)
+    } catch (error) {
+      this.logger.error(`Failed to refresh token for user ${userId}: ${error}`)
+      throw new Error(
+        'Failed to refresh Strava token. Please reconnect your account.'
+      )
+    }
+
+    this.logger.log(`Fetching athlete data for user: ${userId}`)
+
+    const res = await fetch(`https://www.strava.com/api/v3/athlete`, {
+      headers: { Authorization: `Bearer ${account.accessToken}` },
+    })
+
+    if (!res.ok) {
+      const text = await res.text()
+      this.logger.error(`Failed to fetch athlete data for user ${userId}: ${text}`)
+      throw new Error(`Failed to fetch athlete data: ${text}`)
+    }
+
+    const athlete = (await res.json()) as DetailedAthlete
+    this.logger.log(`Successfully fetched athlete data for user: ${userId}`)
+
+    return athlete
   }
 }

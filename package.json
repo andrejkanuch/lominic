@@ -13,6 +13,8 @@
     "format": "turbo run format",
     "format:check": "turbo run format:check",
     "type-check": "turbo run type-check",
+    "build:ts": "turbo run build --filter='//packages/*'",
+    "watch:ts": "turbo run build --filter='//packages/*' -- --watch",
     "codegen": "turbo run codegen",
     "codegen:watch": "turbo run codegen:watch",
     "test": "turbo run test",

@@ -23,29 +23,13 @@ import {
 import { ActivityMetrics } from './ActivityMetrics'
 import { ActivityMap } from './ActivityMap'
 import { ActivityChart } from './ActivityChart'
+import {
+  GetStravaActivitiesQuery,
+  StravaActivityDto,
+} from '@/generated/graphql'
 
 interface ActivityDetailModalProps {
-  activity: {
-    id: number
-    name: string
-    type: string
-    sport_type: string
-    date: string
-    distance: number
-    moving_time: number
-    total_elevation_gain: number
-    average_speed: number
-    max_speed: number
-    average_heartrate?: number
-    max_heartrate?: number
-    kudos_count: number
-    description: string
-    map?: {
-      summary_polyline: string
-    }
-    start_latlng?: [number, number]
-    end_latlng?: [number, number]
-  }
+  activity: GetStravaActivitiesQuery['getStravaActivities'][number]
   isOpen: boolean
   onClose: () => void
 }

@@ -5,6 +5,7 @@ import { StravaActivityDto } from './dto/strava-activity.dto'
 import { CurrentUser } from '../../common/decorators/current-user.decorator'
 import { User } from '../../entities/user.entity'
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard'
+import { DetailedAthlete } from './dto/detailed-athlete.dto'
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
@@ -34,6 +35,17 @@ export class StravaResolver {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error occurred'
       throw new Error(`Failed to create test Strava account: ${errorMessage}`)
+    }
+  }
+
+  @Query(() => DetailedAthlete)
+  async getAthlete(@CurrentUser() user: User): Promise<DetailedAthlete> {
+    try {
+      return await this.stravaService.getAthlete(user.id)
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred'
+      throw new Error(`Failed to fetch athlete data: ${errorMessage}`)
     }
   }
 }

@@ -145,9 +145,7 @@ const ClientProfile = () => {
               <div className="pt-4 border-t border-border">
                 <div className="text-center space-y-2">
                   <p className="text-sm text-muted-foreground">Health Score</p>
-                  <div className="text-3xl font-bold text-primary">
-                    87/100
-                  </div>
+                  <div className="text-3xl font-bold text-primary">87/100</div>
                   <Badge className="bg-success/10 text-success">
                     Excellent
                   </Badge>

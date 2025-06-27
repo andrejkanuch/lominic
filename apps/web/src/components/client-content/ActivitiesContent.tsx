@@ -11,102 +11,108 @@ import {
 import { Search, Filter, TrendingUp } from 'lucide-react'
 import { ActivityCard } from '@/components/ActivityCard'
 import { ActivityDetailModal } from '@/components/ActivityDetailModal'
+import {
+  useGetStravaActivitiesQuery,
+  GetStravaActivitiesQuery,
+} from '@/generated/graphql'
 
-// Mock data for activities
-const mockActivities = [
-  {
-    id: 1,
-    name: 'Morning Mountain Bike Ride',
-    type: 'Ride',
-    sport_type: 'MountainBikeRide',
-    date: '2024-06-27',
-    distance: 25.4,
-    moving_time: 3600,
-    total_elevation_gain: 450,
-    average_speed: 25.4,
-    max_speed: 52.1,
-    average_heartrate: 142,
-    max_heartrate: 178,
-    kudos_count: 12,
-    description:
-      'Epic morning ride through the mountain trails. Perfect weather and amazing views!',
-    map: {
-      summary_polyline: 'encoded_polyline_data',
-    },
-    start_latlng: [37.7749, -122.4194],
-    end_latlng: [37.7849, -122.4094],
-  },
-  {
-    id: 2,
-    name: 'Evening Run',
-    type: 'Run',
-    sport_type: 'Run',
-    date: '2024-06-26',
-    distance: 8.2,
-    moving_time: 2400,
-    total_elevation_gain: 85,
-    average_speed: 12.3,
-    max_speed: 18.5,
-    average_heartrate: 155,
-    max_heartrate: 172,
-    kudos_count: 8,
-    description:
-      'Nice evening run around the neighborhood. Felt strong throughout!',
-    map: {
-      summary_polyline: 'encoded_polyline_data',
-    },
-    start_latlng: [37.7649, -122.4294],
-    end_latlng: [37.7749, -122.4194],
-  },
-  {
-    id: 3,
-    name: 'Weekend Road Cycling',
-    type: 'Ride',
-    sport_type: 'Ride',
-    date: '2024-06-25',
-    distance: 65.8,
-    moving_time: 7200,
-    total_elevation_gain: 890,
-    average_speed: 32.9,
-    max_speed: 67.2,
-    average_heartrate: 138,
-    max_heartrate: 165,
-    kudos_count: 15,
-    description:
-      'Long weekend ride with the cycling group. Challenging climbs but rewarding descents!',
-    map: {
-      summary_polyline: 'encoded_polyline_data',
-    },
-    start_latlng: [37.7849, -122.4094],
-    end_latlng: [37.8049, -122.3894],
-  },
-]
+type StravaActivity = NonNullable<
+  GetStravaActivitiesQuery['getStravaActivities']
+>[0]
 
 const ActivitiesContent: React.FC = () => {
-  const [activities] = useState<Activity[]>(mockActivities)
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
-    null
-  )
+  const [selectedActivity, setSelectedActivity] =
+    useState<StravaActivity | null>(null)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedSport, setSelectedSport] = useState('all')
   const [selectedTimeRange, setSelectedTimeRange] = useState('all')
 
+  // Fetch real Strava activities
+  const { data, loading, error } = useGetStravaActivitiesQuery({
+    variables: { limit: 50 },
+  })
+
+  const activities = data?.getStravaActivities || []
+
   const filteredActivities = activities.filter(activity => {
     const matchesSearch =
       activity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      activity.description.toLowerCase().includes(searchTerm.toLowerCase())
+      (activity.description || '')
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
     const matchesSport =
       selectedSport === 'all' || activity.sport_type === selectedSport
     return matchesSearch && matchesSport
   })
 
-  const handleActivityClick = (activity: Activity) => {
+  const handleActivityClick = (activity: StravaActivity) => {
     setSelectedActivity(activity)
     setIsDetailModalOpen(true)
   }
 
   const sportTypes = Array.from(new Set(activities.map(a => a.sport_type)))
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Activities</h1>
+            <p className="text-muted-foreground mt-1">
+              Loading your activities...
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <Card key={i} className="animate-pulse">
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div className="h-4 bg-muted rounded w-3/4"></div>
+                  <div className="h-3 bg-muted rounded w-1/2"></div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {[...Array(4)].map((_, j) => (
+                      <div key={j} className="space-y-2">
+                        <div className="h-3 bg-muted rounded w-1/2"></div>
+                        <div className="h-4 bg-muted rounded"></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Activities</h1>
+            <p className="text-muted-foreground mt-1">
+              Error loading activities
+            </p>
+          </div>
+        </div>
+        <Card className="text-center py-12">
+          <CardContent>
+            <div className="text-muted-foreground">
+              <TrendingUp className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-lg font-semibold mb-2">
+                Failed to load activities
+              </h3>
+              <p>Please try again later or check your Strava connection</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -192,7 +198,7 @@ const ActivitiesContent: React.FC = () => {
         {filteredActivities.map(activity => (
           <ActivityCard
             key={activity.id}
-            activity={activity as any}
+            activity={activity}
             onClick={() => handleActivityClick(activity)}
           />
         ))}

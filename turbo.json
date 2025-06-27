@@ -24,6 +24,9 @@
         ".output/**"
       ]
     },
+    "strava-api-types#build": {
+      "outputs": ["dist/**"]
+    },
     "lint": {
       "dependsOn": [
         "^lint"

@@ -17,6 +17,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: Date; output: Date; }
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: { input: Record<string, any>; output: Record<string, any>; }
 };
 
 export type AuthResponse = {
@@ -119,12 +121,64 @@ export type Role =
 
 export type StravaActivityDto = {
   __typename?: 'StravaActivityDto';
+  achievement_count: Scalars['Int']['output'];
+  athlete_count: Scalars['Int']['output'];
+  average_cadence: Maybe<Scalars['Float']['output']>;
+  average_heartrate: Maybe<Scalars['Float']['output']>;
+  average_speed: Scalars['Float']['output'];
+  average_temp: Maybe<Scalars['Float']['output']>;
+  average_watts: Maybe<Scalars['Float']['output']>;
+  calories: Maybe<Scalars['Float']['output']>;
+  comment_count: Scalars['Int']['output'];
+  commute: Scalars['Boolean']['output'];
   description: Maybe<Scalars['String']['output']>;
+  device_watts: Maybe<Scalars['Boolean']['output']>;
+  display_hide_heartrate_option: Maybe<Scalars['Boolean']['output']>;
   distance: Scalars['Float']['output'];
+  elapsed_time: Scalars['Int']['output'];
+  elev_high: Maybe<Scalars['Float']['output']>;
+  elev_low: Maybe<Scalars['Float']['output']>;
+  end_latlng: Maybe<Scalars['JSON']['output']>;
+  external_id: Maybe<Scalars['String']['output']>;
+  flagged: Scalars['Boolean']['output'];
+  from_accepted_tag: Scalars['Boolean']['output'];
+  gear_id: Maybe<Scalars['String']['output']>;
+  has_heartrate: Scalars['Boolean']['output'];
+  has_kudoed: Scalars['Boolean']['output'];
+  heartrate_opt_out: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
-  movingTime: Scalars['Int']['output'];
+  kilojoules: Maybe<Scalars['Float']['output']>;
+  kudos_count: Scalars['Int']['output'];
+  location_city: Maybe<Scalars['String']['output']>;
+  location_country: Maybe<Scalars['String']['output']>;
+  location_state: Maybe<Scalars['String']['output']>;
+  manual: Scalars['Boolean']['output'];
+  max_heartrate: Maybe<Scalars['Float']['output']>;
+  max_speed: Scalars['Float']['output'];
+  max_watts: Maybe<Scalars['Float']['output']>;
+  moving_time: Scalars['Int']['output'];
   name: Scalars['String']['output'];
-  startDate: Scalars['String']['output'];
+  photo_count: Scalars['Int']['output'];
+  polyline: Maybe<Scalars['JSON']['output']>;
+  pr_count: Scalars['Int']['output'];
+  private: Scalars['Boolean']['output'];
+  resource_state: Maybe<Scalars['Int']['output']>;
+  sport_type: Scalars['String']['output'];
+  start_date: Scalars['String']['output'];
+  start_date_local: Scalars['String']['output'];
+  start_latlng: Maybe<Scalars['JSON']['output']>;
+  suffer_score: Maybe<Scalars['Int']['output']>;
+  timezone: Scalars['String']['output'];
+  total_elevation_gain: Scalars['Float']['output'];
+  total_photo_count: Scalars['Int']['output'];
+  trainer: Scalars['Boolean']['output'];
+  type: Scalars['String']['output'];
+  upload_id: Maybe<Scalars['Int']['output']>;
+  upload_id_str: Maybe<Scalars['String']['output']>;
+  utc_offset: Scalars['Int']['output'];
+  visibility: Maybe<Scalars['String']['output']>;
+  weighted_average_watts: Maybe<Scalars['Float']['output']>;
+  workout_type: Maybe<Scalars['Int']['output']>;
 };
 
 export type UpdateUserInput = {
@@ -226,6 +280,7 @@ export type ResolversTypes = ResolversObject<{
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   LoginInput: LoginInput;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -246,6 +301,7 @@ export type ResolversParentTypes = ResolversObject<{
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  JSON: Scalars['JSON']['output'];
   LoginInput: LoginInput;
   Mutation: {};
   Query: {};
@@ -264,6 +320,10 @@ export type AuthResponseResolvers<ContextType = GraphQLContext, ParentType exten
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
+}
+
+export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON';
 }
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -285,12 +345,64 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
 }>;
 
 export type StravaActivityDtoResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['StravaActivityDto'] = ResolversParentTypes['StravaActivityDto']> = ResolversObject<{
+  achievement_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  athlete_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  average_cadence?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  average_heartrate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  average_speed?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  average_temp?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  average_watts?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  calories?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  comment_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  commute?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  device_watts?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  display_hide_heartrate_option?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   distance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  elapsed_time?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  elev_high?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  elev_low?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  end_latlng?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  external_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  flagged?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  from_accepted_tag?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  gear_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  has_heartrate?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  has_kudoed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  heartrate_opt_out?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  movingTime?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  kilojoules?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  kudos_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  location_city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  location_country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  location_state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  manual?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  max_heartrate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  max_speed?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  max_watts?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  moving_time?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  startDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  photo_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  polyline?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  pr_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  private?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  resource_state?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  sport_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  start_date?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  start_date_local?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  start_latlng?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  suffer_score?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  timezone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  total_elevation_gain?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  total_photo_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  trainer?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  upload_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  upload_id_str?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  utc_offset?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  visibility?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  weighted_average_watts?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  workout_type?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -309,6 +421,7 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
 export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   AuthResponse?: AuthResponseResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
+  JSON?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   StravaActivityDto?: StravaActivityDtoResolvers<ContextType>;
