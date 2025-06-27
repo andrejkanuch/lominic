@@ -6,6 +6,8 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator'
 import { User } from '../../entities/user.entity'
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard'
 import { DetailedAthlete } from './dto/detailed-athlete.dto'
+import { Zones } from './dto/zones.dto'
+import { ActivityStats } from './dto/activity-stats.dto'
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
@@ -46,6 +48,28 @@ export class StravaResolver {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error occurred'
       throw new Error(`Failed to fetch athlete data: ${errorMessage}`)
+    }
+  }
+
+  @Query(() => Zones)
+  async getAthleteZones(@CurrentUser() user: User): Promise<Zones> {
+    try {
+      return await this.stravaService.getAthleteZones(user.id)
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred'
+      throw new Error(`Failed to fetch athlete zones: ${errorMessage}`)
+    }
+  }
+
+  @Query(() => ActivityStats)
+  async getAthleteStats(@CurrentUser() user: User): Promise<ActivityStats> {
+    try {
+      return await this.stravaService.getAthleteStats(user.id)
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred'
+      throw new Error(`Failed to fetch athlete stats: ${errorMessage}`)
     }
   }
 }

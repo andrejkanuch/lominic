@@ -5,7 +5,7 @@ import { Repository } from 'typeorm'
 import fetch from 'node-fetch'
 import { StravaAccount } from '../../entities/strava-account.entity'
 import { StravaActivityDto } from './dto/strava-activity.dto'
-import { Activity, DetailedAthlete } from '@lominic/strava-api-types'
+import { Activity, DetailedAthlete, Zones, ActivityStats } from '@lominic/strava-api-types'
 
 @Injectable()
 export class StravaService {
@@ -328,5 +328,90 @@ export class StravaService {
     this.logger.log(`Successfully fetched athlete data for user: ${userId}`)
 
     return athlete
+  }
+
+  /**
+   * Gets the authenticated athlete's zones from the Strava API.
+   * @param userId - The ID of the user.
+   * @returns The athlete's zones.
+   */
+  async getAthleteZones(userId: string): Promise<Zones> {
+    const account = await this.findAccountByUserId(userId)
+    if (!account) {
+      this.logger.warn(`No Strava account found for user: ${userId}`)
+      throw new NotFoundException(
+        'Strava account not found. Please connect your Strava account first.'
+      )
+    }
+
+    try {
+      await this.refreshTokenIfNeeded(account)
+    } catch (error) {
+      this.logger.error(`Failed to refresh token for user ${userId}: ${error}`)
+      throw new Error(
+        'Failed to refresh Strava token. Please reconnect your account.'
+      )
+    }
+
+    this.logger.log(`Fetching athlete zones for user: ${userId}`)
+
+    const res = await fetch(`https://www.strava.com/api/v3/athlete/zones`, {
+      headers: { Authorization: `Bearer ${account.accessToken}` },
+    })
+
+    if (!res.ok) {
+      const text = await res.text()
+      this.logger.error(`Failed to fetch athlete zones for user ${userId}: ${text}`)
+      throw new Error(`Failed to fetch athlete zones: ${text}`)
+    }
+
+    const zones = (await res.json()) as Zones
+    this.logger.log(`Successfully fetched athlete zones for user: ${userId}`)
+
+    return zones
+  }
+
+  /**
+   * Gets the authenticated athlete's stats from the Strava API.
+   * @param userId - The ID of the user.
+   * @returns The athlete's stats.
+   */
+  async getAthleteStats(userId: string): Promise<ActivityStats> {
+    const account = await this.findAccountByUserId(userId)
+    if (!account) {
+      this.logger.warn(`No Strava account found for user: ${userId}`)
+      throw new NotFoundException(
+        'Strava account not found. Please connect your Strava account first.'
+      )
+    }
+
+    try {
+      await this.refreshTokenIfNeeded(account)
+    } catch (error) {
+      this.logger.error(`Failed to refresh token for user ${userId}: ${error}`)
+      throw new Error(
+        'Failed to refresh Strava token. Please reconnect your account.'
+      )
+    }
+
+    this.logger.log(`Fetching athlete stats for user: ${userId}`)
+
+    const res = await fetch(
+      `https://www.strava.com/api/v3/athletes/${account.athleteId}/stats`,
+      {
+        headers: { Authorization: `Bearer ${account.accessToken}` },
+      }
+    )
+
+    if (!res.ok) {
+      const text = await res.text()
+      this.logger.error(`Failed to fetch athlete stats for user ${userId}: ${text}`)
+      throw new Error(`Failed to fetch athlete stats: ${text}`)
+    }
+
+    const stats = (await res.json()) as ActivityStats
+    this.logger.log(`Successfully fetched athlete stats for user: ${userId}`)
+
+    return stats
   }
 }

@@ -15,3 +15,105 @@ query getStravaActivities($limit: Int) {
 mutation createTestStravaAccount {
   createTestStravaAccount
 }
+
+query GetAthleteZones {
+  getAthleteZones {
+    heart_rate {
+      min
+      max
+    }
+    power {
+      zone {
+        min
+        max
+      }
+      distribution_buckets {
+        max
+        min
+        time
+      }
+      type
+      resource_state
+      sensor_based
+    }
+  }
+}
+
+query GetAthleteStats {
+  getAthleteStats {
+    recent_run_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    all_run_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    recent_swim_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    biggest_ride_distance
+    ytd_swim_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    all_swim_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    recent_ride_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    biggest_climb_elevation_gain
+    ytd_ride_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    all_ride_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    ytd_run_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+  }
+}

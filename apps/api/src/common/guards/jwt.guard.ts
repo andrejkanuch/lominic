@@ -28,10 +28,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context)
   }
 
-  handleRequest<TUser = any>(
-    err: any,
-    user: any,
-    info: any,
+  handleRequest<TUser = unknown>(
+    err: Error | null,
+    user: TUser,
+    info: unknown,
     _context: ExecutionContext
   ): TUser {
     console.log('🔐 JwtAuthGuard - handleRequest called')

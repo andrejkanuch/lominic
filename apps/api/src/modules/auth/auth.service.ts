@@ -4,6 +4,17 @@ import { UsersService } from '../users/users.service'
 import { LoginInput } from './dto/login.input'
 import { RegisterInput } from './dto/register.input'
 import { AuthResponse } from './dto/auth-response'
+import { User } from '../../entities/user.entity'
+
+interface JwtPayload {
+  email: string
+  sub: string
+}
+
+type UserWithoutPassword = Omit<
+  User,
+  'password' | 'hashPassword' | 'validatePassword'
+>
 
 @Injectable()
 export class AuthService {
@@ -12,10 +23,13 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async validateUser(email: string, password: string): Promise<unknown> {
+  async validateUser(
+    email: string,
+    password: string
+  ): Promise<UserWithoutPassword | null> {
     const user = await this.usersService.findByEmail(email)
     if (user && (await user.validatePassword(password))) {
-      const { password: _password, ...result } = user
+      const { password: _unused, ...result } = user
       return result
     }
     return null
@@ -27,7 +41,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials')
     }
 
-    const payload = { email: (user as any).email, sub: (user as any).id }
+    const payload: JwtPayload = { email: user.email, sub: user.id }
     return {
       access_token: this.jwtService.sign(payload),
       user: user as any,
@@ -43,9 +57,9 @@ export class AuthService {
     }
 
     const user = await this.usersService.createUser(registerInput)
-    const { password: _password, ...result } = user
+    const { password: _unused, ...result } = user
 
-    const payload = { email: user.email, sub: user.id }
+    const payload: JwtPayload = { email: user.email, sub: user.id }
     return {
       access_token: this.jwtService.sign(payload),
       user: result as any,

@@ -167,7 +167,7 @@ export function UserProfile() {
                       <div className="font-medium">{act.name}</div>
                       <div className="text-sm text-gray-600">
                         {Math.round(act.distance / 1000)} km –{' '}
-                        {Math.round(act.movingTime / 60)} min
+                        {Math.round(act.moving_time / 60)} min
                       </div>
                       {act.description && (
                         <div className="text-xs text-gray-500 mt-1">

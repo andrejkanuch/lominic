@@ -277,3 +277,53 @@ export interface DetailedAthlete extends SummaryAthlete {
   username: string
   // Add other fields from the sample response that are not in SummaryAthlete
 }
+
+export interface ZoneBucket {
+  max: number
+  min: number
+  time: number
+}
+
+export interface HeartRateZone {
+  min: number
+  max: number
+}
+
+export interface PowerZone {
+  zone: {
+    min: number
+    max: number
+  }
+  distribution_buckets: ZoneBucket[]
+  type: string
+  resource_state: number
+  sensor_based: boolean
+}
+
+export interface Zones {
+  heart_rate?: HeartRateZone
+  power?: PowerZone
+}
+
+export interface ActivityTotal {
+  count: number
+  distance: number
+  moving_time: number
+  elapsed_time: number
+  elevation_gain: number
+  achievement_count?: number
+}
+
+export interface ActivityStats {
+  recent_run_totals: ActivityTotal
+  all_run_totals: ActivityTotal
+  recent_swim_totals: ActivityTotal
+  biggest_ride_distance: number
+  ytd_swim_totals: ActivityTotal
+  all_swim_totals: ActivityTotal
+  recent_ride_totals: ActivityTotal
+  biggest_climb_elevation_gain: number
+  ytd_ride_totals: ActivityTotal
+  all_ride_totals: ActivityTotal
+  ytd_run_totals: ActivityTotal
+}

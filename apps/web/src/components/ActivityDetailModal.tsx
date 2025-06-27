@@ -25,7 +25,6 @@ import { ActivityMap } from './ActivityMap'
 import { ActivityChart } from './ActivityChart'
 import {
   GetStravaActivitiesQuery,
-  StravaActivityDto,
 } from '@/generated/graphql'
 
 interface ActivityDetailModalProps {
