@@ -1,21 +1,30 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { ClientSidebar } from './ClientSidebar'
 import { ClientHeader } from './ClientHeader'
 import { ClientFooter } from './ClientFooter'
+import ClientContent from './client-content/ClientContent'
 
-interface ClientLayoutProps {
-  children: React.ReactNode
-}
+const ClientLayout = () => {
+  const [activeItem, setActiveItem] = useState('/client/dashboard')
 
-const ClientLayout = ({ children }: ClientLayoutProps) => {
+  const handleMenuItemClick = (url: string) => {
+    setActiveItem(url)
+  }
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
-        <ClientSidebar />
+        <ClientSidebar
+          onMenuItemClick={handleMenuItemClick}
+          activeItem={activeItem}
+        />
         <div className="flex-1 flex flex-col">
           <ClientHeader />
-          <main className="flex-1 p-6">{children}</main>
+          <main className="flex-1 p-6">
+            <ClientContent activeItem={activeItem} />
+          </main>
           <ClientFooter />
         </div>
       </div>

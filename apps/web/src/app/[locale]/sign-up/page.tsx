@@ -1,63 +1,63 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { ArrowRight, Eye, EyeOff, Check } from "lucide-react";
-import { useRegisterMutation } from "@/generated/graphql";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { useFormik } from "formik";
-import { z } from "zod";
+import React, { useEffect, useState } from 'react'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import { ArrowRight, Eye, EyeOff, Check } from 'lucide-react'
+import { useRegisterMutation } from '@/generated/graphql'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { useFormik } from 'formik'
+import { z } from 'zod'
 
 const SignUpSchema = z
   .object({
-    firstName: z.string().nonempty("First name is required"),
-    lastName: z.string().nonempty("Last name is required"),
-    email: z.string().email("Please enter a valid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    firstName: z.string().nonempty('First name is required'),
+    lastName: z.string().nonempty('Last name is required'),
+    email: z.string().email('Please enter a valid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
     confirmPassword: z.string(),
     agreeToTerms: z.literal(true, {
       errorMap: () => ({
-        message: "You must agree to the terms and conditions",
+        message: 'You must agree to the terms and conditions',
       }),
     }),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+  .refine(data => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
 
-type SignUpValues = z.infer<typeof SignUpSchema>;
+type SignUpValues = z.infer<typeof SignUpSchema>
 
 export default function SignUpPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [register, { loading }] = useRegisterMutation();
-  const router = useRouter();
-  const [registerError, setRegisterError] = useState("");
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [register, { loading }] = useRegisterMutation()
+  const router = useRouter()
+  const [registerError, setRegisterError] = useState('')
 
   const formik = useFormik<SignUpValues>({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
       agreeToTerms: true,
     },
-    validate: (values) => {
-      const result = SignUpSchema.safeParse(values);
-      if (result.success) return {};
-      const errors: Record<string, string> = {};
+    validate: values => {
+      const result = SignUpSchema.safeParse(values)
+      if (result.success) return {}
+      const errors: Record<string, string> = {}
       for (const issue of result.error.issues) {
-        const key = issue.path[0] as string;
-        if (!errors[key]) errors[key] = issue.message;
+        const key = issue.path[0] as string
+        if (!errors[key]) errors[key] = issue.message
       }
-      return errors;
+      return errors
     },
-    onSubmit: async (values) => {
-      setRegisterError("");
+    onSubmit: async values => {
+      setRegisterError('')
       try {
         const { data } = await register({
           variables: {
@@ -66,52 +66,63 @@ export default function SignUpPage() {
             firstName: values.firstName,
             lastName: values.lastName,
           },
-        });
+        })
         if (data?.register?.access_token) {
-          localStorage.setItem("access_token", data.register.access_token);
-          router.push("/profile");
+          localStorage.setItem('access_token', data.register.access_token)
+          router.push('/client')
         } else {
-          setRegisterError("Registration failed");
+          setRegisterError('Registration failed')
         }
       } catch (error: unknown) {
-        if (error instanceof Error && 'graphQLErrors' in error && Array.isArray(error.graphQLErrors)) {
+        if (
+          error instanceof Error &&
+          'graphQLErrors' in error &&
+          Array.isArray(error.graphQLErrors)
+        ) {
           error.graphQLErrors.forEach((err: unknown) => {
-            if (err instanceof Error && err.message.includes("already exists")) {
+            if (
+              err instanceof Error &&
+              err.message.includes('already exists')
+            ) {
               formik.setFieldError(
-                "email",
-                "User with this email already exists"
-              );
+                'email',
+                'User with this email already exists'
+              )
             }
-          });
+          })
         }
         setRegisterError(
-          (error instanceof Error && 'graphQLErrors' in error && Array.isArray(error.graphQLErrors) && error.graphQLErrors[0] instanceof Error && error.graphQLErrors[0].message) ||
-            "Registration failed. Please try again."
-        );
+          (error instanceof Error &&
+            'graphQLErrors' in error &&
+            Array.isArray(error.graphQLErrors) &&
+            error.graphQLErrors[0] instanceof Error &&
+            error.graphQLErrors[0].message) ||
+            'Registration failed. Please try again.'
+        )
       }
     },
-  });
+  })
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in");
-            observer.unobserve(entry.target);
+            entry.target.classList.add('animate-fade-in')
+            observer.unobserve(entry.target)
           }
-        });
+        })
       },
       { threshold: 0.1 }
-    );
+    )
 
-    const elements = document.querySelectorAll(".animate-on-scroll");
-    elements.forEach((el) => observer.observe(el));
+    const elements = document.querySelectorAll('.animate-on-scroll')
+    elements.forEach(el => observer.observe(el))
 
     return () => {
-      elements.forEach((el) => observer.unobserve(el));
-    };
-  }, []);
+      elements.forEach(el => observer.unobserve(el))
+    }
+  }, [])
 
   return (
     <div className="min-h-screen">
@@ -121,8 +132,8 @@ export default function SignUpPage() {
           className="overflow-hidden relative bg-cover min-h-screen flex items-center"
           style={{
             backgroundImage: 'url("/Header-background.webp")',
-            backgroundPosition: "center 30%",
-            padding: "60px 12px 40px",
+            backgroundPosition: 'center 30%',
+            padding: '60px 12px 40px',
           }}
         >
           <div className="absolute -top-[10%] -right-[5%] w-1/2 h-[70%] bg-pulse-gradient opacity-20 blur-3xl rounded-full"></div>
@@ -130,7 +141,7 @@ export default function SignUpPage() {
             <div className="max-w-md mx-auto">
               <div
                 className="pulse-chip mb-6 opacity-0 animate-fade-in"
-                style={{ animationDelay: "0.1s" }}
+                style={{ animationDelay: '0.1s' }}
               >
                 <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-pulse-500 text-white mr-2">
                   <Check className="w-3 h-3" />
@@ -139,19 +150,19 @@ export default function SignUpPage() {
               </div>
               <h1
                 className="section-title text-3xl sm:text-4xl leading-tight opacity-0 animate-fade-in text-center"
-                style={{ animationDelay: "0.3s" }}
+                style={{ animationDelay: '0.3s' }}
               >
                 Create Your Account
               </h1>
               <p
                 className="section-subtitle mt-4 mb-8 leading-relaxed opacity-0 animate-fade-in text-gray-950 font-normal text-base text-center"
-                style={{ animationDelay: "0.5s" }}
+                style={{ animationDelay: '0.5s' }}
               >
                 Start your AI-powered training journey today
               </p>
               <div
                 className="glass-card p-6 sm:p-8 opacity-0 animate-fade-in"
-                style={{ animationDelay: "0.7s" }}
+                style={{ animationDelay: '0.7s' }}
               >
                 <form onSubmit={formik.handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -171,8 +182,8 @@ export default function SignUpPage() {
                         onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
                           formik.touched.firstName && formik.errors.firstName
-                            ? "border-red-500"
-                            : "border-gray-300"
+                            ? 'border-red-500'
+                            : 'border-gray-300'
                         }`}
                         placeholder="John"
                       />
@@ -198,8 +209,8 @@ export default function SignUpPage() {
                         onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
                           formik.touched.lastName && formik.errors.lastName
-                            ? "border-red-500"
-                            : "border-gray-300"
+                            ? 'border-red-500'
+                            : 'border-gray-300'
                         }`}
                         placeholder="Doe"
                       />
@@ -226,8 +237,8 @@ export default function SignUpPage() {
                       onBlur={formik.handleBlur}
                       className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
                         formik.touched.email && formik.errors.email
-                          ? "border-red-500"
-                          : "border-gray-300"
+                          ? 'border-red-500'
+                          : 'border-gray-300'
                       }`}
                       placeholder="john@example.com"
                     />
@@ -246,7 +257,7 @@ export default function SignUpPage() {
                     </label>
                     <div className="relative">
                       <input
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         id="password"
                         name="password"
                         value={formik.values.password}
@@ -254,8 +265,8 @@ export default function SignUpPage() {
                         onBlur={formik.handleBlur}
                         className={`w-full px-4 py-3 pr-12 border rounded-lg bg-white focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
                           formik.touched.password && formik.errors.password
-                            ? "border-red-500"
-                            : "border-gray-300"
+                            ? 'border-red-500'
+                            : 'border-gray-300'
                         }`}
                         placeholder="••••••••"
                       />
@@ -286,7 +297,7 @@ export default function SignUpPage() {
                     </label>
                     <div className="relative">
                       <input
-                        type={showConfirmPassword ? "text" : "password"}
+                        type={showConfirmPassword ? 'text' : 'password'}
                         id="confirmPassword"
                         name="confirmPassword"
                         value={formik.values.confirmPassword}
@@ -295,8 +306,8 @@ export default function SignUpPage() {
                         className={`w-full px-4 py-3 pr-12 border rounded-lg bg-white focus:ring-2 focus:ring-pulse-500 focus:border-transparent transition-all duration-300 ${
                           formik.touched.confirmPassword &&
                           formik.errors.confirmPassword
-                            ? "border-red-500"
-                            : "border-gray-300"
+                            ? 'border-red-500'
+                            : 'border-gray-300'
                         }`}
                         placeholder="••••••••"
                       />
@@ -335,14 +346,14 @@ export default function SignUpPage() {
                       htmlFor="agreeToTerms"
                       className="text-sm text-gray-600"
                     >
-                      I agree to the{" "}
+                      I agree to the{' '}
                       <a
                         href="#"
                         className="text-pulse-600 hover:text-pulse-700 underline"
                       >
                         Terms of Service
-                      </a>{" "}
-                      and{" "}
+                      </a>{' '}
+                      and{' '}
                       <a
                         href="#"
                         className="text-pulse-600 hover:text-pulse-700 underline"
@@ -367,24 +378,24 @@ export default function SignUpPage() {
                     disabled={loading}
                     className="flex items-center justify-center group w-full text-center disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
-                      backgroundColor: "#FE5C02",
-                      borderRadius: "1440px",
-                      boxSizing: "border-box",
-                      color: "#FFFFFF",
-                      cursor: "pointer",
-                      fontSize: "14px",
-                      lineHeight: "20px",
-                      padding: "16px 24px",
-                      border: "1px solid white",
+                      backgroundColor: '#FE5C02',
+                      borderRadius: '1440px',
+                      boxSizing: 'border-box',
+                      color: '#FFFFFF',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      lineHeight: '20px',
+                      padding: '16px 24px',
+                      border: '1px solid white',
                     }}
                   >
-                    {loading ? "Creating Account..." : "Create Account"}
+                    {loading ? 'Creating Account...' : 'Create Account'}
                     <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </button>
                 </form>
                 <div className="mt-6 text-center">
                   <p className="text-sm text-gray-600">
-                    Already have an account?{" "}
+                    Already have an account?{' '}
                     <Link
                       href="/login"
                       className="text-pulse-600 hover:text-pulse-700 font-medium"
@@ -404,5 +415,5 @@ export default function SignUpPage() {
       </main>
       <Footer />
     </div>
-  );
+  )
 }

@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+
 import {
   Activity,
   Calendar,
@@ -29,11 +28,40 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 
+interface ClientSidebarProps {
+  onMenuItemClick: (url: string) => void
+  activeItem: string
+}
+
 const healthItems = [
-  { title: 'Dashboard', url: '/client/dashboard', icon: Monitor, disabled: true, comingSoon: true },
-  { title: 'Health Metrics', url: '/client/health', icon: HeartPulse, disabled: true, comingSoon: true },
-  { title: 'Vital Signs', url: '/client/vitals', icon: Thermometer, disabled: true, comingSoon: true },
-  { title: 'Heart Rate', url: '/client/heart-rate', icon: Heart, disabled: true, comingSoon: true },
+  {
+    title: 'Dashboard',
+    url: '/client/dashboard',
+    icon: Monitor,
+    disabled: false,
+    comingSoon: false,
+  },
+  {
+    title: 'Health Metrics',
+    url: '/client/health',
+    icon: HeartPulse,
+    disabled: true,
+    comingSoon: true,
+  },
+  {
+    title: 'Vital Signs',
+    url: '/client/vitals',
+    icon: Thermometer,
+    disabled: true,
+    comingSoon: true,
+  },
+  {
+    title: 'Heart Rate',
+    url: '/client/heart-rate',
+    icon: Heart,
+    disabled: true,
+    comingSoon: true,
+  },
 ]
 
 const trackingItems = [
@@ -49,19 +77,23 @@ const basicItems = [
   { title: 'Settings', url: '/client/settings', icon: Settings },
 ]
 
-export function ClientSidebar() {
+export function ClientSidebar({
+  onMenuItemClick,
+  activeItem,
+}: ClientSidebarProps) {
   const { state } = useSidebar()
-  const currentPath = usePathname()
   const isCollapsed = state === 'collapsed'
 
-  const isActive = (path: string) => currentPath === path
+  const isActive = (path: string) => {
+    return activeItem === path
+  }
 
   const getNavClass = (path: string, isDisabled?: boolean) =>
     isActive(path)
       ? 'bg-primary/10 text-primary border-r-2 border-primary'
       : isDisabled
       ? 'text-muted-foreground'
-      : 'text-foreground hover:bg-muted hover:text-foreground'
+      : 'text-foreground hover:bg-muted hover:text-foreground hover:scale-[1.02] active:scale-[0.98]'
 
   return (
     <Sidebar
@@ -71,8 +103,8 @@ export function ClientSidebar() {
     >
       <SidebarHeader className="border-b border-border p-4">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-pulse-500 rounded-lg flex items-center justify-center">
-            <Activity className="w-5 h-5 text-white" />
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <Activity className="w-5 h-5 text-primary-foreground" />
           </div>
           {!isCollapsed && (
             <div>
@@ -87,40 +119,34 @@ export function ClientSidebar() {
 
       <SidebarContent className="p-2">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-pulse-600 font-medium text-xs uppercase tracking-wide">
+          <SidebarGroupLabel className="text-primary font-medium text-xs uppercase tracking-wide">
             {!isCollapsed && 'Health Monitoring'}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {healthItems.map(item => (
                 <SidebarMenuItem key={item.title} disabled={item.disabled}>
-                  <SidebarMenuButton asChild>
-                    <Link
-                      href={item.url}
-                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
-                        item.disabled
-                          ? 'text-muted-foreground cursor-not-allowed'
-                          : getNavClass(item.url)
-                      }`}
-                      aria-disabled={item.disabled}
-                      tabIndex={item.disabled ? -1 : undefined}
-                    >
-                      <item.icon
-                        className={`${
-                          isCollapsed ? 'w-5 h-5' : 'w-4 h-4 mr-3'
-                        }`}
-                      />
-                      {!isCollapsed && (
-                        <span className="text-sm font-medium">
-                          {item.title}
-                        </span>
-                      )}
-                      {item.comingSoon && !isCollapsed && (
-                        <span className="ml-auto px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                          Soon
-                        </span>
-                      )}
-                    </Link>
+                  <SidebarMenuButton
+                    onClick={() => !item.disabled && onMenuItemClick(item.url)}
+                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                      item.disabled
+                        ? 'text-muted-foreground cursor-not-allowed'
+                        : getNavClass(item.url, item.disabled)
+                    }`}
+                    aria-disabled={item.disabled}
+                    tabIndex={item.disabled ? -1 : undefined}
+                  >
+                    <item.icon
+                      className={`${isCollapsed ? 'w-5 h-5' : 'w-4 h-4 mr-3'}`}
+                    />
+                    {!isCollapsed && (
+                      <span className="text-sm font-medium">{item.title}</span>
+                    )}
+                    {item.comingSoon && !isCollapsed && (
+                      <span className="ml-auto px-2 py-0.5 text-xs font-semibold rounded-full bg-info/10 text-info">
+                        Soon
+                      </span>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -129,31 +155,25 @@ export function ClientSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-pulse-600 font-medium text-xs uppercase tracking-wide mt-6">
+          <SidebarGroupLabel className="text-primary font-medium text-xs uppercase tracking-wide mt-6">
             {!isCollapsed && 'Activity Tracking'}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {trackingItems.map(item => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link
-                      href={item.url}
-                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${getNavClass(
-                        item.url
-                      )}`}
-                    >
-                      <item.icon
-                        className={`${
-                          isCollapsed ? 'w-5 h-5' : 'w-4 h-4 mr-3'
-                        }`}
-                      />
-                      {!isCollapsed && (
-                        <span className="text-sm font-medium">
-                          {item.title}
-                        </span>
-                      )}
-                    </Link>
+                  <SidebarMenuButton
+                    onClick={() => onMenuItemClick(item.url)}
+                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${getNavClass(
+                      item.url
+                    )}`}
+                  >
+                    <item.icon
+                      className={`${isCollapsed ? 'w-5 h-5' : 'w-4 h-4 mr-3'}`}
+                    />
+                    {!isCollapsed && (
+                      <span className="text-sm font-medium">{item.title}</span>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -162,31 +182,25 @@ export function ClientSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-pulse-600 font-medium text-xs uppercase tracking-wide mt-6">
+          <SidebarGroupLabel className="text-primary font-medium text-xs uppercase tracking-wide mt-6">
             {!isCollapsed && 'Account'}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {basicItems.map(item => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link
-                      href={item.url}
-                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${getNavClass(
-                        item.url
-                      )}`}
-                    >
-                      <item.icon
-                        className={`${
-                          isCollapsed ? 'w-5 h-5' : 'w-4 h-4 mr-3'
-                        }`}
-                      />
-                      {!isCollapsed && (
-                        <span className="text-sm font-medium">
-                          {item.title}
-                        </span>
-                      )}
-                    </Link>
+                  <SidebarMenuButton
+                    onClick={() => onMenuItemClick(item.url)}
+                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${getNavClass(
+                      item.url
+                    )}`}
+                  >
+                    <item.icon
+                      className={`${isCollapsed ? 'w-5 h-5' : 'w-4 h-4 mr-3'}`}
+                    />
+                    {!isCollapsed && (
+                      <span className="text-sm font-medium">{item.title}</span>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

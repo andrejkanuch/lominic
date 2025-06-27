@@ -1,74 +1,74 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { useLoginMutation } from "@/generated/graphql";
-import { useRouter } from "next/navigation";
-import { useFormik } from "formik";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input/input";
+import React, { useEffect, useState } from 'react'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import { useLoginMutation } from '@/generated/graphql'
+import { useRouter } from 'next/navigation'
+import { useFormik } from 'formik'
+import { z } from 'zod'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input/input'
 
 const LoginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
-});
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(1, 'Password is required'),
+})
 
-type LoginValues = z.infer<typeof LoginSchema>;
+type LoginValues = z.infer<typeof LoginSchema>
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [login, { loading, error }] = useLoginMutation();
-  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false)
+  const [login, { loading, error }] = useLoginMutation()
+  const router = useRouter()
 
   const formik = useFormik<LoginValues>({
-    initialValues: { email: "", password: "" },
-    validate: (values) => {
-      const result = LoginSchema.safeParse(values);
-      if (result.success) return {};
-      const errors: Record<string, string> = {};
+    initialValues: { email: '', password: '' },
+    validate: values => {
+      const result = LoginSchema.safeParse(values)
+      if (result.success) return {}
+      const errors: Record<string, string> = {}
       for (const issue of result.error.issues) {
-        const key = issue.path[0] as string;
-        if (!errors[key]) errors[key] = issue.message;
+        const key = issue.path[0] as string
+        if (!errors[key]) errors[key] = issue.message
       }
-      return errors;
+      return errors
     },
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
         const { data } = await login({
           variables: { email: values.email, password: values.password },
-        });
+        })
         if (data?.login.access_token) {
-          localStorage.setItem("access_token", data.login.access_token);
-          router.push("/profile");
+          localStorage.setItem('access_token', data.login.access_token)
+          router.push('/client')
         }
       } catch (err) {
-        console.error(err);
+        console.error(err)
       }
     },
-  });
+  })
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in");
-            observer.unobserve(entry.target);
+            entry.target.classList.add('animate-fade-in')
+            observer.unobserve(entry.target)
           }
-        });
+        })
       },
       { threshold: 0.1 }
-    );
+    )
 
-    const elements = document.querySelectorAll(".animate-on-scroll");
-    elements.forEach((el) => observer.observe(el));
+    const elements = document.querySelectorAll('.animate-on-scroll')
+    elements.forEach(el => observer.observe(el))
 
     return () => {
-      elements.forEach((el) => observer.unobserve(el));
-    };
-  }, []);
+      elements.forEach(el => observer.unobserve(el))
+    }
+  }, [])
 
   return (
     <div className="min-h-screen">
@@ -78,8 +78,8 @@ export default function LoginPage() {
           className="overflow-hidden relative bg-cover min-h-screen flex items-center"
           style={{
             backgroundImage: 'url("/Header-background.webp")',
-            backgroundPosition: "center 30%",
-            padding: "60px 12px 40px",
+            backgroundPosition: 'center 30%',
+            padding: '60px 12px 40px',
           }}
         >
           <div className="container px-4 sm:px-6 lg:px-8">
@@ -89,7 +89,7 @@ export default function LoginPage() {
               </h1>
               <div
                 className="glass-card p-6 sm:p-8 opacity-0 animate-fade-in"
-                style={{ animationDelay: "0.2s" }}
+                style={{ animationDelay: '0.2s' }}
               >
                 <form onSubmit={formik.handleSubmit} className="space-y-6">
                   <div>
@@ -123,7 +123,7 @@ export default function LoginPage() {
                     </label>
                     <div className="relative">
                       <Input
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         id="password"
                         name="password"
                         value={formik.values.password}
@@ -131,8 +131,8 @@ export default function LoginPage() {
                         onBlur={formik.handleBlur}
                         className={` transition-all duration-300 ${
                           formik.touched.password && formik.errors.password
-                            ? "border-red-500"
-                            : "border-gray-300"
+                            ? 'border-red-500'
+                            : 'border-gray-300'
                         }`}
                         placeholder="••••••••"
                       />
@@ -162,18 +162,18 @@ export default function LoginPage() {
                     disabled={loading}
                     className="flex items-center justify-center group w-full text-center disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
-                      backgroundColor: "#FE5C02",
-                      borderRadius: "1440px",
-                      boxSizing: "border-box",
-                      color: "#FFFFFF",
-                      cursor: "pointer",
-                      fontSize: "14px",
-                      lineHeight: "20px",
-                      padding: "16px 24px",
-                      border: "1px solid white",
+                      backgroundColor: '#FE5C02',
+                      borderRadius: '1440px',
+                      boxSizing: 'border-box',
+                      color: '#FFFFFF',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      lineHeight: '20px',
+                      padding: '16px 24px',
+                      border: '1px solid white',
                     }}
                   >
-                    {loading ? "Logging in..." : "Login"}
+                    {loading ? 'Logging in...' : 'Login'}
                   </Button>
                 </form>
               </div>
@@ -183,5 +183,5 @@ export default function LoginPage() {
       </main>
       <Footer />
     </div>
-  );
+  )
 }
