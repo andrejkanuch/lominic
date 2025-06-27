@@ -41,6 +41,7 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createTestStravaAccount: Scalars['Boolean']['output'];
   createUser: User;
   login: AuthResponse;
   register: AuthResponse;
@@ -88,9 +89,15 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getStravaActivities: Array<StravaActivityDto>;
   me: User;
   user: User;
   users: Array<User>;
+};
+
+
+export type QueryGetStravaActivitiesArgs = {
+  limit: Scalars['Int']['input'];
 };
 
 
@@ -110,6 +117,16 @@ export type Role =
   | 'ADMIN'
   | 'SUPER_ADMIN'
   | 'USER';
+
+export type StravaActivityDto = {
+  __typename?: 'StravaActivityDto';
+  description: Maybe<Scalars['String']['output']>;
+  distance: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  movingTime: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  startDate: Scalars['String']['output'];
+};
 
 export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
@@ -153,6 +170,18 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: Role, isEmailVerified: boolean, createdAt: string, updatedAt: string } };
+
+export type GetStravaActivitiesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetStravaActivitiesQuery = { __typename?: 'Query', getStravaActivities: Array<{ __typename?: 'StravaActivityDto', id: string, name: string, distance: number, movingTime: number, startDate: string, description: string | null }> };
+
+export type CreateTestStravaAccountMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateTestStravaAccountMutation = { __typename?: 'Mutation', createTestStravaAccount: boolean };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -339,6 +368,81 @@ export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQ
 export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
 export type GetCurrentUserSuspenseQueryHookResult = ReturnType<typeof useGetCurrentUserSuspenseQuery>;
 export type GetCurrentUserQueryResult = ApolloReactCommon.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
+export const GetStravaActivitiesDocument = gql`
+    query getStravaActivities($limit: Int) {
+  getStravaActivities(limit: $limit) {
+    id
+    name
+    distance
+    movingTime
+    startDate
+    description
+  }
+}
+    `;
+
+/**
+ * __useGetStravaActivitiesQuery__
+ *
+ * To run a query within a React component, call `useGetStravaActivitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStravaActivitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStravaActivitiesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetStravaActivitiesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>(GetStravaActivitiesDocument, options);
+      }
+export function useGetStravaActivitiesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>(GetStravaActivitiesDocument, options);
+        }
+export function useGetStravaActivitiesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>(GetStravaActivitiesDocument, options);
+        }
+export type GetStravaActivitiesQueryHookResult = ReturnType<typeof useGetStravaActivitiesQuery>;
+export type GetStravaActivitiesLazyQueryHookResult = ReturnType<typeof useGetStravaActivitiesLazyQuery>;
+export type GetStravaActivitiesSuspenseQueryHookResult = ReturnType<typeof useGetStravaActivitiesSuspenseQuery>;
+export type GetStravaActivitiesQueryResult = ApolloReactCommon.QueryResult<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>;
+export const CreateTestStravaAccountDocument = gql`
+    mutation createTestStravaAccount {
+  createTestStravaAccount
+}
+    `;
+export type CreateTestStravaAccountMutationFn = ApolloReactCommon.MutationFunction<CreateTestStravaAccountMutation, CreateTestStravaAccountMutationVariables>;
+
+/**
+ * __useCreateTestStravaAccountMutation__
+ *
+ * To run a mutation, you first call `useCreateTestStravaAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTestStravaAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTestStravaAccountMutation, { data, loading, error }] = useCreateTestStravaAccountMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateTestStravaAccountMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateTestStravaAccountMutation, CreateTestStravaAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateTestStravaAccountMutation, CreateTestStravaAccountMutationVariables>(CreateTestStravaAccountDocument, options);
+      }
+export type CreateTestStravaAccountMutationHookResult = ReturnType<typeof useCreateTestStravaAccountMutation>;
+export type CreateTestStravaAccountMutationResult = ApolloReactCommon.MutationResult<CreateTestStravaAccountMutation>;
+export type CreateTestStravaAccountMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTestStravaAccountMutation, CreateTestStravaAccountMutationVariables>;
 export const GetUsersDocument = gql`
     query GetUsers {
   users {

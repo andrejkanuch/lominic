@@ -6,8 +6,6 @@ import { cn } from "@/lib/utils";
 import { SVGProps } from "react";
 import { Loader } from "lucide-react";
 
-export interface IconProps extends SVGProps<SVGSVGElement> {}
-
 const buttonVariants = cva(
   cn(
     "inline-flex items-center justify-center gap-2 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
@@ -83,9 +81,9 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   isLoading?: boolean;
-  leftIcon?: React.FC<IconProps>;
-  rightIcon?: React.FC<IconProps>;
-  icon?: React.FC<IconProps>;
+  leftIcon?: React.FC<SVGProps<SVGSVGElement>>;
+  rightIcon?: React.FC<SVGProps<SVGSVGElement>>;
+  icon?: React.FC<SVGProps<SVGSVGElement>>;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

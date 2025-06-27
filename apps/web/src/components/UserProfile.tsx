@@ -1,36 +1,46 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import { useRBAC, Permission } from "@/hooks/use-rbac";
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input/input'
+import { Label } from '@/components/ui/label'
+import { Badge } from '@/components/ui/badge'
+import { toast } from 'sonner'
+import { useRBAC, Permission } from '@/hooks/use-rbac'
 import {
   useUpdateOwnProfileMutation,
   GetCurrentUserDocument,
-} from "@/generated/graphql";
-import { useApolloClient } from "@apollo/client";
-import { RoleBasedComponent } from "@/components/RoleBasedComponent";
+  useGetStravaActivitiesQuery,
+  useCreateTestStravaAccountMutation,
+} from '@/generated/graphql'
+import { useApolloClient } from '@apollo/client'
+import { RoleBasedComponent } from '@/components/RoleBasedComponent'
 
 export function UserProfile() {
-  const { user, hasPermission } = useRBAC();
-  const [isEditing, setIsEditing] = useState(false);
+  const { user, hasPermission } = useRBAC()
+  const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
-    email: user?.email || "",
-  });
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    email: user?.email || '',
+  })
 
-  const [updateProfile, { loading: saving }] = useUpdateOwnProfileMutation();
-  const apolloClient = useApolloClient();
+  const { data, loading, error, refetch } = useGetStravaActivitiesQuery({
+    variables: { limit: 5 as never },
+    skip: !user,
+  })
+
+  const [createTestAccount, { loading: creatingTest }] =
+    useCreateTestStravaAccountMutation()
+
+  const [updateProfile, { loading: saving }] = useUpdateOwnProfileMutation()
+  const apolloClient = useApolloClient()
 
   const handleSave = async () => {
     if (!hasPermission(Permission.UPDATE_OWN_PROFILE)) {
-      toast.error("You don't have permission to update your profile");
-      return;
+      toast.error("You don't have permission to update your profile")
+      return
     }
 
     try {
@@ -41,26 +51,85 @@ export function UserProfile() {
             lastName: formData.lastName,
           },
         },
-      });
+      })
 
-      await apolloClient.refetchQueries({ include: [GetCurrentUserDocument] });
+      await apolloClient.refetchQueries({ include: [GetCurrentUserDocument] })
 
-      toast.success("Profile updated successfully!");
-      setIsEditing(false);
+      toast.success('Profile updated successfully!')
+      setIsEditing(false)
     } catch (error) {
-      toast.error("Failed to update profile");
-      console.error(error);
+      toast.error('Failed to update profile')
+      console.error(error)
     }
-  };
+  }
 
   const handleCancel = () => {
     setFormData({
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
-      email: user?.email || "",
-    });
-    setIsEditing(false);
-  };
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
+      email: user?.email || '',
+    })
+    setIsEditing(false)
+  }
+
+  const handleCreateTestAccount = async () => {
+    try {
+      await createTestAccount()
+      toast.success('Test Strava account created!')
+      await refetch()
+    } catch (error) {
+      toast.error('Failed to create test account')
+      console.error(error)
+    }
+  }
+
+  const handleStravaConnect = () => {
+    if (!user) return
+
+    const apiBase = (
+      process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/graphql'
+    ).replace(/\/?graphql$/, '')
+    const connectUrl = `${apiBase}/api/strava/connect?state=${user.id}`
+
+    // Open in popup window
+    const popup = window.open(
+      connectUrl,
+      'strava-connect',
+      'width=500,height=600,scrollbars=yes,resizable=yes'
+    )
+
+    // Check if popup was blocked
+    if (!popup) {
+      toast.error('Popup blocked! Please allow popups for this site.')
+      return
+    }
+
+    // Listen for messages from popup
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === 'STRAVA_CONNECTED') {
+        if (event.data.success) {
+          toast.success('Strava connected successfully!')
+          refetch() // Refresh activities data
+        } else {
+          toast.error(
+            `Failed to connect Strava: ${event.data.error || 'Unknown error'}`
+          )
+        }
+        window.removeEventListener('message', handleMessage)
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+
+    // Fallback: Listen for popup close to refresh data
+    const checkClosed = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(checkClosed)
+        window.removeEventListener('message', handleMessage)
+        refetch() // Refresh activities data
+      }
+    }, 1000)
+  }
 
   if (!user) {
     return (
@@ -72,7 +141,7 @@ export function UserProfile() {
           <p className="text-gray-600">Please log in to view your profile.</p>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (
@@ -80,6 +149,54 @@ export function UserProfile() {
       <Card>
         <CardHeader>
           <CardTitle>User Profile</CardTitle>
+          <div className="p-6 space-y-4">
+            <h2 className="text-2xl font-bold">Strava Activities</h2>
+            {loading && <p>Loading activities...</p>}
+            {error && (
+              <div className="space-y-2">
+                <p className="text-gray-600 mb-2">
+                  Connect your account to Strava to see recent activities.
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleStravaConnect}
+                    disabled={creatingTest}
+                    variant="outline"
+                  >
+                    {creatingTest ? 'Connecting...' : 'Connect with Strava'}
+                  </Button>
+                  <Button
+                    onClick={handleCreateTestAccount}
+                    disabled={creatingTest}
+                    variant="outline"
+                  >
+                    {creatingTest ? 'Creating...' : 'Create Test Account'}
+                  </Button>
+                </div>
+              </div>
+            )}
+            {data?.getStravaActivities && (
+              <div>
+                <h3 className="text-lg font-medium mb-2">Recent Activities</h3>
+                <ul className="space-y-2">
+                  {data.getStravaActivities.map(act => (
+                    <li key={act.id} className="border p-3 rounded">
+                      <div className="font-medium">{act.name}</div>
+                      <div className="text-sm text-gray-600">
+                        {Math.round(act.distance / 1000)} km –{' '}
+                        {Math.round(act.movingTime / 60)} min
+                      </div>
+                      {act.description && (
+                        <div className="text-xs text-gray-500 mt-1">
+                          {act.description}
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
@@ -91,10 +208,10 @@ export function UserProfile() {
             </div>
             <RoleBasedComponent permissions={Permission.UPDATE_OWN_PROFILE}>
               <Button
-                variant={isEditing ? "outline" : "default"}
+                variant={isEditing ? 'outline' : 'default'}
                 onClick={() => setIsEditing(!isEditing)}
               >
-                {isEditing ? "Cancel" : "Edit Profile"}
+                {isEditing ? 'Cancel' : 'Edit Profile'}
               </Button>
             </RoleBasedComponent>
           </div>
@@ -106,8 +223,8 @@ export function UserProfile() {
                 <Input
                   id="firstName"
                   value={formData.firstName}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData(prev => ({
                       ...prev,
                       firstName: e.target.value,
                     }))
@@ -123,8 +240,8 @@ export function UserProfile() {
                 <Input
                   id="lastName"
                   value={formData.lastName}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData(prev => ({
                       ...prev,
                       lastName: e.target.value,
                     }))
@@ -141,8 +258,8 @@ export function UserProfile() {
                   id="email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, email: e.target.value }))
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData(prev => ({ ...prev, email: e.target.value }))
                   }
                 />
               ) : (
@@ -155,7 +272,7 @@ export function UserProfile() {
             <div>
               <Label>Email Verified</Label>
               <p className="text-gray-600">
-                {user.isEmailVerified ? "Yes" : "No"}
+                {user.isEmailVerified ? 'Yes' : 'No'}
               </p>
             </div>
             <div>
@@ -169,9 +286,13 @@ export function UserProfile() {
           {isEditing && (
             <div className="flex gap-2">
               <Button onClick={handleSave} disabled={saving}>
-                {saving ? "Saving..." : "Save Changes"}
+                {saving ? 'Saving...' : 'Save Changes'}
               </Button>
-              <Button variant="outline" onClick={handleCancel} disabled={saving}>
+              <Button
+                variant="outline"
+                onClick={handleCancel}
+                disabled={saving}
+              >
                 Cancel
               </Button>
             </div>
@@ -205,5 +326,5 @@ export function UserProfile() {
         </Card>
       </RoleBasedComponent>
     </div>
-  );
+  )
 }

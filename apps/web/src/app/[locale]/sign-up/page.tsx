@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { ArrowRight, Eye, EyeOff, Check } from "lucide-react";
 import { useRegisterMutation } from "@/generated/graphql";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useFormik } from "formik";
 import { z } from "zod";
 
@@ -72,10 +73,10 @@ export default function SignUpPage() {
         } else {
           setRegisterError("Registration failed");
         }
-      } catch (error: any) {
-        if (error.graphQLErrors) {
-          error.graphQLErrors.forEach((err: any) => {
-            if (err.message.includes("already exists")) {
+      } catch (error: unknown) {
+        if (error instanceof Error && 'graphQLErrors' in error && Array.isArray(error.graphQLErrors)) {
+          error.graphQLErrors.forEach((err: unknown) => {
+            if (err instanceof Error && err.message.includes("already exists")) {
               formik.setFieldError(
                 "email",
                 "User with this email already exists"
@@ -84,7 +85,7 @@ export default function SignUpPage() {
           });
         }
         setRegisterError(
-          error?.graphQLErrors?.[0]?.message ||
+          (error instanceof Error && 'graphQLErrors' in error && Array.isArray(error.graphQLErrors) && error.graphQLErrors[0] instanceof Error && error.graphQLErrors[0].message) ||
             "Registration failed. Please try again."
         );
       }
@@ -384,12 +385,12 @@ export default function SignUpPage() {
                 <div className="mt-6 text-center">
                   <p className="text-sm text-gray-600">
                     Already have an account?{" "}
-                    <a
+                    <Link
                       href="/login"
                       className="text-pulse-600 hover:text-pulse-700 font-medium"
                     >
                       Sign in
-                    </a>
+                    </Link>
                   </p>
                 </div>
               </div>

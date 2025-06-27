@@ -40,6 +40,7 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createTestStravaAccount: Scalars['Boolean']['output'];
   createUser: User;
   login: AuthResponse;
   register: AuthResponse;
@@ -87,9 +88,15 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getStravaActivities: Array<StravaActivityDto>;
   me: User;
   user: User;
   users: Array<User>;
+};
+
+
+export type QueryGetStravaActivitiesArgs = {
+  limit: Scalars['Int']['input'];
 };
 
 
@@ -109,6 +116,16 @@ export type Role =
   | 'ADMIN'
   | 'SUPER_ADMIN'
   | 'USER';
+
+export type StravaActivityDto = {
+  __typename?: 'StravaActivityDto';
+  description: Maybe<Scalars['String']['output']>;
+  distance: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  movingTime: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  startDate: Scalars['String']['output'];
+};
 
 export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
@@ -206,12 +223,15 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateUserInput: CreateUserInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   LoginInput: LoginInput;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   RegisterInput: RegisterInput;
   Role: Role;
+  StravaActivityDto: ResolverTypeWrapper<StravaActivityDto>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
@@ -223,11 +243,14 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
   CreateUserInput: CreateUserInput;
   DateTime: Scalars['DateTime']['output'];
+  Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
+  Int: Scalars['Int']['output'];
   LoginInput: LoginInput;
   Mutation: {};
   Query: {};
   RegisterInput: RegisterInput;
+  StravaActivityDto: StravaActivityDto;
   String: Scalars['String']['output'];
   UpdateUserInput: UpdateUserInput;
   User: User;
@@ -244,6 +267,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 }
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createTestStravaAccount?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'createUserInput'>>;
   login?: Resolver<ResolversTypes['AuthResponse'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'loginInput'>>;
   register?: Resolver<ResolversTypes['AuthResponse'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'registerInput'>>;
@@ -254,9 +278,20 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
 }>;
 
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  getStravaActivities?: Resolver<Array<ResolversTypes['StravaActivityDto']>, ParentType, ContextType, RequireFields<QueryGetStravaActivitiesArgs, 'limit'>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+}>;
+
+export type StravaActivityDtoResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['StravaActivityDto'] = ResolversParentTypes['StravaActivityDto']> = ResolversObject<{
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  distance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  movingTime?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  startDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -276,6 +311,7 @@ export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  StravaActivityDto?: StravaActivityDtoResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;
 

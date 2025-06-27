@@ -15,7 +15,6 @@ import { toast } from "sonner";
 import { useRBAC, Permission } from "@/hooks/use-rbac";
 import {
   RoleBasedComponent,
-  AdminOnly,
   UserManagementOnly,
 } from "@/components/RoleBasedComponent";
 
@@ -26,7 +25,7 @@ export function UsersList() {
     email: "",
   });
 
-  const { canManageUsers, canViewAllUsers, hasPermission } = useRBAC();
+  const { hasPermission } = useRBAC();
   const { data: users, loading, error, refetch } = useGetUsersQuery();
   const [createUser, { loading: creating }] = useCreateUserMutation();
   const [removeUser, { loading: removing }] = useRemoveUserMutation();

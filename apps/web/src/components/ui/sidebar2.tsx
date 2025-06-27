@@ -41,14 +41,6 @@ export interface SidebarItemProps
   isActive?: boolean;
 }
 
-const roleMapper: Record<string, string> = {
-  none: "text-[var(--role-color)]",
-  Admin: "text-[var(--role-color)]",
-  SuperAdmin: "text-[var(--role-color)]",
-  Agent: "text-[var(--role-color)]",
-  Client: "text-[var(--role-color)]",
-};
-
 const SidebarItem = React.forwardRef<HTMLDivElement, SidebarItemProps>(
   (
     { className, text, icon: Icon, rightAddon: RightAddon, isActive, ...props },
@@ -93,12 +85,9 @@ const SidebarItem = React.forwardRef<HTMLDivElement, SidebarItemProps>(
   }
 );
 
-export interface SidebarItemGroupProps
-  extends React.BaseHTMLAttributes<HTMLDivElement> {}
-
 const SidebarItemGroup = React.forwardRef<
   HTMLDivElement,
-  SidebarItemGroupProps
+  React.BaseHTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
   <div
     className={cn(
@@ -187,10 +176,7 @@ const SidebarCollapsibleItemGroupContent = React.forwardRef<
   </AccordionPrimitive.Content>
 ));
 
-export interface SidebarFooterProps
-  extends React.BaseHTMLAttributes<HTMLDivElement> {}
-
-const SidebarFooter = React.forwardRef<HTMLDivElement, SidebarFooterProps>(
+const SidebarFooter = React.forwardRef<HTMLDivElement, React.BaseHTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       className={cn(
@@ -204,10 +190,7 @@ const SidebarFooter = React.forwardRef<HTMLDivElement, SidebarFooterProps>(
   )
 );
 
-export interface SidebarProps
-  extends React.BaseHTMLAttributes<HTMLDivElement> {}
-
-const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
+const Sidebar = React.forwardRef<HTMLDivElement, React.BaseHTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       className={cn(
