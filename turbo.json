@@ -1,10 +1,21 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local", "**/.env"],
-  "globalEnv": ["NODE_ENV", "CI", "VERCEL", "TURBO_TEAM", "TURBO_TOKEN"],
-  "pipeline": {
+  "globalDependencies": [
+    "**/.env.*local",
+    "**/.env"
+  ],
+  "globalEnv": [
+    "NODE_ENV",
+    "CI",
+    "VERCEL",
+    "TURBO_TEAM",
+    "TURBO_TOKEN"
+  ],
+  "tasks": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
@@ -14,61 +25,91 @@
       ]
     },
     "lint": {
-      "dependsOn": ["^lint"],
+      "dependsOn": [
+        "^lint"
+      ],
       "outputs": []
     },
     "lint:fix": {
-      "dependsOn": ["^lint:fix"],
+      "dependsOn": [
+        "^lint:fix"
+      ],
       "outputs": []
     },
     "format": {
-      "dependsOn": ["^format"],
+      "dependsOn": [
+        "^format"
+      ],
       "outputs": []
     },
     "format:check": {
-      "dependsOn": ["^format:check"],
+      "dependsOn": [
+        "^format:check"
+      ],
       "outputs": []
     },
     "type-check": {
-      "dependsOn": ["^type-check"],
+      "dependsOn": [
+        "^type-check"
+      ],
       "outputs": []
     },
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "start": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["build"]
+      "dependsOn": [
+        "build"
+      ]
     },
     "start:dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "codegen": {
       "cache": false,
-      "dependsOn": ["^codegen"]
+      "dependsOn": [
+        "^codegen"
+      ]
     },
     "codegen:watch": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^codegen"]
+      "dependsOn": [
+        "^codegen"
+      ]
     },
     "test": {
-      "dependsOn": ["build"],
-      "outputs": ["coverage/**"]
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
     },
     "test:watch": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["build"]
+      "dependsOn": [
+        "build"
+      ]
     },
     "test:coverage": {
-      "dependsOn": ["build"],
-      "outputs": ["coverage/**"]
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
     },
     "clean": {
       "cache": false,
