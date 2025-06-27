@@ -29,12 +29,12 @@ const ClientProfile = () => {
         {/* Profile Header */}
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-            <p className="text-gray-500 mt-1">
+            <h1 className="text-3xl font-bold text-foreground">Profile</h1>
+            <p className="text-muted-foreground mt-1">
               Manage your personal information and health settings
             </p>
           </div>
-          <Button className="bg-pulse-500 hover:bg-pulse-600">
+          <Button className="bg-primary hover:bg-primary/90">
             <Edit className="w-4 h-4 mr-2" />
             Edit Profile
           </Button>
@@ -45,7 +45,7 @@ const ClientProfile = () => {
           <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <User className="w-5 h-5 text-pulse-500" />
+                <User className="w-5 h-5 text-primary" />
                 <span>Personal Information</span>
               </CardTitle>
               <CardDescription>Your basic profile details</CardDescription>
@@ -54,17 +54,17 @@ const ClientProfile = () => {
               <div className="flex items-center space-x-4">
                 <Avatar className="w-20 h-20">
                   <AvatarImage src="" alt="Profile" />
-                  <AvatarFallback className="bg-pulse-100 text-pulse-600 text-xl font-semibold">
+                  <AvatarFallback className="bg-primary/10 text-primary text-xl font-semibold">
                     JD
                   </AvatarFallback>
                 </Avatar>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-foreground">
                     John Doe
                   </h3>
                   <Badge
                     variant="secondary"
-                    className="bg-pulse-100 text-pulse-700"
+                    className="bg-primary/10 text-primary"
                   >
                     Premium Member
                   </Badge>
@@ -73,35 +73,35 @@ const ClientProfile = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <div className="flex items-center space-x-2 text-gray-600">
+                  <div className="flex items-center space-x-2 text-muted-foreground">
                     <Mail className="w-4 h-4" />
                     <span className="text-sm font-medium">Email</span>
                   </div>
-                  <p className="text-gray-900">john.doe@example.com</p>
+                  <p className="text-foreground">john.doe@example.com</p>
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex items-center space-x-2 text-gray-600">
+                  <div className="flex items-center space-x-2 text-muted-foreground">
                     <Phone className="w-4 h-4" />
                     <span className="text-sm font-medium">Phone</span>
                   </div>
-                  <p className="text-gray-900">+1 (555) 123-4567</p>
+                  <p className="text-foreground">+1 (555) 123-4567</p>
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex items-center space-x-2 text-gray-600">
+                  <div className="flex items-center space-x-2 text-muted-foreground">
                     <MapPin className="w-4 h-4" />
                     <span className="text-sm font-medium">Location</span>
                   </div>
-                  <p className="text-gray-900">San Francisco, CA</p>
+                  <p className="text-foreground">San Francisco, CA</p>
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex items-center space-x-2 text-gray-600">
+                  <div className="flex items-center space-x-2 text-muted-foreground">
                     <Calendar className="w-4 h-4" />
                     <span className="text-sm font-medium">Member Since</span>
                   </div>
-                  <p className="text-gray-900">January 2024</p>
+                  <p className="text-foreground">January 2024</p>
                 </div>
               </div>
             </CardContent>
@@ -111,7 +111,7 @@ const ClientProfile = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Activity className="w-5 h-5 text-pulse-500" />
+                <Activity className="w-5 h-5 text-primary" />
                 <span>Health Stats</span>
               </CardTitle>
             </CardHeader>
@@ -119,36 +119,36 @@ const ClientProfile = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <Heart className="w-4 h-4 text-red-500" />
+                    <Heart className="w-4 h-4 text-destructive" />
                     <span className="text-sm font-medium">Avg Heart Rate</span>
                   </div>
-                  <span className="font-semibold text-gray-900">72 BPM</span>
+                  <span className="font-semibold text-foreground">72 BPM</span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <Target className="w-4 h-4 text-green-500" />
+                    <Target className="w-4 h-4 text-success" />
                     <span className="text-sm font-medium">Daily Steps</span>
                   </div>
-                  <span className="font-semibold text-gray-900">8,542</span>
+                  <span className="font-semibold text-foreground">8,542</span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <Activity className="w-4 h-4 text-blue-500" />
+                    <Activity className="w-4 h-4 text-info" />
                     <span className="text-sm font-medium">Weekly Workouts</span>
                   </div>
-                  <span className="font-semibold text-gray-900">5</span>
+                  <span className="font-semibold text-foreground">5</span>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-gray-200">
+              <div className="pt-4 border-t border-border">
                 <div className="text-center space-y-2">
-                  <p className="text-sm text-gray-600">Health Score</p>
-                  <div className="text-3xl font-bold text-pulse-600">
+                  <p className="text-sm text-muted-foreground">Health Score</p>
+                  <div className="text-3xl font-bold text-primary">
                     87/100
                   </div>
-                  <Badge className="bg-green-100 text-green-700">
+                  <Badge className="bg-success/10 text-success">
                     Excellent
                   </Badge>
                 </div>
@@ -172,13 +172,13 @@ const ClientProfile = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Daily Steps (10,000)</span>
-                  <Badge className="bg-pulse-100 text-pulse-700">
+                  <Badge className="bg-primary/10 text-primary">
                     85% Complete
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Weekly Workouts (5x)</span>
-                  <Badge className="bg-green-100 text-green-700">
+                  <Badge className="bg-success/10 text-success">
                     Completed
                   </Badge>
                 </div>
@@ -201,11 +201,11 @@ const ClientProfile = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Notifications</span>
-                  <Badge className="bg-pulse-100 text-pulse-700">Enabled</Badge>
+                  <Badge className="bg-primary/10 text-primary">Enabled</Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Data Sync</span>
-                  <Badge className="bg-green-100 text-green-700">
+                  <Badge className="bg-success/10 text-success">
                     Connected
                   </Badge>
                 </div>

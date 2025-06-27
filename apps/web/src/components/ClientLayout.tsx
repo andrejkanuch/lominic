@@ -11,7 +11,7 @@ interface ClientLayoutProps {
 const ClientLayout = ({ children }: ClientLayoutProps) => {
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50">
+      <div className="min-h-screen flex w-full bg-background">
         <ClientSidebar />
         <div className="flex-1 flex flex-col">
           <ClientHeader />

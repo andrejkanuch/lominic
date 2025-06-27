@@ -88,7 +88,7 @@ const HumanoidSection = () => {
   return (
     <div ref={sectionRef} className="relative" style={{ height: "300vh" }}>
       <section
-        className="w-full h-screen py-10 md:py-16 sticky top-0 overflow-hidden bg-white"
+        className="w-full h-screen py-10 md:py-16 sticky top-0 overflow-hidden bg-background"
         id="why-humanoid"
       >
         <div className="container px-6 lg:px-8 mx-auto h-full flex flex-col">
@@ -131,7 +131,7 @@ const HumanoidSection = () => {
               }}
             >
               <div
-                className="absolute inset-0 z-0 bg-gradient-to-b from-pulse-900/40 to-dark-900/80"
+                className="absolute inset-0 z-0 bg-gradient-to-b from-pulse-900/40 to-background/80"
                 style={{
                   backgroundImage: "url('/background-section1.png')",
                   backgroundSize: "cover",
@@ -175,7 +175,7 @@ const HumanoidSection = () => {
               }}
             >
               <div
-                className="absolute inset-0 z-0 bg-gradient-to-b from-pulse-900/40 to-dark-900/80"
+                className="absolute inset-0 z-0 bg-gradient-to-b from-pulse-900/40 to-background/80"
                 style={{
                   backgroundImage: "url('/background-section2.png')",
                   backgroundSize: "cover",
@@ -219,7 +219,7 @@ const HumanoidSection = () => {
               }}
             >
               <div
-                className="absolute inset-0 z-0 bg-gradient-to-b from-pulse-900/40 to-dark-900/80"
+                className="absolute inset-0 z-0 bg-gradient-to-b from-pulse-900/40 to-background/80"
                 style={{
                   backgroundImage: "url('/background-section3.png')",
                   backgroundSize: "cover",

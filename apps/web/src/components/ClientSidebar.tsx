@@ -74,8 +74,10 @@ export function ClientSidebar() {
           </div>
           {!isCollapsed && (
             <div>
-              <h2 className="font-semibold text-gray-900">Health Hub</h2>
-              <p className="text-xs text-gray-500">Your wellness companion</p>
+              <h2 className="font-semibold text-foreground">Health Hub</h2>
+              <p className="text-xs text-muted-foreground">
+                Your wellness companion
+              </p>
             </div>
           )}
         </div>

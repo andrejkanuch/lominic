@@ -16,26 +16,26 @@ const StepCard = ({ number, title, description, isActive, onClick }: StepCardPro
       className={cn(
         "rounded-xl p-6 cursor-pointer transition-all duration-500 border",
         isActive 
-          ? "bg-white shadow-elegant border-pulse-200" 
-          : "bg-white/50 hover:bg-white/80 border-transparent"
+          ? "bg-card shadow-elegant border-pulse-200" 
+          : "bg-card/50 hover:bg-card/80 border-transparent"
       )}
       onClick={onClick}
     >
       <div className="flex items-start">
         <div className={cn(
           "flex items-center justify-center rounded-full w-10 h-10 mr-4 flex-shrink-0 transition-colors duration-300",
-          isActive ? "bg-pulse-500 text-white" : "bg-gray-100 text-gray-500"
+          isActive ? "bg-pulse-500 text-white" : "bg-muted text-muted-foreground"
         )}>
           {number}
         </div>
         <div>
           <h3 className={cn(
             "text-lg font-semibold mb-2 transition-colors duration-300",
-            isActive ? "text-pulse-600" : "text-gray-800"
+            isActive ? "text-pulse-600" : "text-foreground"
           )}>
             {title}
           </h3>
-          <p className="text-gray-600 text-sm">{description}</p>
+          <p className="text-muted-foreground text-sm">{description}</p>
         </div>
       </div>
     </div>
@@ -108,7 +108,7 @@ const HowItWorks = () => {
   }, []);
   
   return (
-    <section className="py-20 bg-white relative" id="how-it-works" ref={sectionRef}>
+    <section className="py-20 bg-background relative" id="how-it-works" ref={sectionRef}>
       {/* Background decorative elements */}
       <div className="absolute -top-20 right-0 w-72 h-72 bg-pulse-50 rounded-full opacity-60 blur-3xl -z-10"></div>
       <div className="absolute bottom-0 left-10 w-64 h-64 bg-gray-50 rounded-full opacity-70 blur-3xl -z-10"></div>
@@ -152,7 +152,7 @@ const HowItWorks = () => {
                   alt={step.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-900/70 to-transparent">
+                <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent">
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <span className="text-pulse-400 font-medium mb-2 block">{step.number}</span>
                     <h3 className="text-2xl font-semibold mb-2">{step.title}</h3>

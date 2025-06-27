@@ -142,7 +142,7 @@ const Hero = () => {
 
           <div className="w-full lg:w-1/2 relative mt-6 lg:mt-0">
             <>
-              <div className="absolute inset-0 bg-dark-900 rounded-2xl sm:rounded-3xl -z-10 shadow-xl"></div>
+              <div className="absolute inset-0 bg-background rounded-2xl sm:rounded-3xl -z-10 shadow-xl"></div>
               <div className="relative transition-all duration-500 ease-out overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl">
                 <img
                   ref={imageRef}

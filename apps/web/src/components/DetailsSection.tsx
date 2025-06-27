@@ -78,7 +78,7 @@ This request was submitted from the Lominic website.`,
   };
 
   return (
-    <section id="details" className="w-full bg-white py-0">
+    <section id="details" className="w-full bg-background py-0">
       <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
         <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2">
           {/* Left Card - The Details */}
@@ -99,11 +99,7 @@ This request was submitted from the Lominic website.`,
 
             {/* Card Content */}
             <div
-              className="bg-white p-4 sm:p-8"
-              style={{
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #ECECEC",
-              }}
+              className="bg-card p-4 sm:p-8"
             >
               <h3 className="text-lg sm:text-xl font-display mb-6 sm:mb-8">
                 AI-powered insights for every athlete
@@ -111,7 +107,7 @@ This request was submitted from the Lominic website.`,
 
               <div className="space-y-4 sm:space-y-6">
                 <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-dark-900 flex items-center justify-center mt-1 flex-shrink-0">
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center mt-1 flex-shrink-0">
                     <svg
                       width="14"
                       height="10"
@@ -139,7 +135,7 @@ This request was submitted from the Lominic website.`,
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-dark-900 flex items-center justify-center mt-1 flex-shrink-0">
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center mt-1 flex-shrink-0">
                     <svg
                       width="14"
                       height="10"
@@ -165,7 +161,7 @@ This request was submitted from the Lominic website.`,
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-dark-900 flex items-center justify-center mt-1 flex-shrink-0">
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center mt-1 flex-shrink-0">
                     <svg
                       width="14"
                       height="10"
@@ -193,7 +189,7 @@ This request was submitted from the Lominic website.`,
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-dark-900 flex items-center justify-center mt-1 flex-shrink-0">
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center mt-1 flex-shrink-0">
                     <svg
                       width="14"
                       height="10"
@@ -221,7 +217,7 @@ This request was submitted from the Lominic website.`,
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-dark-900 flex items-center justify-center mt-1 flex-shrink-0">
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center mt-1 flex-shrink-0">
                     <svg
                       width="14"
                       height="10"
@@ -272,11 +268,8 @@ This request was submitted from the Lominic website.`,
 
             {/* Card Content - Form */}
             <div
-              className="bg-white p-4 sm:p-8"
-              style={{
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #ECECEC",
-              }}
+              className="bg-card p-4 sm:p-8"
+             
             >
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 <div>
