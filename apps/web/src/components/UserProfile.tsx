@@ -104,28 +104,11 @@ export function UserProfile() {
       return
     }
 
-    // Listen for messages from popup
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data.type === 'STRAVA_CONNECTED') {
-        if (event.data.success) {
-          toast.success('Strava connected successfully!')
-          refetch() // Refresh activities data
-        } else {
-          toast.error(
-            `Failed to connect Strava: ${event.data.error || 'Unknown error'}`
-          )
-        }
-        window.removeEventListener('message', handleMessage)
-      }
-    }
-
-    window.addEventListener('message', handleMessage)
-
-    // Fallback: Listen for popup close to refresh data
+    // Listen for the popup to close, then refetch the data.
     const checkClosed = setInterval(() => {
       if (popup.closed) {
         clearInterval(checkClosed)
-        window.removeEventListener('message', handleMessage)
+        toast.success('Strava connection process finished.')
         refetch() // Refresh activities data
       }
     }, 1000)

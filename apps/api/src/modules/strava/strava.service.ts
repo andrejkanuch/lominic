@@ -21,6 +21,11 @@ export class StravaService {
     private configService: ConfigService
   ) {}
 
+  /**
+   * Generates the Strava authorization URL.
+   * @param userId - The ID of the user to associate with the Strava account.
+   * @returns The authorization URL.
+   */
   getAuthorizationUrl(userId: string): string {
     const clientId = this.STRAVA_CLIENT_ID
     const redirectUri = 'http://localhost:4000/api/strava/oauth/callback'
@@ -32,6 +37,12 @@ export class StravaService {
     )}&response_type=code&scope=${scope}&state=${state}`
   }
 
+  /**
+   * Exchanges an authorization code for an access token.
+   * @param code - The authorization code from Strava.
+   * @param userId - The ID of the user to associate with the Strava account.
+   * @returns The created or updated Strava account.
+   */
   async exchangeToken(code: string, userId: string): Promise<StravaAccount> {
     const clientId = this.STRAVA_CLIENT_ID
     const clientSecret = this.STRAVA_CLIENT_SECRET
@@ -55,7 +66,12 @@ export class StravaService {
       throw new Error(`Token exchange failed: ${text}`)
     }
 
-    const data = (await res.json()) as any
+    const data = (await res.json()) as {
+      access_token: string
+      refresh_token: string
+      expires_at: number
+      athlete: { id: number }
+    }
     this.logger.log(`Successfully exchanged token for user: ${userId}`)
 
     let account = await this.accounts.findOne({ where: { userId } })
@@ -71,10 +87,20 @@ export class StravaService {
     return this.accounts.save(account)
   }
 
+  /**
+   * Finds a Strava account by user ID.
+   * @param userId - The ID of the user.
+   * @returns The Strava account, or null if not found.
+   */
   async findAccountByUserId(userId: string): Promise<StravaAccount | null> {
     return this.accounts.findOne({ where: { userId } })
   }
 
+  /**
+   * Refreshes the access token if it has expired.
+   * @param account - The Strava account.
+   * @returns The updated Strava account.
+   */
   private async refreshTokenIfNeeded(
     account: StravaAccount
   ): Promise<StravaAccount> {
@@ -106,7 +132,11 @@ export class StravaService {
       throw new Error(`Token refresh failed: ${text}`)
     }
 
-    const data = (await res.json()) as any
+    const data = (await res.json()) as {
+      access_token: string
+      refresh_token: string
+      expires_at: number
+    }
     this.logger.log(`Successfully refreshed token for user: ${account.userId}`)
     account.accessToken = data.access_token
     account.refreshToken = data.refresh_token
@@ -114,6 +144,12 @@ export class StravaService {
     return this.accounts.save(account)
   }
 
+  /**
+   * Gets recent activities for a user from the Strava API.
+   * @param userId - The ID of the user.
+   * @param limit - The maximum number of activities to return.
+   * @returns A list of recent activities.
+   */
   async getRecentActivities(
     userId: string,
     limit = 10
@@ -152,7 +188,14 @@ export class StravaService {
       throw new Error(`Failed to fetch activities: ${text}`)
     }
 
-    const data = (await res.json()) as any[]
+    const data = (await res.json()) as {
+      id: number
+      name: string
+      distance: number
+      moving_time: number
+      start_date: string
+      description: string
+    }[]
     this.logger.log(
       `Successfully fetched ${data.length} activities for user: ${userId}`
     )
@@ -167,7 +210,11 @@ export class StravaService {
     }))
   }
 
-  // Method to manually create a test account with hardcoded tokens
+  /**
+   * Creates a test Strava account with hardcoded tokens for development.
+   * @param userId - The ID of the user.
+   * @returns The created test account.
+   */
   async createTestAccount(userId: string): Promise<StravaAccount> {
     this.logger.log(`Creating test Strava account for user: ${userId}`)
 
