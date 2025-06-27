@@ -23,9 +23,7 @@ import {
 import { ActivityMetrics } from './ActivityMetrics'
 import { ActivityMap } from './ActivityMap'
 import { ActivityChart } from './ActivityChart'
-import {
-  GetStravaActivitiesQuery,
-} from '@/generated/graphql'
+import { GetStravaActivitiesQuery } from '@/generated/graphql'
 
 interface ActivityDetailModalProps {
   activity: GetStravaActivitiesQuery['getStravaActivities'][number]
@@ -89,7 +87,7 @@ export const ActivityDetailModal = ({
                 </Badge>
                 <div className="flex items-center space-x-2 text-gray-500">
                   <Calendar className="w-4 h-4" />
-                  <span>{formatDate(activity.date)}</span>
+                  <span>{formatDate(activity.start_date)}</span>
                 </div>
               </div>
             </div>
@@ -115,13 +113,13 @@ export const ActivityDetailModal = ({
           {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ActivityChart activity={activity} type="speed" />
-            {activity.average_heartrate && (
+            {/* {activity.average_heartrate && (
               <ActivityChart activity={activity} type="heartrate" />
-            )}
+            )} */}
           </div>
 
           {/* Map */}
-          {activity.map && activity.start_latlng && (
+          {activity.polyline && activity.start_latlng && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
@@ -166,7 +164,7 @@ export const ActivityDetailModal = ({
               </CardContent>
             </Card>
 
-            {activity.max_heartrate && (
+            {activity.has_heartrate && (
               <Card>
                 <CardContent className="pt-6 text-center">
                   <div className="flex items-center justify-center space-x-2 mb-2">
@@ -175,9 +173,9 @@ export const ActivityDetailModal = ({
                       Max HR
                     </span>
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {activity.max_heartrate}
-                  </p>
+                  {/* <p className="text-2xl font-bold text-gray-900">
+                    {activity.max_heartrate?.toFixed(1)}
+                  </p> */}
                   <p className="text-sm text-gray-500">BPM</p>
                 </CardContent>
               </Card>

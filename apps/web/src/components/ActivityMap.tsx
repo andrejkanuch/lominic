@@ -1,14 +1,9 @@
 import React from 'react'
 import { MapPin } from 'lucide-react'
+import { GetStravaActivitiesQuery } from '@/generated/graphql'
 
 interface ActivityMapProps {
-  activity: {
-    start_latlng?: [number, number]
-    end_latlng?: [number, number]
-    map?: {
-      summary_polyline: string
-    }
-  }
+  activity: GetStravaActivitiesQuery['getStravaActivities'][number]
 }
 
 export const ActivityMap = ({ activity }: ActivityMapProps) => {
