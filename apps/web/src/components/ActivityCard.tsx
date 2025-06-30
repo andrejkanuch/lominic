@@ -15,7 +15,7 @@ import { GetStravaActivitiesQuery } from '@/generated/graphql'
 
 interface ActivityCardProps {
   activity: GetStravaActivitiesQuery['getStravaActivities'][number]
-  onClick: () => void
+  onClick: (activityId: number) => void
 }
 
 export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
@@ -62,7 +62,7 @@ export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
   return (
     <Card
       className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px]"
-      onClick={onClick}
+      onClick={() => onClick(Number(activity.id))}
     >
       <CardContent className="p-6">
         <div className="space-y-4">

@@ -1,9 +1,9 @@
 import React from 'react'
 import { MapPin } from 'lucide-react'
-import { GetStravaActivitiesQuery } from '@/generated/graphql'
+import { GetActivityByIdQuery } from '@/generated/graphql'
 
 interface ActivityMapProps {
-  activity: GetStravaActivitiesQuery['getStravaActivities'][number]
+  activity: GetActivityByIdQuery['getActivityById']
 }
 
 export const ActivityMap = ({ activity }: ActivityMapProps) => {
@@ -22,7 +22,7 @@ export const ActivityMap = ({ activity }: ActivityMapProps) => {
       </div>
 
       {/* Route Info */}
-      {activity.start_latlng && activity.end_latlng && (
+      {activity.polyline && (
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
@@ -32,8 +32,8 @@ export const ActivityMap = ({ activity }: ActivityMapProps) => {
               </span>
             </div>
             <p className="text-sm text-gray-600">
-              {activity.start_latlng[0].toFixed(4)},{' '}
-              {activity.start_latlng[1].toFixed(4)}
+              {activity.start_latlng?.[0]?.toFixed(4)},{' '}
+              {activity.start_latlng?.[1]?.toFixed(4)}
             </p>
           </div>
 
@@ -45,8 +45,8 @@ export const ActivityMap = ({ activity }: ActivityMapProps) => {
               </span>
             </div>
             <p className="text-sm text-gray-600">
-              {activity.end_latlng[0].toFixed(4)},{' '}
-              {activity.end_latlng[1].toFixed(4)}
+              {activity.end_latlng?.[0]?.toFixed(4)},{' '}
+              {activity.end_latlng?.[1]?.toFixed(4)}
             </p>
           </div>
         </div>

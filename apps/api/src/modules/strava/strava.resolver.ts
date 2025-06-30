@@ -8,6 +8,10 @@ import { GqlAuthGuard } from '../../common/guards/gql-auth.guard'
 import { DetailedAthlete } from './dto/detailed-athlete.dto'
 import { Zones } from './dto/zones.dto'
 import { ActivityStats } from './dto/activity-stats.dto'
+import { ActivityDto } from './dto/activity.dto';
+import { CommentDto } from './dto/comment.dto';
+import { KudoerDto } from './dto/kudoer.dto';
+import { ActivityZoneDto } from './dto/activity-zone.dto';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
@@ -70,6 +74,62 @@ export class StravaResolver {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error occurred'
       throw new Error(`Failed to fetch athlete stats: ${errorMessage}`)
+    }
+  }
+
+  @Query(() => ActivityDto)
+  async getActivityById(
+    @CurrentUser() user: User,
+    @Args('activityId', { type: () => Int }) activityId: number
+  ): Promise<ActivityDto> {
+    try {
+      return await this.stravaService.getActivityById(user.id, activityId);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred';
+      throw new Error(`Failed to fetch activity data: ${errorMessage}`);
+    }
+  }
+
+  @Query(() => [CommentDto])
+  async getActivityComments(
+    @CurrentUser() user: User,
+    @Args('activityId', { type: () => Int }) activityId: number
+  ): Promise<CommentDto[]> {
+    try {
+      return await this.stravaService.getActivityComments(user.id, activityId);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred';
+      throw new Error(`Failed to fetch activity comments: ${errorMessage}`);
+    }
+  }
+
+  @Query(() => [KudoerDto])
+  async getActivityKudoers(
+    @CurrentUser() user: User,
+    @Args('activityId', { type: () => Int }) activityId: number
+  ): Promise<KudoerDto[]> {
+    try {
+      return await this.stravaService.getActivityKudoers(user.id, activityId);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred';
+      throw new Error(`Failed to fetch activity kudoers: ${errorMessage}`);
+    }
+  }
+
+  @Query(() => [ActivityZoneDto])
+  async getActivityZones(
+    @CurrentUser() user: User,
+    @Args('activityId', { type: () => Int }) activityId: number
+  ): Promise<ActivityZoneDto[]> {
+    try {
+      return await this.stravaService.getActivityZones(user.id, activityId);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred';
+      throw new Error(`Failed to fetch activity zones: ${errorMessage}`);
     }
   }
 }

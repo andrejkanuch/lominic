@@ -5,7 +5,14 @@ import { Repository } from 'typeorm'
 import fetch from 'node-fetch'
 import { StravaAccount } from '../../entities/strava-account.entity'
 import { StravaActivityDto } from './dto/strava-activity.dto'
-import { Activity, DetailedAthlete, Zones, ActivityStats } from '@lominic/strava-api-types'
+import {
+  Activity,
+  DetailedAthlete,
+  Zones,
+  ActivityStats,
+  Kudoer,
+  ActivityZone,
+} from '@lominic/strava-api-types'
 
 @Injectable()
 export class StravaService {
@@ -320,7 +327,9 @@ export class StravaService {
 
     if (!res.ok) {
       const text = await res.text()
-      this.logger.error(`Failed to fetch athlete data for user ${userId}: ${text}`)
+      this.logger.error(
+        `Failed to fetch athlete data for user ${userId}: ${text}`
+      )
       throw new Error(`Failed to fetch athlete data: ${text}`)
     }
 
@@ -361,7 +370,9 @@ export class StravaService {
 
     if (!res.ok) {
       const text = await res.text()
-      this.logger.error(`Failed to fetch athlete zones for user ${userId}: ${text}`)
+      this.logger.error(
+        `Failed to fetch athlete zones for user ${userId}: ${text}`
+      )
       throw new Error(`Failed to fetch athlete zones: ${text}`)
     }
 
@@ -405,7 +416,9 @@ export class StravaService {
 
     if (!res.ok) {
       const text = await res.text()
-      this.logger.error(`Failed to fetch athlete stats for user ${userId}: ${text}`)
+      this.logger.error(
+        `Failed to fetch athlete stats for user ${userId}: ${text}`
+      )
       throw new Error(`Failed to fetch athlete stats: ${text}`)
     }
 
@@ -413,5 +426,147 @@ export class StravaService {
     this.logger.log(`Successfully fetched athlete stats for user: ${userId}`)
 
     return stats
+  }
+
+  /**
+   * Gets a specific activity by its ID from the Strava API.
+   * @param userId - The ID of the user.
+   * @param activityId - The ID of the activity.
+   * @returns The detailed activity data.
+   */
+  async getActivityById(userId: string, activityId: number): Promise<Activity> {
+    const account = await this.findAccountByUserId(userId)
+    if (!account) {
+      this.logger.warn(`No Strava account found for user: ${userId}`)
+      throw new NotFoundException(
+        'Strava account not found. Please connect your Strava account first.'
+      )
+    }
+
+    try {
+      await this.refreshTokenIfNeeded(account)
+    } catch (error) {
+      this.logger.error(`Failed to refresh token for user ${userId}: ${error}`)
+      throw new Error(
+        'Failed to refresh Strava token. Please reconnect your account.'
+      )
+    }
+
+    this.logger.log(`Fetching activity ${activityId} for user: ${userId}`)
+
+    const res = await fetch(
+      `https://www.strava.com/api/v3/activities/${activityId}`,
+      {
+        headers: { Authorization: `Bearer ${account.accessToken}` },
+      }
+    )
+
+    if (!res.ok) {
+      const text = await res.text()
+      this.logger.error(
+        `Failed to fetch activity ${activityId} for user ${userId}: ${text}`
+      )
+      throw new Error(`Failed to fetch activity: ${text}`)
+    }
+
+    const activity = (await res.json()) as Activity
+    this.logger.log(
+      `Successfully fetched activity ${activityId} for user: ${userId}`
+    )
+
+    return activity
+  }
+
+  /**
+   * Gets comments for a specific activity from the Strava API.
+   * @param userId - The ID of the user.
+   * @param activityId - The ID of the activity.
+   * @returns A list of comments.
+   */
+  async getActivityComments(
+    userId: string,
+    activityId: number
+  ): Promise<Comment[]> {
+    const account = await this.findAccountByUserId(userId)
+    if (!account) {
+      throw new NotFoundException('Strava account not found.')
+    }
+    await this.refreshTokenIfNeeded(account)
+
+    const res = await fetch(
+      `https://www.strava.com/api/v3/activities/${activityId}/comments`,
+      {
+        headers: { Authorization: `Bearer ${account.accessToken}` },
+      }
+    )
+
+    if (!res.ok) {
+      const text = await res.text()
+      throw new Error(`Failed to fetch activity comments: ${text}`)
+    }
+
+    return (await res.json()) as Comment[]
+  }
+
+  /**
+   * Gets kudoers for a specific activity from the Strava API.
+   * @param userId - The ID of the user.
+   * @param activityId - The ID of the activity.
+   * @returns A list of kudoers.
+   */
+  async getActivityKudoers(
+    userId: string,
+    activityId: number
+  ): Promise<Kudoer[]> {
+    const account = await this.findAccountByUserId(userId)
+    if (!account) {
+      throw new NotFoundException('Strava account not found.')
+    }
+    await this.refreshTokenIfNeeded(account)
+
+    const res = await fetch(
+      `https://www.strava.com/api/v3/activities/${activityId}/kudos`,
+      {
+        headers: { Authorization: `Bearer ${account.accessToken}` },
+      }
+    )
+
+    if (!res.ok) {
+      const text = await res.text()
+      throw new Error(`Failed to fetch activity kudoers: ${text}`)
+    }
+
+    return (await res.json()) as Kudoer[]
+  }
+
+  /**
+   * Gets zones for a specific activity from the Strava API.
+   * @param userId - The ID of the user.
+   * @param activityId - The ID of the activity.
+   * @returns A list of activity zones.
+   */
+  async getActivityZones(
+    userId: string,
+    activityId: number
+  ): Promise<ActivityZone[]> {
+    const account = await this.findAccountByUserId(userId)
+    if (!account) {
+      throw new NotFoundException('Strava account not found.')
+    }
+    await this.refreshTokenIfNeeded(account)
+
+    const res = await fetch(
+      `https://www.strava.com/api/v3/activities/${activityId}/zones`,
+      {
+        headers: { Authorization: `Bearer ${account.accessToken}` },
+      }
+    )
+
+    if (!res.ok) {
+      const text = await res.text()
+      throw new Error(`Failed to fetch activity zones: ${text}`)
+    }
+
+    return (await res.json()) as ActivityZone[]
   }
 }

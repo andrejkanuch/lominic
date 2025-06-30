@@ -23,19 +23,30 @@ import {
 import { ActivityMetrics } from './ActivityMetrics'
 import { ActivityMap } from './ActivityMap'
 import { ActivityChart } from './ActivityChart'
-import { GetStravaActivitiesQuery } from '@/generated/graphql'
+import { useGetActivityByIdQuery } from '@/generated/graphql'
 
 interface ActivityDetailModalProps {
-  activity: GetStravaActivitiesQuery['getStravaActivities'][number]
+  activityId: number
   isOpen: boolean
   onClose: () => void
 }
 
 export const ActivityDetailModal = ({
-  activity,
+  activityId,
   isOpen,
   onClose,
 }: ActivityDetailModalProps) => {
+  const { data, loading, error } = useGetActivityByIdQuery({
+    variables: { activityId },
+    skip: !isOpen,
+  })
+
+  const activity = data?.getActivityById
+
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
+  if (!activity) return null
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -98,7 +109,6 @@ export const ActivityDetailModal = ({
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Description */}
           {activity.description && (
             <Card>
               <CardContent className="pt-6">
@@ -107,18 +117,15 @@ export const ActivityDetailModal = ({
             </Card>
           )}
 
-          {/* Key Metrics */}
           <ActivityMetrics activity={activity} />
 
-          {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ActivityChart activity={activity} type="speed" />
             {/* {activity.average_heartrate && (
-              <ActivityChart activity={activity} type="heartrate" />
-            )} */}
+                <ActivityChart activity={activity} type="heartrate" />
+              )} */}
           </div>
 
-          {/* Map */}
           {activity.polyline && activity.start_latlng && (
             <Card>
               <CardHeader>
@@ -133,7 +140,6 @@ export const ActivityDetailModal = ({
             </Card>
           )}
 
-          {/* Additional Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card>
               <CardContent className="pt-6 text-center">
@@ -158,13 +164,13 @@ export const ActivityDetailModal = ({
                   </span>
                 </div>
                 <p className="text-2xl font-bold text-gray-900">
-                  {activity.max_speed.toFixed(1)}
+                  {activity.max_speed ? activity.max_speed.toFixed(1) : 'N/A'}
                 </p>
                 <p className="text-sm text-gray-500">km/h</p>
               </CardContent>
             </Card>
 
-            {activity.has_heartrate && (
+            {activity.has_heartrate && activity.max_watts && (
               <Card>
                 <CardContent className="pt-6 text-center">
                   <div className="flex items-center justify-center space-x-2 mb-2">
@@ -173,9 +179,9 @@ export const ActivityDetailModal = ({
                       Max HR
                     </span>
                   </div>
-                  {/* <p className="text-2xl font-bold text-gray-900">
-                    {activity.max_heartrate?.toFixed(1)}
-                  </p> */}
+                  <p className="text-2xl font-bold text-gray-900">
+                    {activity.max_watts.toFixed(1)}
+                  </p>
                   <p className="text-sm text-gray-500">BPM</p>
                 </CardContent>
               </Card>
@@ -190,7 +196,13 @@ export const ActivityDetailModal = ({
                   </span>
                 </div>
                 <p className="text-2xl font-bold text-gray-900">
-                  {(activity.moving_time / 60 / activity.distance).toFixed(1)}
+                  {activity.moving_time && activity.distance
+                    ? (
+                        activity.moving_time /
+                        60 /
+                        (activity.distance / 1000)
+                      ).toFixed(1)
+                    : 'N/A'}
                 </p>
                 <p className="text-sm text-gray-500">min/km</p>
               </CardContent>

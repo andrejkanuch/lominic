@@ -169,6 +169,43 @@ export interface SummaryActivity {
   has_kudoed: boolean
   workout_type: number | null
   suffer_score: number | null
+  location_city?: string | null
+  location_state?: string | null
+  location_country?: string | null
+  average_heartrate?: number
+  max_heartrate?: number
+}
+
+export interface CommentAthlete {
+  firstname: string
+  lastname: string
+}
+
+export interface Comment {
+  id: number
+  activity_id: number
+  post_id: number | null
+  resource_state: number
+  text: string
+  mentions_metadata: null
+  created_at: string
+  athlete: CommentAthlete
+  cursor: string
+}
+
+export interface Kudoer {
+  firstname: string
+  lastname:string
+}
+
+export interface ActivityZone {
+  score: number
+  distribution_buckets: ZoneBucket[]
+  type: string
+  sensor_based: boolean
+  points: number
+  custom_zones: boolean
+  max: number
 }
 
 export interface Activity {

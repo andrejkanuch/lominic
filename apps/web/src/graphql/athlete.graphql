@@ -15,8 +15,6 @@ query GetAthlete {
     badge_type_id
     profile_medium
     profile
-    friend
-    follower
     follower_count
     friend_count
     mutual_friend_count

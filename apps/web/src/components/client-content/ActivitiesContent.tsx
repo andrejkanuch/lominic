@@ -11,24 +11,17 @@ import {
 import { Search, Filter, TrendingUp } from 'lucide-react'
 import { ActivityCard } from '@/components/ActivityCard'
 import { ActivityDetailModal } from '@/components/ActivityDetailModal'
-import {
-  useGetStravaActivitiesQuery,
-  GetStravaActivitiesQuery,
-} from '@/generated/graphql'
-
-type StravaActivity = NonNullable<
-  GetStravaActivitiesQuery['getStravaActivities']
->[0]
+import { useGetStravaActivitiesQuery } from '@/generated/graphql'
 
 const ActivitiesContent: React.FC = () => {
-  const [selectedActivity, setSelectedActivity] =
-    useState<StravaActivity | null>(null)
+  const [selectedActivityId, setSelectedActivityId] = useState<number | null>(
+    null
+  )
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedSport, setSelectedSport] = useState('all')
   const [selectedTimeRange, setSelectedTimeRange] = useState('all')
 
-  // Fetch real Strava activities
   const { data, loading, error } = useGetStravaActivitiesQuery({
     variables: { limit: 50 },
   })
@@ -36,18 +29,16 @@ const ActivitiesContent: React.FC = () => {
   const activities = data?.getStravaActivities || []
 
   const filteredActivities = activities.filter(activity => {
-    const matchesSearch =
-      activity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (activity.description || '')
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
+    const matchesSearch = activity.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
     const matchesSport =
       selectedSport === 'all' || activity.sport_type === selectedSport
     return matchesSearch && matchesSport
   })
 
-  const handleActivityClick = (activity: StravaActivity) => {
-    setSelectedActivity(activity)
+  const handleActivityClick = (activityId: number) => {
+    setSelectedActivityId(activityId)
     setIsDetailModalOpen(true)
   }
 
@@ -116,7 +107,6 @@ const ActivitiesContent: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Activities</h1>
@@ -126,7 +116,6 @@ const ActivitiesContent: React.FC = () => {
         </div>
       </div>
 
-      {/* Filters */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
@@ -193,13 +182,12 @@ const ActivitiesContent: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Activities Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredActivities.map(activity => (
           <ActivityCard
             key={activity.id}
             activity={activity}
-            onClick={() => handleActivityClick(activity)}
+            onClick={handleActivityClick}
           />
         ))}
       </div>
@@ -218,10 +206,9 @@ const ActivitiesContent: React.FC = () => {
         </Card>
       )}
 
-      {/* Activity Detail Modal */}
-      {selectedActivity && (
+      {selectedActivityId && (
         <ActivityDetailModal
-          activity={selectedActivity}
+          activityId={selectedActivityId}
           isOpen={isDetailModalOpen}
           onClose={() => setIsDetailModalOpen(false)}
         />

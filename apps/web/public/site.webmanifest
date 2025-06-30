@@ -36,45 +36,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshot-wide.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/screenshot-narrow.png",
-      "sizes": "750x1334",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Upload Workout",
-      "short_name": "Upload",
-      "description": "Upload a new workout for analysis",
-      "url": "/upload",
-      "icons": [
-        {
-          "src": "/icon-upload.png",
-          "sizes": "96x96"
-        }
-      ]
-    },
-    {
-      "name": "View Insights",
-      "short_name": "Insights",
-      "description": "View your workout insights",
-      "url": "/insights",
-      "icons": [
-        {
-          "src": "/icon-insights.png",
-          "sizes": "96x96"
-        }
-      ]
-    }
   ]
 }
