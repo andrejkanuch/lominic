@@ -4,9 +4,12 @@ import { SidebarProvider } from '@/components/ui/sidebar'
 import { ClientSidebar } from './ClientSidebar'
 import { ClientHeader } from './ClientHeader'
 import { ClientFooter } from './ClientFooter'
-import ClientContent from './client-content/ClientContent'
 
-const ClientLayout = () => {
+interface ClientLayoutProps {
+  children: React.ReactNode
+}
+
+const ClientLayout = ({ children }: ClientLayoutProps) => {
   const [activeItem, setActiveItem] = useState('/client/dashboard')
 
   const handleMenuItemClick = (url: string) => {
@@ -22,9 +25,7 @@ const ClientLayout = () => {
         />
         <div className="flex-1 flex flex-col">
           <ClientHeader />
-          <main className="flex-1 p-6">
-            <ClientContent activeItem={activeItem} />
-          </main>
+          <main className="flex-1 p-6">{children}</main>
           <ClientFooter />
         </div>
       </div>

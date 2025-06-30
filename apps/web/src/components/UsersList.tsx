@@ -1,39 +1,39 @@
-"use client";
+'use client'
 
 import {
   useGetUsersQuery,
   useCreateUserMutation,
   useRemoveUserMutation,
-} from "@/generated/graphql";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useRBAC, Permission } from "@/hooks/use-rbac";
+} from '@/generated/graphql'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Badge } from '@/components/ui/badge'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { useRBAC, Permission } from '@/hooks/use-rbac'
 import {
   RoleBasedComponent,
   UserManagementOnly,
-} from "@/components/RoleBasedComponent";
+} from '@/components/RoleBasedComponent'
 
 export function UsersList() {
   const [newUser, setNewUser] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-  });
+    firstName: '',
+    lastName: '',
+    email: '',
+  })
 
-  const { hasPermission } = useRBAC();
-  const { data: users, loading, error, refetch } = useGetUsersQuery();
-  const [createUser, { loading: creating }] = useCreateUserMutation();
-  const [removeUser, { loading: removing }] = useRemoveUserMutation();
+  const { hasPermission } = useRBAC()
+  const { data: users, loading, error, refetch } = useGetUsersQuery()
+  const [createUser, { loading: creating }] = useCreateUserMutation()
+  const [removeUser, { loading: removing }] = useRemoveUserMutation()
 
   const handleCreateUser = async () => {
     if (!hasPermission(Permission.CREATE_USER)) {
-      toast.error("You don't have permission to create users");
-      return;
+      toast.error("You don't have permission to create users")
+      return
     }
 
     try {
@@ -43,40 +43,40 @@ export function UsersList() {
             firstName: newUser.firstName,
             lastName: newUser.lastName,
             email: newUser.email,
-            password: "defaultPassword123", // In real app, add password field
+            password: 'defaultPassword123', // In real app, add password field
           },
         },
-      });
+      })
 
-      setNewUser({ firstName: "", lastName: "", email: "" });
-      refetch();
-      toast.success("User created successfully!");
+      setNewUser({ firstName: '', lastName: '', email: '' })
+      refetch()
+      toast.success('User created successfully!')
     } catch (error) {
-      toast.error("Failed to create user");
-      console.error(error);
+      toast.error('Failed to create user')
+      console.error(error)
     }
-  };
+  }
 
   const handleRemoveUser = async (id: string) => {
     if (!hasPermission(Permission.DELETE_USER)) {
-      toast.error("You don't have permission to delete users");
-      return;
+      toast.error("You don't have permission to delete users")
+      return
     }
 
     try {
       await removeUser({
         variables: { id },
-      });
-      refetch();
-      toast.success("User removed successfully!");
+      })
+      refetch()
+      toast.success('User removed successfully!')
     } catch (error) {
-      toast.error("Failed to remove user");
-      console.error(error);
+      toast.error('Failed to remove user')
+      console.error(error)
     }
-  };
+  }
 
-  if (loading) return <div>Loading users...</div>;
-  if (error) return <div>Error loading users: {error.message}</div>;
+  if (loading) return <div>Loading users...</div>
+  if (error) return <div>Error loading users: {error.message}</div>
 
   return (
     <div className="space-y-6">
@@ -92,8 +92,8 @@ export function UsersList() {
                 <Input
                   id="firstName"
                   value={newUser.firstName}
-                  onChange={(e) =>
-                    setNewUser((prev) => ({
+                  onChange={e =>
+                    setNewUser(prev => ({
                       ...prev,
                       firstName: e.target.value,
                     }))
@@ -105,8 +105,8 @@ export function UsersList() {
                 <Input
                   id="lastName"
                   value={newUser.lastName}
-                  onChange={(e) =>
-                    setNewUser((prev) => ({
+                  onChange={e =>
+                    setNewUser(prev => ({
                       ...prev,
                       lastName: e.target.value,
                     }))
@@ -119,14 +119,14 @@ export function UsersList() {
                   id="email"
                   type="email"
                   value={newUser.email}
-                  onChange={(e) =>
-                    setNewUser((prev) => ({ ...prev, email: e.target.value }))
+                  onChange={e =>
+                    setNewUser(prev => ({ ...prev, email: e.target.value }))
                   }
                 />
               </div>
             </div>
             <Button onClick={handleCreateUser} disabled={creating}>
-              {creating ? "Creating..." : "Create User"}
+              {creating ? 'Creating...' : 'Create User'}
             </Button>
           </CardContent>
         </Card>
@@ -153,7 +153,7 @@ export function UsersList() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {users?.users?.map((user) => (
+              {users?.users?.map(user => (
                 <div
                   key={user.id}
                   className="flex items-center justify-between p-4 border rounded-lg"
@@ -163,7 +163,7 @@ export function UsersList() {
                       <h3 className="font-medium">
                         {user.firstName} {user.lastName}
                       </h3>
-                      <Badge variant="secondary">{user.role || "user"}</Badge>
+                      <Badge variant="secondary">{user.role || 'user'}</Badge>
                     </div>
                     <p className="text-sm text-gray-600">{user.email}</p>
                     <p className="text-xs text-gray-500">
@@ -173,7 +173,7 @@ export function UsersList() {
                   <div className="flex gap-2">
                     <RoleBasedComponent permissions={Permission.DELETE_USER}>
                       <Button
-                        variant="destructive"
+                        variant="outline"
                         size="sm"
                         onClick={() => handleRemoveUser(user.id)}
                         disabled={removing}
@@ -192,5 +192,5 @@ export function UsersList() {
         </Card>
       </RoleBasedComponent>
     </div>
-  );
+  )
 }
