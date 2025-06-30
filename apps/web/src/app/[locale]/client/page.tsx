@@ -1,8 +1,8 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { UserProfile } from '@/components/UserProfile'
-import { ProtectedRoute } from '@/components/ProtectedRoute'
+import { UserProfile } from '../../../components/UserProfile'
+import { ProtectedRoute } from '../../../components/ProtectedRoute'
 
 export default function ProfilePage() {
   const pathname = usePathname()

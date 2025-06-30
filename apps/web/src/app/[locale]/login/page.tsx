@@ -1,14 +1,14 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { useLoginMutation } from '@/generated/graphql'
+import Navbar from '../../../components/Navbar'
+import Footer from '../../../components/Footer'
+import { useLoginMutation } from '../../../generated/graphql'
 import { useRouter } from 'next/navigation'
 import { useFormik } from 'formik'
 import { z } from 'zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input/input'
+import { Button } from '../../../components/ui/button'
+import { Input } from '../../../components/ui/input/input'
 
 const LoginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),

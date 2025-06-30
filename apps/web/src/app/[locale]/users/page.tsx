@@ -1,5 +1,5 @@
-import { UsersList } from "@/components/UsersList";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { UsersList } from '../../../components/UsersList'
+import { ProtectedRoute } from '../../../components/ProtectedRoute'
 
 export default function UsersPage() {
   return (
@@ -9,5 +9,5 @@ export default function UsersPage() {
         <UsersList />
       </div>
     </ProtectedRoute>
-  );
+  )
 }

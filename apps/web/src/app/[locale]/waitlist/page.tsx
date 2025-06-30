@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import emailjs from '@emailjs/browser'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import Navbar from '../../../components/Navbar'
+import Footer from '../../../components/Footer'
 import { ArrowRight, Users, Zap, Brain } from 'lucide-react'
 
 export default function WaitlistPage() {

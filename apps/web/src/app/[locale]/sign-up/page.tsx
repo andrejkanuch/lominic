@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import Navbar from '../../../components/Navbar'
+import Footer from '../../../components/Footer'
 import { ArrowRight, Eye, EyeOff, Check } from 'lucide-react'
-import { useRegisterMutation } from '@/generated/graphql'
+import { useRegisterMutation } from '../../../generated/graphql'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useFormik } from 'formik'

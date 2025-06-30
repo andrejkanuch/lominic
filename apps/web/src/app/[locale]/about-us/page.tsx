@@ -2,8 +2,8 @@
 
 import React, { useEffect } from 'react'
 import Link from 'next/link'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import Navbar from '../../../components/Navbar'
+import Footer from '../../../components/Footer'
 import { ArrowRight, Brain, Mountain, Shield, Users, Zap } from 'lucide-react'
 
 const AboutUs = () => {

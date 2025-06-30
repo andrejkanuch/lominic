@@ -1,6 +1,6 @@
-import { NextConfig } from "next";
-
-import createNextIntlPlugin from "next-intl/plugin";
+import { NextConfig } from 'next'
+import path from 'path'
+import createNextIntlPlugin from 'next-intl/plugin'
 
 const nextConfig: NextConfig = {
   images: {
@@ -12,7 +12,17 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-};
-const withNextIntl = createNextIntlPlugin();
+  experimental: {
+    esmExternals: 'loose',
+  },
+  webpack: config => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname, 'src'),
+    }
+    return config
+  },
+}
+const withNextIntl = createNextIntlPlugin()
 
-export default withNextIntl(nextConfig);
+export default withNextIntl(nextConfig)
