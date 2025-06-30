@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { Menu, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
+import { ThemeToggle } from './ui/theme-toggle'
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -42,7 +44,7 @@ const Navbar = () => {
         'fixed top-0 left-0 right-0 z-50 py-2 sm:py-3 md:py-4 transition-all duration-300',
         isScrolled
           ? 'bg-background/80 backdrop-blur-md shadow-sm'
-          : 'bg-transparent'
+          : 'bg-background md:bg-transparent'
       )}
     >
       <div className="container flex items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -55,10 +57,12 @@ const Navbar = () => {
           }}
           aria-label="Lominic"
         >
-          <img
+          <Image
             src="/lominic-peak.svg"
             alt="Lominic Logo"
             className="h-7 sm:h-8"
+            width={100}
+            height={100}
           />
         </a>
 
@@ -80,6 +84,8 @@ const Navbar = () => {
           <a href="#details" className="nav-link">
             {t('pricing')}
           </a>
+
+          <ThemeToggle />
         </nav>
 
         {/* Mobile menu button - increased touch target */}

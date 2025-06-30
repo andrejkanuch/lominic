@@ -16,10 +16,10 @@
   },
   "Hero": {
     "trainingIntelligence": "Inteligencia de Entrenamiento",
-    "yourTrainingPartner": "Tu Compañero de Entrenamiento",
+    "yourTrainingPartner": "Información de Entrenamiento Más Inteligente de Tus Dispositivos Favoritos",
     "withABrain": "Con un Cerebro",
-    "description": "Sube entrenamientos desde Garmin, Apple Watch o Strava y obtén información instantánea generada por IA en lenguaje sencillo.",
-    "tryFree": "Prueba Gratis",
+    "description": "Sube tus entrenamientos de Garmin, Apple Watch o Strava y obtén información inteligente generada por IA. Rastrea el rendimiento, la recuperación y las tendencias con tu nuevo compañero de entrenamiento digital.",
+    "tryFree": "Únete a la Lista de Espera para Acceso Anticipado",
     "lominicAppInterface": "Interfaz de la aplicación Lominic"
   },
   "HumanoidSection": {
@@ -82,6 +82,16 @@
     "universalCompatibilityTitle": "Compatibilidad Universal",
     "universalCompatibilityDescription": "Funciona con Garmin, Apple Health, Strava y cualquier archivo .FIT o .GPX de tus dispositivos de fitness favoritos."
   },
+  "OptimizedFeatures": {
+    "worksWithDevicesTitle": "Funciona con Tus Dispositivos",
+    "worksWithDevicesDescription": "Conecta sin problemas tu cuenta de Garmin, Apple Watch o Strava para importar entrenamientos automáticamente. Nuestra plataforma es compatible con todos los dispositivos de fitness principales y formatos de archivo, para que puedas concentrarte en entrenar, no en gestionar datos.",
+    "poweredByAITitle": "Impulsado por IA, Construido para Atletas",
+    "poweredByAIDescription": "Nuestra IA avanzada analiza tus patrones de entrenamiento, zonas de frecuencia cardíaca y métricas de recuperación para proporcionar información personalizada. Obtén recomendaciones que se adaptan a tu nivel de fitness y objetivos de entrenamiento.",
+    "yourPrivacyTitle": "Tu Privacidad, Tus Datos",
+    "yourPrivacyDescription": "Tus datos de entrenamiento permanecen privados y seguros. Utilizamos encriptación de nivel empresarial y nunca compartimos tu información personal. Tú controlas qué datos compartes y puedes eliminarlos en cualquier momento.",
+    "seeYourTrendsTitle": "Ve Tus Tendencias, No Solo Números",
+    "seeYourTrendsDescription": "Ve más allá de las estadísticas básicas con análisis inteligente de tendencias. Comprende tu carga de entrenamiento, patrones de recuperación y mejoras de rendimiento a lo largo del tiempo con información clara y procesable."
+  },
   "Testimonials": {
     "testimonials": "Testimonios",
     "whatOthersSay": "Lo que dicen otros",
@@ -116,22 +126,22 @@
     "aiHumanIntelligence": "IA + Inteligencia Humana"
   },
   "Metadata": {
-    "title": "Lominic - Información de Entrenamiento con IA y Compañero de Entrenamiento",
-    "description": "Sube entrenamientos desde Garmin, Apple Watch o Strava y obtén información instantánea generada por IA en lenguaje sencillo. Tu compañero de entrenamiento con un cerebro.",
-    "keywords": "Análisis de entrenamiento con IA, seguimiento de actividad física, Garmin, Apple Watch, Strava, información de entrenamiento, optimización de entrenamiento, aplicación de fitness, compañero de entrenamiento con IA",
-    "ogTitle": "Lominic - Información de Entrenamiento con IA y Compañero de Entrenamiento",
-    "ogDescription": "Sube entrenamientos desde Garmin, Apple Watch o Strava y obtén información instantánea generada por IA en lenguaje sencillo. Tu compañero de entrenamiento con un cerebro.",
-    "ogImageAlt": "Lominic - Información de Entrenamiento con IA",
-    "twitterTitle": "Lominic - Información de Entrenamiento con IA y Compañero de Entrenamiento",
-    "twitterDescription": "Sube entrenamientos desde Garmin, Apple Watch o Strava y obtén información instantánea generada por IA en lenguaje sencillo.",
-    "schemaDescription": "Análisis de entrenamiento con IA y aplicación de información de entrenamiento",
-    "schemaOfferDescription": "Prueba gratuita disponible",
+    "title": "Lominic | Información de Entrenamiento Más Inteligente de Garmin, Strava y Apple Watch",
+    "description": "Sube tus entrenamientos de Garmin, Apple Watch o Strava y obtén información inteligente generada por IA. Rastrea el rendimiento, la recuperación y las tendencias con tu nuevo compañero de entrenamiento digital.",
+    "keywords": "información de entrenamiento, Garmin, Strava, Apple Watch, análisis de entrenamiento con IA, seguimiento de actividad física, compañero de entrenamiento, optimización de entrenamiento, aplicación de fitness, información de recuperación",
+    "ogTitle": "Lominic | Información de Entrenamiento Más Inteligente de Garmin, Strava y Apple Watch",
+    "ogDescription": "Sube tus entrenamientos de Garmin, Apple Watch o Strava y obtén información inteligente generada por IA. Rastrea el rendimiento, la recuperación y las tendencias con tu nuevo compañero de entrenamiento digital.",
+    "ogImageAlt": "Lominic - Información de Entrenamiento Más Inteligente de Garmin, Strava y Apple Watch",
+    "twitterTitle": "Lominic | Información de Entrenamiento Más Inteligente de Garmin, Strava y Apple Watch",
+    "twitterDescription": "Sube tus entrenamientos de Garmin, Apple Watch o Strava y obtén información inteligente generada por IA. Rastrea el rendimiento, la recuperación y las tendencias con tu nuevo compañero de entrenamiento digital.",
+    "schemaDescription": "Análisis de entrenamiento con IA y aplicación de información de entrenamiento que funciona con Garmin, Strava y Apple Watch",
+    "schemaOfferDescription": "Prueba gratuita disponible con información inteligente de entrenamiento",
     "schemaFeature1": "Análisis de entrenamiento con IA",
     "schemaFeature2": "Integración con Garmin",
     "schemaFeature3": "Integración con Apple Watch",
     "schemaFeature4": "Integración con Strava",
     "schemaFeature5": "Información de entrenamiento",
     "schemaFeature6": "Optimización de entrenamiento",
-    "organizationDescription": "Plataforma de análisis de entrenamiento y fitness impulsada por IA"
+    "organizationDescription": "Plataforma de análisis de entrenamiento y fitness impulsada por IA para usuarios de Garmin, Strava y Apple Watch"
   }
 }

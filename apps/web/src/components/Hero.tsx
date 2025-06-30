@@ -105,8 +105,6 @@ const Hero = () => {
               style={{ animationDelay: '0.3s' }}
             >
               {t('yourTrainingPartner')}
-              <br className="hidden sm:inline" />
-              {t('withABrain')}
             </h1>
 
             <p
