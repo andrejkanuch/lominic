@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { Menu, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const t = useTranslations('Navbar')
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,13 +72,13 @@ const Navbar = () => {
               scrollToTop()
             }}
           >
-            Home
+            {t('home')}
           </a>
           <a href="#features" className="nav-link">
-            Features
+            {t('features')}
           </a>
           <a href="#details" className="nav-link">
-            Pricing
+            {t('pricing')}
           </a>
         </nav>
 
@@ -84,7 +86,7 @@ const Navbar = () => {
         <button
           className="md:hidden text-foreground p-3 focus:outline-none"
           onClick={toggleMenu}
-          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-label={isMenuOpen ? t('closeMenu') : t('openMenu')}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -93,7 +95,7 @@ const Navbar = () => {
       {/* Mobile Navigation - improved for better touch experience */}
       <div
         className={cn(
-          'fixed inset-0 z-40 bg-white flex flex-col pt-16 px-6 md:hidden transition-all duration-300 ease-in-out',
+          'fixed inset-0 z-40 bg-background flex flex-col pt-16 px-6 md:hidden transition-all duration-300 ease-in-out',
           isMenuOpen
             ? 'opacity-100 translate-x-0'
             : 'opacity-0 translate-x-full pointer-events-none'
@@ -102,7 +104,7 @@ const Navbar = () => {
         <nav className="flex flex-col space-y-8 items-center mt-8">
           <a
             href="#"
-            className="text-xl font-medium py-3 px-6 w-full text-center rounded-lg hover:bg-gray-100"
+            className="text-xl font-medium py-3 px-6 w-full text-center rounded-lg hover:bg-muted transition-colors"
             onClick={e => {
               e.preventDefault()
               scrollToTop()
@@ -110,27 +112,27 @@ const Navbar = () => {
               document.body.style.overflow = ''
             }}
           >
-            Home
+            {t('home')}
           </a>
           <a
             href="#features"
-            className="text-xl font-medium py-3 px-6 w-full text-center rounded-lg hover:bg-gray-100"
+            className="text-xl font-medium py-3 px-6 w-full text-center rounded-lg hover:bg-muted transition-colors"
             onClick={() => {
               setIsMenuOpen(false)
               document.body.style.overflow = ''
             }}
           >
-            Features
+            {t('features')}
           </a>
           <a
             href="#details"
-            className="text-xl font-medium py-3 px-6 w-full text-center rounded-lg hover:bg-gray-100"
+            className="text-xl font-medium py-3 px-6 w-full text-center rounded-lg hover:bg-muted transition-colors"
             onClick={() => {
               setIsMenuOpen(false)
               document.body.style.overflow = ''
             }}
           >
-            Pricing
+            {t('pricing')}
           </a>
         </nav>
       </div>

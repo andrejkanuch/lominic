@@ -1,6 +1,137 @@
 {
+  "Home": {
+    "title": "Hello world!",
+    "about": "Go to the about page"
+  },
   "HomePage": {
     "title": "Hello world!",
     "about": "Go to the about page"
+  },
+  "Navbar": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "Hero": {
+    "trainingIntelligence": "Training Intelligence",
+    "yourTrainingPartner": "Your Training Partner",
+    "withABrain": "With a Brain",
+    "description": "Upload workouts from Garmin, Apple Watch or Strava and get instant, AI-generated insights in plain language.",
+    "tryFree": "Try Free",
+    "lominicAppInterface": "Lominic App Interface"
+  },
+  "HumanoidSection": {
+    "trainingIntelligence": "Training Intelligence",
+    "whyAITrainingAnalysis": "Why AI Training Analysis",
+    "theVision": "The vision",
+    "sportsScienceAccessible": "We're making sports science accessible to every athlete",
+    "aiInsightsToWhereYouTrain": "We're bringing AI insights to where you train",
+    "creatingTrainingPartners": "We're creating training partners, not just data"
+  },
+  "SpecsSection": {
+    "howItWorks": "How It Works",
+    "description": "lominic works with your data, not against it. By analyzing heart rate zones, training load, recovery patterns, and learning from every workout, our AI helps athletes focus on what they do best: train smarter, recover better, and perform consistently."
+  },
+  "DetailsSection": {
+    "pricingAndPlans": "Pricing & Plans",
+    "aiPoweredInsights": "AI-powered insights for every athlete",
+    "freePlan": "Free Plan:",
+    "basicSummaries": "Basic summaries & 5 uploads/month",
+    "proPlan": "Pro Plan:",
+    "proPlanPrice": "$9.99/month - Unlimited uploads & AI Q&A",
+    "coachPlan": "Coach Plan:",
+    "coachPlanPrice": "$19.99/month - Weekly reports & coaching",
+    "fileSupport": "File Support:",
+    "fileSupportTypes": "FIT, GPX, Apple Health, Strava",
+    "aiAnalysis": "AI Analysis:",
+    "aiAnalysisDescription": "Real-time insights & recommendations",
+    "getEarlyAccess": "Get early access",
+    "startTrainingSmarter": "Start training smarter",
+    "fullName": "Full name",
+    "emailAddress": "Email address",
+    "sportActivityOptional": "Sport/Activity (optional)",
+    "messagePlaceholder": "Tell us about your sport/activities,what kind of reports you are looking for, etc.",
+    "validationError": "Please fill in all required fields",
+    "successMessage": "Request submitted successfully! We'll get back to you soon.",
+    "errorMessage": "Failed to send request. Please try again.",
+    "sending": "Sending..."
+  },
+  "ImageShowcaseSection": {
+    "experienceAITrainingAnalysis": "Experience AI Training Analysis",
+    "description": "Our AI-powered platform transforms your workout data into actionable insights that help you train smarter and recover better.",
+    "lominicAppInterfaceAlt": "Lominic app interface showing AI training insights",
+    "smartTrainingIntelligence": "Smart Training Intelligence",
+    "smartTrainingIntelligenceDescription": "Built with advanced AI and sports science, our platform seamlessly analyzes your workouts from any device, providing personalized insights and recommendations to optimize your training."
+  },
+  "Features": {
+    "smartFeatures": "Smart Features",
+    "aiPoweredTrainingIntelligence": "AI-Powered Training Intelligence",
+    "transformWorkoutData": "Transform your workout data into actionable insights that help you train smarter and recover better.",
+    "smartSummariesTitle": "Smart Summaries",
+    "smartSummariesDescription": "Get instant AI-generated summaries of every training session in plain language - no sports science degree required.",
+    "askQuestionsTitle": "Ask Questions",
+    "askQuestionsDescription": "Chat with your data! Ask 'Was this good for Zone 2?' or 'Did I overtrain this week?' and get intelligent answers.",
+    "trackProgressTitle": "Track Progress",
+    "trackProgressDescription": "Monitor weekly training load, heart rate trends, and improvement areas with intelligent analysis over time.",
+    "compareWithFriendsTitle": "Compare with Friends",
+    "compareWithFriendsDescription": "Share progress and compare training insights with friends or training partners to stay motivated.",
+    "recoveryInsightsTitle": "Recovery Insights",
+    "recoveryInsightsDescription": "Learn how to recover better and avoid overtraining with personalized recommendations based on your data.",
+    "universalCompatibilityTitle": "Universal Compatibility",
+    "universalCompatibilityDescription": "Works with Garmin, Apple Health, Strava, and any .FIT or .GPX file from your favorite fitness devices."
+  },
+  "Testimonials": {
+    "testimonials": "Testimonials",
+    "whatOthersSay": "What others say",
+    "testimonial1Content": "Lominic transformed my training by making complex data actually understandable. I finally know if I'm overtraining or if my recovery is on point.",
+    "testimonial1Author": "Sarah Chen",
+    "testimonial1Role": "Marathon Runner, 3:45 PR",
+    "testimonial2Content": "As a cycling coach, I recommend this to all my athletes. The AI insights help them understand their training load and recovery needs better than any app I've seen.",
+    "testimonial2Author": "Michael Rodriguez",
+    "testimonial2Role": "Cycling Coach, Elite Performance",
+    "testimonial3Content": "The conversational AI is incredible. I can ask 'Was this a good Zone 2 session?' and get a detailed explanation that actually makes sense. Game changer for my training.",
+    "testimonial3Author": "Dr. Amara Patel",
+    "testimonial3Role": "Triathlete, Ironman Finisher",
+    "testimonial4Content": "Finally, an app that doesn't just show me numbers but tells me what they mean. The weekly insights have helped me avoid overtraining and improve my performance.",
+    "testimonial4Author": "Jason Lee",
+    "testimonial4Role": "Ultra Runner, 100K Finisher"
+  },
+  "Newsletter": {
+    "newsletter": "Newsletter",
+    "subscribeToNewsletter": "Subscribe to the newsletter",
+    "newsletterDescription": "Be first to hear about new features, training insights, and AI improvements",
+    "emailAddress": "Email address",
+    "validationError": "Please enter your email address",
+    "successMessage": "Thank you for subscribing! You'll receive updates about Lominic soon.",
+    "errorMessage": "Failed to subscribe. Please try again.",
+    "submitting": "Submitting...",
+    "submit": "Submit"
+  },
+  "Footer": {
+    "copyright": "© 2024 Lominic. AI-powered training insights for athletes."
+  },
+  "MadeByHumans": {
+    "aiHumanIntelligence": "AI + Human Intelligence"
+  },
+  "Metadata": {
+    "title": "Lominic - AI-Powered Workout Insights & Training Partner",
+    "description": "Upload workouts from Garmin, Apple Watch or Strava and get instant, AI-generated insights in plain language. Your training partner with a brain.",
+    "keywords": "AI workout analysis, fitness tracking, Garmin, Apple Watch, Strava, training insights, workout optimization, fitness app, AI training partner",
+    "ogTitle": "Lominic - AI-Powered Workout Insights & Training Partner",
+    "ogDescription": "Upload workouts from Garmin, Apple Watch or Strava and get instant, AI-generated insights in plain language. Your training partner with a brain.",
+    "ogImageAlt": "Lominic - AI-Powered Workout Insights",
+    "twitterTitle": "Lominic - AI-Powered Workout Insights & Training Partner",
+    "twitterDescription": "Upload workouts from Garmin, Apple Watch or Strava and get instant, AI-generated insights in plain language.",
+    "schemaDescription": "AI-powered workout analysis and training insights app",
+    "schemaOfferDescription": "Free trial available",
+    "schemaFeature1": "AI workout analysis",
+    "schemaFeature2": "Garmin integration",
+    "schemaFeature3": "Apple Watch integration",
+    "schemaFeature4": "Strava integration",
+    "schemaFeature5": "Training insights",
+    "schemaFeature6": "Workout optimization",
+    "organizationDescription": "AI-powered fitness training and workout analysis platform"
   }
 }

@@ -1,5 +1,5 @@
 module.exports = {
-  locales: ["en"],
+  locales: ["en", "es"],
   defaultLocale: "en",
   namespaces: ["common"],
 };

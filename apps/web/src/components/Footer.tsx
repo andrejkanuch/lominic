@@ -1,13 +1,16 @@
-import React from "react";
+import React from 'react'
+import { useTranslations } from 'next-intl'
+
 const Footer = () => {
+  const t = useTranslations('Footer')
   return (
-    <footer className="w-full bg-white py-0">
+    <footer className="w-full bg-background py-0 border-t border-border">
       <div className="section-container">
-        <p className="text-center text-gray-600 text-sm">
-          © 2024 Lominic. AI-powered training insights for athletes.
+        <p className="text-center text-muted-foreground text-sm">
+          {t('copyright')}
         </p>
       </div>
     </footer>
-  );
-};
-export default Footer;
+  )
+}
+export default Footer

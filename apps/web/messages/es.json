@@ -1,0 +1,137 @@
+{
+  "Home": {
+    "title": "Hola Mundo!",
+    "about": "Ir a la página de información"
+  },
+  "HomePage": {
+    "title": "Hola Mundo!",
+    "about": "Ir a la página de información"
+  },
+  "Navbar": {
+    "home": "Inicio",
+    "features": "Características",
+    "pricing": "Precios",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "Hero": {
+    "trainingIntelligence": "Inteligencia de Entrenamiento",
+    "yourTrainingPartner": "Tu Compañero de Entrenamiento",
+    "withABrain": "Con un Cerebro",
+    "description": "Sube entrenamientos desde Garmin, Apple Watch o Strava y obtén información instantánea generada por IA en lenguaje sencillo.",
+    "tryFree": "Prueba Gratis",
+    "lominicAppInterface": "Interfaz de la aplicación Lominic"
+  },
+  "HumanoidSection": {
+    "trainingIntelligence": "Inteligencia de Entrenamiento",
+    "whyAITrainingAnalysis": "¿Por qué el análisis de entrenamiento con IA?",
+    "theVision": "La visión",
+    "sportsScienceAccessible": "Estamos haciendo que la ciencia del deporte sea accesible para cada atleta",
+    "aiInsightsToWhereYouTrain": "Estamos llevando la información de la IA a donde entrenas",
+    "creatingTrainingPartners": "Estamos creando compañeros de entrenamiento, no solo datos"
+  },
+  "SpecsSection": {
+    "howItWorks": "Cómo funciona",
+    "description": "lominic trabaja con tus datos, no contra ellos. Al analizar las zonas de frecuencia cardíaca, la carga de entrenamiento, los patrones de recuperación y aprender de cada entrenamiento, nuestra IA ayuda a los atletas a concentrarse en lo que mejor saben hacer: entrenar de forma más inteligente, recuperarse mejor y rendir de forma constante."
+  },
+  "DetailsSection": {
+    "pricingAndPlans": "Precios y Planes",
+    "aiPoweredInsights": "Información impulsada por IA para cada atleta",
+    "freePlan": "Plan Gratuito:",
+    "basicSummaries": "Resúmenes básicos y 5 cargas/mes",
+    "proPlan": "Plan Pro:",
+    "proPlanPrice": "$9.99/mes - Cargas ilimitadas y preguntas y respuestas con IA",
+    "coachPlan": "Plan Entrenador:",
+    "coachPlanPrice": "$19.99/mes - Informes semanales y entrenamiento",
+    "fileSupport": "Soporte de Archivos:",
+    "fileSupportTypes": "FIT, GPX, Apple Health, Strava",
+    "aiAnalysis": "Análisis de IA:",
+    "aiAnalysisDescription": "Información y recomendaciones en tiempo real",
+    "getEarlyAccess": "Obtener acceso anticipado",
+    "startTrainingSmarter": "Empieza a entrenar de forma más inteligente",
+    "fullName": "Nombre completo",
+    "emailAddress": "Correo electrónico",
+    "sportActivityOptional": "Deporte/Actividad (opcional)",
+    "messagePlaceholder": "Cuéntanos sobre tus deportes/actividades, qué tipo de informes buscas, etc.",
+    "validationError": "Por favor, rellena todos los campos obligatorios",
+    "successMessage": "¡Solicitud enviada con éxito! Nos pondremos en contacto contigo pronto.",
+    "errorMessage": "Error al enviar la solicitud. Por favor, inténtalo de nuevo.",
+    "sending": "Enviando..."
+  },
+  "ImageShowcaseSection": {
+    "experienceAITrainingAnalysis": "Experimenta el Análisis de Entrenamiento con IA",
+    "description": "Nuestra plataforma impulsada por IA transforma tus datos de entrenamiento en información procesable que te ayuda a entrenar de forma más inteligente y a recuperarte mejor.",
+    "lominicAppInterfaceAlt": "Interfaz de la aplicación Lominic mostrando información de entrenamiento con IA",
+    "smartTrainingIntelligence": "Inteligencia de Entrenamiento Inteligente",
+    "smartTrainingIntelligenceDescription": "Construida con IA avanzada y ciencia del deporte, nuestra plataforma analiza sin problemas tus entrenamientos desde cualquier dispositivo, proporcionando información y recomendaciones personalizadas para optimizar tu entrenamiento."
+  },
+  "Features": {
+    "smartFeatures": "Funciones Inteligentes",
+    "aiPoweredTrainingIntelligence": "Inteligencia de Entrenamiento Impulsada por IA",
+    "transformWorkoutData": "Transforma tus datos de entrenamiento en información procesable que te ayuda a entrenar de forma más inteligente y a recuperarte mejor.",
+    "smartSummariesTitle": "Resúmenes Inteligentes",
+    "smartSummariesDescription": "Obtén resúmenes instantáneos generados por IA de cada sesión de entrenamiento en lenguaje sencillo, sin necesidad de un título en ciencias del deporte.",
+    "askQuestionsTitle": "Haz Preguntas",
+    "askQuestionsDescription": "¡Chatea con tus datos! Pregunta '¿Fue esto bueno para la Zona 2?' o '¿Me sobreentrené esta semana?' y obtén respuestas inteligentes.",
+    "trackProgressTitle": "Seguimiento del Progreso",
+    "trackProgressDescription": "Monitoriza la carga de entrenamiento semanal, las tendencias de frecuencia cardíaca y las áreas de mejora con análisis inteligente a lo largo del tiempo.",
+    "compareWithFriendsTitle": "Compara con Amigos",
+    "compareWithFriendsDescription": "Comparte el progreso y compara los conocimientos de entrenamiento con amigos o compañeros de entrenamiento para mantenerte motivado.",
+    "recoveryInsightsTitle": "Información sobre la Recuperación",
+    "recoveryInsightsDescription": "Aprende a recuperarte mejor y evita el sobreentrenamiento con recomendaciones personalizadas basadas en tus datos.",
+    "universalCompatibilityTitle": "Compatibilidad Universal",
+    "universalCompatibilityDescription": "Funciona con Garmin, Apple Health, Strava y cualquier archivo .FIT o .GPX de tus dispositivos de fitness favoritos."
+  },
+  "Testimonials": {
+    "testimonials": "Testimonios",
+    "whatOthersSay": "Lo que dicen otros",
+    "testimonial1Content": "Lominic transformó mi entrenamiento al hacer que los datos complejos fueran realmente comprensibles. Finalmente sé si estoy sobreentrenando o si mi recuperación es la adecuada.",
+    "testimonial1Author": "Sarah Chen",
+    "testimonial1Role": "Corredora de Maratón, 3:45 PR",
+    "testimonial2Content": "Como entrenador de ciclismo, recomiendo esto a todos mis atletas. Los conocimientos de IA les ayudan a comprender su carga de entrenamiento y sus necesidades de recuperación mejor que cualquier aplicación que haya visto.",
+    "testimonial2Author": "Michael Rodriguez",
+    "testimonial2Role": "Entrenador de Ciclismo, Rendimiento de Élite",
+    "testimonial3Content": "La IA conversacional es increíble. Puedo preguntar '¿Fue esta una buena sesión de Zona 2?' y obtener una explicación detallada que realmente tiene sentido. Un cambio de juego para mi entrenamiento.",
+    "testimonial3Author": "Dra. Amara Patel",
+    "testimonial3Role": "Triathlete, Ironman Finisher",
+    "testimonial4Content": "Finalmente, una aplicación que no solo me muestra números, sino que me dice lo que significan. Los conocimientos semanales me han ayudado a evitar el sobreentrenamiento y a mejorar mi rendimiento.",
+    "testimonial4Author": "Jason Lee",
+    "testimonial4Role": "Ultra Corredor, Finalista de 100K"
+  },
+  "Newsletter": {
+    "newsletter": "Boletín",
+    "subscribeToNewsletter": "Suscríbete al boletín",
+    "newsletterDescription": "Sé el primero en enterarte de las nuevas funciones, los conocimientos de entrenamiento y las mejoras de la IA",
+    "emailAddress": "Dirección de correo electrónico",
+    "validationError": "Por favor, introduce tu dirección de correo electrónico",
+    "successMessage": "¡Gracias por suscribirte! Pronto recibirás actualizaciones sobre Lominic.",
+    "errorMessage": "Error al suscribirse. Por favor, inténtalo de nuevo.",
+    "submitting": "Enviando...",
+    "submit": "Enviar"
+  },
+  "Footer": {
+    "copyright": "© 2024 Lominic. Información de entrenamiento impulsada por IA para atletas."
+  },
+  "MadeByHumans": {
+    "aiHumanIntelligence": "IA + Inteligencia Humana"
+  },
+  "Metadata": {
+    "title": "Lominic - Información de Entrenamiento con IA y Compañero de Entrenamiento",
+    "description": "Sube entrenamientos desde Garmin, Apple Watch o Strava y obtén información instantánea generada por IA en lenguaje sencillo. Tu compañero de entrenamiento con un cerebro.",
+    "keywords": "Análisis de entrenamiento con IA, seguimiento de actividad física, Garmin, Apple Watch, Strava, información de entrenamiento, optimización de entrenamiento, aplicación de fitness, compañero de entrenamiento con IA",
+    "ogTitle": "Lominic - Información de Entrenamiento con IA y Compañero de Entrenamiento",
+    "ogDescription": "Sube entrenamientos desde Garmin, Apple Watch o Strava y obtén información instantánea generada por IA en lenguaje sencillo. Tu compañero de entrenamiento con un cerebro.",
+    "ogImageAlt": "Lominic - Información de Entrenamiento con IA",
+    "twitterTitle": "Lominic - Información de Entrenamiento con IA y Compañero de Entrenamiento",
+    "twitterDescription": "Sube entrenamientos desde Garmin, Apple Watch o Strava y obtén información instantánea generada por IA en lenguaje sencillo.",
+    "schemaDescription": "Análisis de entrenamiento con IA y aplicación de información de entrenamiento",
+    "schemaOfferDescription": "Prueba gratuita disponible",
+    "schemaFeature1": "Análisis de entrenamiento con IA",
+    "schemaFeature2": "Integración con Garmin",
+    "schemaFeature3": "Integración con Apple Watch",
+    "schemaFeature4": "Integración con Strava",
+    "schemaFeature5": "Información de entrenamiento",
+    "schemaFeature6": "Optimización de entrenamiento",
+    "organizationDescription": "Plataforma de análisis de entrenamiento y fitness impulsada por IA"
+  }
+}
