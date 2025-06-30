@@ -12,9 +12,6 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-  experimental: {
-    esmExternals: 'loose',
-  },
   webpack: config => {
     config.resolve.alias = {
       ...config.resolve.alias,
