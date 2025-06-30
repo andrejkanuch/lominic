@@ -1,0 +1,30 @@
+<svg width="280" height="80" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Lominic Logo - Peak Insight Concept</title>
+
+  <!-- Triangle mountain icon -->
+  <g transform="translate(10,10)">
+    <path d="M0,60 L30,0 L60,60 Z" fill="#FF6F2C"/>
+    
+    <!-- Mountain peak inside -->
+    <path d="M10 45 C20 35, 30 40, 38 30 C42 26, 45 28, 48 34" 
+          stroke="#F5F5F5" stroke-width="3" fill="none"/>
+    
+    <!-- Grid dots (data insight effect) -->
+    <g fill="#FFB49A">
+      <rect x="44" y="42" width="4" height="4" rx="1"/>
+      <rect x="50" y="42" width="4" height="4" rx="1"/>
+      <rect x="44" y="48" width="4" height="4" rx="1"/>
+      <rect x="50" y="48" width="4" height="4" rx="1"/>
+    </g>
+  </g>
+
+  <!-- Brand name -->
+  <text x="80" y="50"
+        font-family="Segoe UI, sans-serif"
+        font-size="32"
+        fill="#1B1E2B"
+        font-weight="600"
+        letter-spacing="2">
+    LOMINIC
+  </text>
+</svg>
