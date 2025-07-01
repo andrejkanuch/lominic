@@ -4,8 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import emailjs from '@emailjs/browser'
 import { useTranslations } from 'next-intl'
-import Navbar from '../../../components/Navbar'
-import Footer from '../../../components/Footer'
 import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
 
 const ContactUs = () => {
@@ -106,7 +104,6 @@ This message was submitted from the Lominic contact page.`,
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
       <main className="space-y-4 sm:space-y-8">
         {/* Hero Section */}
         <section
@@ -434,7 +431,6 @@ This message was submitted from the Lominic contact page.`,
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   )
 }
