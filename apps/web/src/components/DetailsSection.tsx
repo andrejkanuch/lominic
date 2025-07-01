@@ -29,7 +29,7 @@ const DetailsSection = () => {
 
     // Simple validation
     if (!formData.fullName || !formData.email) {
-      toast.error('Please fill in all required fields')
+      toast.error(t('validationError'))
       return
     }
 
@@ -60,9 +60,7 @@ This request was submitted from the Lominic website.`,
 
       await emailjs.send(serviceId, templateId, templateParams, publicKey)
 
-      toast.success(
-        "Request submitted successfully! We'll get back to you soon."
-      )
+      toast.success(t('successMessage'))
 
       // Reset form
       setFormData({
@@ -73,7 +71,7 @@ This request was submitted from the Lominic website.`,
       })
     } catch (error) {
       console.error('Email sending failed:', error)
-      toast.error('Failed to send request. Please try again.')
+      toast.error(t('errorMessage'))
     } finally {
       setIsSubmitting(false)
     }
@@ -95,14 +93,14 @@ This request was submitted from the Lominic website.`,
               }}
             >
               <h2 className="text-2xl sm:text-3xl font-display text-white font-bold">
-                Pricing & Plans
+                {t('pricingAndPlans')}
               </h2>
             </div>
 
             {/* Card Content */}
             <div className="bg-card p-4 sm:p-8">
               <h3 className="text-lg sm:text-xl font-display mb-6 sm:mb-8">
-                AI-powered insights for every athlete
+                {t('aiPoweredInsights')}
               </h3>
 
               <div className="space-y-4 sm:space-y-6">
@@ -127,35 +125,9 @@ This request was submitted from the Lominic website.`,
                   <div className="flex-1">
                     <div className="p-3 rounded-lg bg-muted/80 backdrop-blur-sm border border-border">
                       <span className="font-semibold text-base">
-                        Free Plan:
+                        {t('freePlan')}
                       </span>{' '}
-                      Basic summaries & 5 uploads/month
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center mt-1 flex-shrink-0">
-                    <svg
-                      width="14"
-                      height="10"
-                      viewBox="0 0 14 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M1 5L5 9L13 1"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                  <div className="flex-1">
-                    <div className="p-3 rounded-lg bg-muted/80 backdrop-blur-sm border border-border">
-                      <span className="font-semibold text-base">Pro Plan:</span>{' '}
-                      $9.99/month - Unlimited uploads & AI Q&A
+                      {t('basicSummaries')}
                     </div>
                   </div>
                 </div>
@@ -181,9 +153,9 @@ This request was submitted from the Lominic website.`,
                   <div className="flex-1">
                     <div className="p-3 rounded-lg bg-muted/80 backdrop-blur-sm border border-border">
                       <span className="font-semibold text-base">
-                        Coach Plan:
+                        {t('proPlan')}
                       </span>{' '}
-                      $19.99/month - Weekly reports & coaching
+                      {t('proPlanPrice')}
                     </div>
                   </div>
                 </div>
@@ -209,9 +181,9 @@ This request was submitted from the Lominic website.`,
                   <div className="flex-1">
                     <div className="p-3 rounded-lg bg-muted/80 backdrop-blur-sm border border-border">
                       <span className="font-semibold text-base">
-                        File Support:
+                        {t('coachPlan')}
                       </span>{' '}
-                      FIT, GPX, Apple Health, Strava
+                      {t('coachPlanPrice')}
                     </div>
                   </div>
                 </div>
@@ -237,9 +209,37 @@ This request was submitted from the Lominic website.`,
                   <div className="flex-1">
                     <div className="p-3 rounded-lg bg-muted/80 backdrop-blur-sm border border-border">
                       <span className="font-semibold text-base">
-                        AI Analysis:
+                        {t('fileSupport')}
                       </span>{' '}
-                      Real-time insights & recommendations
+                      {t('fileSupportTypes')}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center mt-1 flex-shrink-0">
+                    <svg
+                      width="14"
+                      height="10"
+                      viewBox="0 0 14 10"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M1 5L5 9L13 1"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="p-3 rounded-lg bg-muted/80 backdrop-blur-sm border border-border">
+                      <span className="font-semibold text-base">
+                        {t('aiAnalysis')}
+                      </span>{' '}
+                      {t('aiAnalysisDescription')}
                     </div>
                   </div>
                 </div>
@@ -259,10 +259,10 @@ This request was submitted from the Lominic website.`,
               }}
             >
               <div className="inline-block px-4 sm:px-6 py-2 border border-white text-white rounded-full text-xs mb-4">
-                Get early access
+                {t('getEarlyAccess')}
               </div>
               <h2 className="text-2xl sm:text-3xl font-display text-white font-bold mt-auto">
-                Start training smarter
+                {t('startTrainingSmarter')}
               </h2>
             </div>
 
@@ -275,7 +275,7 @@ This request was submitted from the Lominic website.`,
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
-                    placeholder="Full name"
+                    placeholder={t('fullName')}
                     required
                   />
                 </div>
@@ -286,7 +286,7 @@ This request was submitted from the Lominic website.`,
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="Email address"
+                    placeholder={t('emailAddress')}
                     required
                   />
                 </div>
@@ -297,7 +297,7 @@ This request was submitted from the Lominic website.`,
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
-                    placeholder="Sport/Activity (optional)"
+                    placeholder={t('sportActivityOptional')}
                   />
                 </div>
 
@@ -306,7 +306,7 @@ This request was submitted from the Lominic website.`,
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    placeholder="Tell us about your sport/activities,what kind of reports you are looking for, etc."
+                    placeholder={t('messagePlaceholder')}
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pulse-500 focus:border-transparent"
                   />
                 </div>
@@ -339,7 +339,7 @@ This request was submitted from the Lominic website.`,
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           ></path>
                         </svg>
-                        Sending...
+                        {t('sending')}
                       </>
                     ) : (
                       t('getEarlyAccess')

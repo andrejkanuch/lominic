@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import emailjs from '@emailjs/browser'
+import { useTranslations } from 'next-intl'
 import Navbar from '../../../components/Navbar'
 import Footer from '../../../components/Footer'
 import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
@@ -15,6 +16,7 @@ const ContactUs = () => {
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const t = useTranslations('ContactUs')
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,7 +54,7 @@ const ContactUs = () => {
 
     // Simple validation
     if (!formData.fullName || !formData.email || !formData.message) {
-      toast.error('Please fill in all required fields')
+      toast.error(t('validationError'))
       return
     }
 
@@ -85,9 +87,7 @@ This message was submitted from the Lominic contact page.`,
 
       await emailjs.send(serviceId, templateId, templateParams, publicKey)
 
-      toast.success(
-        "Message sent successfully! We'll get back to you within 24 hours."
-      )
+      toast.success(t('successMessage'))
 
       // Reset form
       setFormData({
@@ -98,7 +98,7 @@ This message was submitted from the Lominic contact page.`,
       })
     } catch (error) {
       console.error('Email sending failed:', error)
-      toast.error('Failed to send message. Please try again.')
+      toast.error(t('errorMessage'))
     } finally {
       setIsSubmitting(false)
     }
@@ -126,22 +126,21 @@ This message was submitted from the Lominic contact page.`,
                 style={{ animationDelay: '0.1s' }}
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
-                <span>Get in Touch</span>
+                <span>{t('getInTouch')}</span>
               </div>
 
               <h1
                 className="section-title text-4xl sm:text-5xl lg:text-6xl leading-tight opacity-0 animate-fade-in text-white"
                 style={{ animationDelay: '0.3s' }}
               >
-                Let's Talk Training
+                {t('letsTalkTraining')}
               </h1>
 
               <p
                 className="section-subtitle mt-6 mb-8 opacity-0 animate-fade-in text-white"
                 style={{ animationDelay: '0.5s' }}
               >
-                Have questions about Lominic? Want to share feedback? We'd love
-                to hear from you.
+                {t('heroDescription')}
               </p>
             </div>
           </div>
@@ -151,11 +150,10 @@ This message was submitted from the Lominic contact page.`,
         <section className="section-container">
           <div className="text-center mb-12">
             <h2 className="section-title text-3xl lg:text-4xl mb-6 text-foreground">
-              How to Reach Us
+              {t('howToReachUs')}
             </h2>
             <p className="text-muted-foreground mb-8 leading-relaxed">
-              We're here to help with any questions about Lominic, partnerships,
-              or just to chat about training.
+              {t('reachUsDescription')}
             </p>
           </div>
 
@@ -165,11 +163,10 @@ This message was submitted from the Lominic contact page.`,
                 <Mail className="w-6 h-6 text-pulse-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-foreground">
-                Email Us
+                {t('emailUs')}
               </h3>
               <p className="text-muted-foreground mb-4">
-                Send us a detailed message and we'll get back to you within 24
-                hours.
+                {t('emailUsDescription')}
               </p>
               <a
                 href="mailto:kanuchandrej@gmail.com"
@@ -184,14 +181,13 @@ This message was submitted from the Lominic contact page.`,
                 <MessageCircle className="w-6 h-6 text-pulse-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-foreground">
-                Feedback
+                {t('feedback')}
               </h3>
               <p className="text-muted-foreground mb-4">
-                Share your thoughts, suggestions, or report any issues you've
-                encountered.
+                {t('feedbackDescription')}
               </p>
               <span className="text-pulse-600 font-medium">
-                We read every message
+                {t('weReadEveryMessage')}
               </span>
             </div>
 
@@ -225,10 +221,10 @@ This message was submitted from the Lominic contact page.`,
                 }}
               >
                 <div className="inline-block px-4 sm:px-6 py-2 border border-white text-white rounded-full text-xs mb-4">
-                  Send us a message
+                  {t('sendUsMessage')}
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-display text-white font-bold mt-auto">
-                  Get in Touch
+                  {t('getInTouch')}
                 </h2>
               </div>
 
@@ -244,7 +240,7 @@ This message was submitted from the Lominic contact page.`,
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleChange}
-                      placeholder="Full name *"
+                      placeholder={t('fullName')}
                       className="w-full px-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-pulse-500 focus:border-transparent"
                       required
                     />
@@ -256,7 +252,7 @@ This message was submitted from the Lominic contact page.`,
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="Email address *"
+                      placeholder={t('emailAddress')}
                       className="w-full px-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-pulse-500 focus:border-transparent"
                       required
                     />
@@ -268,7 +264,7 @@ This message was submitted from the Lominic contact page.`,
                       name="company"
                       value={formData.company}
                       onChange={handleChange}
-                      placeholder="Company/Organization (optional)"
+                      placeholder={t('companyOrganization')}
                       className="w-full px-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-pulse-500 focus:border-transparent"
                     />
                   </div>
@@ -278,7 +274,7 @@ This message was submitted from the Lominic contact page.`,
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      placeholder="Your message *"
+                      placeholder={t('yourMessage')}
                       rows={6}
                       className="w-full px-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-pulse-500 focus:border-transparent resize-none"
                       required
@@ -313,11 +309,11 @@ This message was submitted from the Lominic contact page.`,
                               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                             ></path>
                           </svg>
-                          Sending...
+                          {t('sending')}
                         </>
                       ) : (
                         <>
-                          Send Message
+                          {t('sendMessage')}
                           <ArrowRight className="ml-2 w-4 h-4" />
                         </>
                       )}
@@ -341,45 +337,40 @@ This message was submitted from the Lominic contact page.`,
           <div className="text-center max-w-4xl mx-auto">
             <div className="animate-on-scroll">
               <h2 className="section-title text-3xl lg:text-4xl mb-6 text-white">
-                Frequently Asked Questions
+                {t('frequentlyAskedQuestions')}
               </h2>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="glass-card p-6 text-left">
                   <h3 className="font-semibold mb-3 text-foreground">
-                    🤔 What is Lominic?
+                    🤔 {t('whatIsLominic')}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Lominic is an AI-powered training intelligence platform that
-                    turns your wearable data into meaningful, actionable
-                    insights.
+                    {t('whatIsLominicAnswer')}
                   </p>
                 </div>
                 <div className="glass-card p-6 text-left">
                   <h3 className="font-semibold mb-3 text-foreground">
-                    📱 Which devices work?
+                    📱 {t('whichDevicesWork')}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    We support Garmin, Apple Watch, Strava, and other popular
-                    fitness platforms. More integrations coming soon.
+                    {t('whichDevicesWorkAnswer')}
                   </p>
                 </div>
                 <div className="glass-card p-6 text-left">
                   <h3 className="font-semibold mb-3 text-foreground">
-                    💰 How much does it cost?
+                    💰 {t('howMuchDoesItCost')}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    We offer a free plan and premium plans starting at
-                    $9.99/month. Check our pricing page for details.
+                    {t('howMuchDoesItCostAnswer')}
                   </p>
                 </div>
                 <div className="glass-card p-6 text-left">
                   <h3 className="font-semibold mb-3 text-foreground">
-                    🔒 Is my data safe?
+                    🔒 {t('isMyDataSafe')}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Absolutely. We never sell your data and use enterprise-grade
-                    security to protect your information.
+                    {t('isMyDataSafeAnswer')}
                   </p>
                 </div>
               </div>
@@ -392,11 +383,10 @@ This message was submitted from the Lominic contact page.`,
           <div className="text-center max-w-4xl mx-auto">
             <div className="animate-on-scroll">
               <h2 className="section-title text-3xl lg:text-4xl mb-6 text-foreground">
-                We'll Get Back to You Quickly
+                {t('wellGetBackToYouQuickly')}
               </h2>
               <p className="text-muted-foreground mb-8 leading-relaxed">
-                We typically respond to all inquiries within 24 hours, often
-                much sooner.
+                {t('responseTimeDescription')}
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">
@@ -407,10 +397,10 @@ This message was submitted from the Lominic contact page.`,
                     </span>
                   </div>
                   <h3 className="font-semibold mb-2 text-foreground">
-                    Response Time
+                    {t('responseTime')}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    We aim to respond within 24 hours
+                    {t('responseTimeDetail')}
                   </p>
                 </div>
                 <div className="text-center">
@@ -420,10 +410,10 @@ This message was submitted from the Lominic contact page.`,
                     </span>
                   </div>
                   <h3 className="font-semibold mb-2 text-foreground">
-                    Response Rate
+                    {t('responseRate')}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    We respond to every message
+                    {t('responseRateDetail')}
                   </p>
                 </div>
                 <div className="text-center">
@@ -433,10 +423,10 @@ This message was submitted from the Lominic contact page.`,
                     </span>
                   </div>
                   <h3 className="font-semibold mb-2 text-foreground">
-                    Support
+                    {t('support')}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    We're here when you need us
+                    {t('supportDetail')}
                   </p>
                 </div>
               </div>

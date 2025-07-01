@@ -37,7 +37,7 @@ export const ActivityDetailModal = ({
   onClose,
 }: ActivityDetailModalProps) => {
   const { data, loading, error } = useGetActivityByIdQuery({
-    variables: { activityId },
+    variables: { activityId: activityId.toString() },
     skip: !isOpen,
   })
 

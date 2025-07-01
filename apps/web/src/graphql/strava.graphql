@@ -114,7 +114,7 @@ query GetAthleteStats {
   }
 }
 
-query GetActivityById($activityId: Int!) {
+query GetActivityById($activityId: String!) {
   getActivityById(activityId: $activityId) {
     id
     name

@@ -12,6 +12,7 @@ import {
   ActivityStats,
   Kudoer,
   ActivityZone,
+  Comment as StravaComment,
 } from '@lominic/strava-api-types'
 
 @Injectable()
@@ -486,7 +487,7 @@ export class StravaService {
   async getActivityComments(
     userId: string,
     activityId: number
-  ): Promise<Comment[]> {
+  ): Promise<StravaComment[]> {
     const account = await this.findAccountByUserId(userId)
     if (!account) {
       throw new NotFoundException('Strava account not found.')
@@ -505,7 +506,7 @@ export class StravaService {
       throw new Error(`Failed to fetch activity comments: ${text}`)
     }
 
-    return (await res.json()) as Comment[]
+    return (await res.json()) as StravaComment[]
   }
 
   /**

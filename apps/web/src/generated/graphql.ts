@@ -249,22 +249,22 @@ export type Query = {
 
 
 export type QueryGetActivityByIdArgs = {
-  activityId: Scalars['Int']['input'];
+  activityId: Scalars['String']['input'];
 };
 
 
 export type QueryGetActivityCommentsArgs = {
-  activityId: Scalars['Int']['input'];
+  activityId: Scalars['String']['input'];
 };
 
 
 export type QueryGetActivityKudoersArgs = {
-  activityId: Scalars['Int']['input'];
+  activityId: Scalars['String']['input'];
 };
 
 
 export type QueryGetActivityZonesArgs = {
-  activityId: Scalars['Int']['input'];
+  activityId: Scalars['String']['input'];
 };
 
 
@@ -440,7 +440,7 @@ export type GetAthleteStatsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAthleteStatsQuery = { __typename?: 'Query', getAthleteStats: { __typename?: 'ActivityStats', biggest_ride_distance: number, biggest_climb_elevation_gain: number, recent_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, recent_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, recent_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null } } };
 
 export type GetActivityByIdQueryVariables = Exact<{
-  activityId: Scalars['Int']['input'];
+  activityId: Scalars['String']['input'];
 }>;
 
 
@@ -924,7 +924,7 @@ export type GetAthleteStatsLazyQueryHookResult = ReturnType<typeof useGetAthlete
 export type GetAthleteStatsSuspenseQueryHookResult = ReturnType<typeof useGetAthleteStatsSuspenseQuery>;
 export type GetAthleteStatsQueryResult = ApolloReactCommon.QueryResult<GetAthleteStatsQuery, GetAthleteStatsQueryVariables>;
 export const GetActivityByIdDocument = gql`
-    query GetActivityById($activityId: Int!) {
+    query GetActivityById($activityId: String!) {
   getActivityById(activityId: $activityId) {
     id
     name

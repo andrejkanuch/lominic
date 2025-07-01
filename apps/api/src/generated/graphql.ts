@@ -248,22 +248,22 @@ export type Query = {
 
 
 export type QueryGetActivityByIdArgs = {
-  activityId: Scalars['Int']['input'];
+  activityId: Scalars['String']['input'];
 };
 
 
 export type QueryGetActivityCommentsArgs = {
-  activityId: Scalars['Int']['input'];
+  activityId: Scalars['String']['input'];
 };
 
 
 export type QueryGetActivityKudoersArgs = {
-  activityId: Scalars['Int']['input'];
+  activityId: Scalars['String']['input'];
 };
 
 
 export type QueryGetActivityZonesArgs = {
-  activityId: Scalars['Int']['input'];
+  activityId: Scalars['String']['input'];
 };
 
 
