@@ -8,6 +8,8 @@ import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Providers } from '@/components/providers'
+import NavbarWrapper from '../../components/NavbarWrapper'
+import Footer from '../../components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -210,7 +212,9 @@ export default async function LocaleLayout({
             <Toaster />
             <Sonner />
             <NextIntlClientProvider locale={locale}>
+              <NavbarWrapper />
               {children}
+              <Footer />
             </NextIntlClientProvider>
           </TooltipProvider>
         </Providers>

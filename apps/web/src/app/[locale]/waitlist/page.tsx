@@ -2,8 +2,6 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import emailjs from '@emailjs/browser'
-import Navbar from '../../../components/Navbar'
-import Footer from '../../../components/Footer'
 import { ArrowRight, Users, Zap, Brain } from 'lucide-react'
 
 export default function WaitlistPage() {
@@ -102,7 +100,6 @@ This request was submitted from the Lominic waitlist page.`,
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
       <main className="space-y-4 sm:space-y-8">
         {/* Hero Section */}
         <section
@@ -398,7 +395,6 @@ This request was submitted from the Lominic waitlist page.`,
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   )
 }

@@ -4,11 +4,16 @@ import { Menu, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { ThemeToggle } from './ui/theme-toggle'
+import { useRouter, usePathname } from 'next/navigation'
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const t = useTranslations('Navbar')
+  const router = useRouter()
+  const pathname = usePathname()
+  const isHomePage =
+    pathname === '/' || pathname === '/en' || pathname === '/es'
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,6 +43,56 @@ const Navbar = () => {
     }
   }
 
+  const handleLogoClick = () => {
+    if (isHomePage) {
+      scrollToTop()
+    } else {
+      router.push('/')
+    }
+  }
+
+  const handleHomeClick = () => {
+    if (isHomePage) {
+      scrollToTop()
+    } else {
+      router.push('/')
+    }
+    if (isMenuOpen) {
+      setIsMenuOpen(false)
+      document.body.style.overflow = ''
+    }
+  }
+
+  const handleFeaturesClick = () => {
+    if (isHomePage) {
+      const featuresSection = document.getElementById('features')
+      if (featuresSection) {
+        featuresSection.scrollIntoView({ behavior: 'smooth' })
+      }
+    } else {
+      router.push('/#features')
+    }
+    if (isMenuOpen) {
+      setIsMenuOpen(false)
+      document.body.style.overflow = ''
+    }
+  }
+
+  const handlePricingClick = () => {
+    if (isHomePage) {
+      const pricingSection = document.getElementById('details')
+      if (pricingSection) {
+        pricingSection.scrollIntoView({ behavior: 'smooth' })
+      }
+    } else {
+      router.push('/#details')
+    }
+    if (isMenuOpen) {
+      setIsMenuOpen(false)
+      document.body.style.overflow = ''
+    }
+  }
+
   return (
     <header
       className={cn(
@@ -53,7 +108,7 @@ const Navbar = () => {
           className="flex items-center space-x-2"
           onClick={e => {
             e.preventDefault()
-            scrollToTop()
+            handleLogoClick()
           }}
           aria-label="Lominic"
         >
@@ -73,15 +128,29 @@ const Navbar = () => {
             className="nav-link"
             onClick={e => {
               e.preventDefault()
-              scrollToTop()
+              handleHomeClick()
             }}
           >
             {t('home')}
           </a>
-          <a href="#features" className="nav-link">
+          <a
+            href="#features"
+            className="nav-link"
+            onClick={e => {
+              e.preventDefault()
+              handleFeaturesClick()
+            }}
+          >
             {t('features')}
           </a>
-          <a href="#details" className="nav-link">
+          <a
+            href="#details"
+            className="nav-link"
+            onClick={e => {
+              e.preventDefault()
+              handlePricingClick()
+            }}
+          >
             {t('pricing')}
           </a>
 
@@ -113,9 +182,7 @@ const Navbar = () => {
             className="text-xl font-medium py-3 px-6 w-full text-center rounded-lg hover:bg-muted transition-colors"
             onClick={e => {
               e.preventDefault()
-              scrollToTop()
-              setIsMenuOpen(false)
-              document.body.style.overflow = ''
+              handleHomeClick()
             }}
           >
             {t('home')}
@@ -123,9 +190,9 @@ const Navbar = () => {
           <a
             href="#features"
             className="text-xl font-medium py-3 px-6 w-full text-center rounded-lg hover:bg-muted transition-colors"
-            onClick={() => {
-              setIsMenuOpen(false)
-              document.body.style.overflow = ''
+            onClick={e => {
+              e.preventDefault()
+              handleFeaturesClick()
             }}
           >
             {t('features')}
@@ -133,9 +200,9 @@ const Navbar = () => {
           <a
             href="#details"
             className="text-xl font-medium py-3 px-6 w-full text-center rounded-lg hover:bg-muted transition-colors"
-            onClick={() => {
-              setIsMenuOpen(false)
-              document.body.style.overflow = ''
+            onClick={e => {
+              e.preventDefault()
+              handlePricingClick()
             }}
           >
             {t('pricing')}

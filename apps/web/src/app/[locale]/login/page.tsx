@@ -1,8 +1,6 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import Navbar from '../../../components/Navbar'
-import Footer from '../../../components/Footer'
 import { useLoginMutation } from '../../../generated/graphql'
 import { useRouter } from 'next/navigation'
 import { useFormik } from 'formik'
@@ -72,7 +70,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen">
-      <Navbar />
       <main className="pt-20">
         <section
           className="overflow-hidden relative bg-cover min-h-screen flex items-center"
@@ -181,7 +178,6 @@ export default function LoginPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   )
 }

@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import Navbar from '../../components/Navbar'
 import Hero from '../../components/Hero'
 import OptimizedFeatures from '../../components/OptimizedFeatures'
 import HumanoidSection from '../../components/HumanoidSection'
@@ -12,7 +11,6 @@ import Features from '../../components/Features'
 import Testimonials from '../../components/Testimonials'
 import Newsletter from '../../components/Newsletter'
 import MadeByHumans from '../../components/MadeByHumans'
-import Footer from '../../components/Footer'
 
 export default function HomePage() {
   // Initialize intersection observer to detect when elements enter viewport
@@ -64,7 +62,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-200">
-      <Navbar />
       <main className="space-y-4 sm:space-y-8">
         <Hero />
         <OptimizedFeatures />
@@ -77,7 +74,6 @@ export default function HomePage() {
         <Newsletter />
         <MadeByHumans />
       </main>
-      <Footer />
     </div>
   )
 }

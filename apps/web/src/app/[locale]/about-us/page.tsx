@@ -2,8 +2,6 @@
 
 import React, { useEffect } from 'react'
 import Link from 'next/link'
-import Navbar from '../../../components/Navbar'
-import Footer from '../../../components/Footer'
 import { ArrowRight, Brain, Mountain, Shield, Users, Zap } from 'lucide-react'
 
 const AboutUs = () => {
@@ -30,7 +28,6 @@ const AboutUs = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
       <main className="space-y-4 sm:space-y-8">
         {/* Hero Section */}
         <section
@@ -495,7 +492,6 @@ const AboutUs = () => {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   )
 }
