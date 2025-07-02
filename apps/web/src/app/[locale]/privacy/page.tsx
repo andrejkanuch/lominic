@@ -228,7 +228,7 @@ export default async function PrivacyPage() {
 
               <div className="bg-muted p-4 rounded-lg">
                 <p>
-                  <strong>{t('contact.email')}:</strong> privacy@lominic.com
+                  <strong>{t('contact.email')}:</strong> info@lominic.com
                 </p>
                 <p>
                   <strong>{t('contact.address')}:</strong>
@@ -236,11 +236,11 @@ export default async function PrivacyPage() {
                 <p className="ml-4">
                   Lominic
                   <br />
-                  [Your Business Address]
+                  Sladkovicova 8
                   <br />
-                  [City, State, ZIP]
+                  Bratislava, Slovakia
                   <br />
-                  United States
+                  Europe
                 </p>
               </div>
             </section>
