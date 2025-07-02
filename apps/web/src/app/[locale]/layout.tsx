@@ -9,6 +9,7 @@ import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Providers } from '@/components/providers'
 import LayoutWrapper from '@/components/LayoutWrapper'
+import { Analytics } from '@vercel/analytics/next'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -215,6 +216,7 @@ export default async function LocaleLayout({
             </NextIntlClientProvider>
           </TooltipProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   )

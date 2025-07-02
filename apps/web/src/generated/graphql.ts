@@ -446,6 +446,13 @@ export type GetActivityByIdQueryVariables = Exact<{
 
 export type GetActivityByIdQuery = { __typename?: 'Query', getActivityById: { __typename?: 'ActivityDto', id: string, name: string, type: string, sport_type: string, distance: number, moving_time: number, elapsed_time: number, total_elevation_gain: number, start_date: string, start_date_local: string, description: string | null, timezone: string, utc_offset: number, start_latlng: Array<number> | null, end_latlng: Array<number> | null, achievement_count: number, kudos_count: number, comment_count: number, athlete_count: number, photo_count: number, trainer: boolean, commute: boolean, manual: boolean, private: boolean, flagged: boolean, gear_id: string | null, from_accepted_tag: boolean, average_speed: number, max_speed: number, average_cadence: number | null, average_temp: number | null, average_watts: number | null, weighted_average_watts: number | null, kilojoules: number | null, device_watts: boolean | null, has_heartrate: boolean, max_watts: number | null, elev_high: number | null, elev_low: number | null, pr_count: number, total_photo_count: number, has_kudoed: boolean, workout_type: number | null, suffer_score: number | null, calories: number | null, polyline: string | null } };
 
+export type GetActivityZonesQueryVariables = Exact<{
+  activityId: Scalars['String']['input'];
+}>;
+
+
+export type GetActivityZonesQuery = { __typename?: 'Query', getActivityZones: Array<{ __typename?: 'ActivityZoneDto', score: number, type: string, sensor_based: boolean, points: number, custom_zones: boolean, max: number }> };
+
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1009,6 +1016,51 @@ export type GetActivityByIdQueryHookResult = ReturnType<typeof useGetActivityByI
 export type GetActivityByIdLazyQueryHookResult = ReturnType<typeof useGetActivityByIdLazyQuery>;
 export type GetActivityByIdSuspenseQueryHookResult = ReturnType<typeof useGetActivityByIdSuspenseQuery>;
 export type GetActivityByIdQueryResult = ApolloReactCommon.QueryResult<GetActivityByIdQuery, GetActivityByIdQueryVariables>;
+export const GetActivityZonesDocument = gql`
+    query GetActivityZones($activityId: String!) {
+  getActivityZones(activityId: $activityId) {
+    score
+    type
+    sensor_based
+    points
+    custom_zones
+    max
+  }
+}
+    `;
+
+/**
+ * __useGetActivityZonesQuery__
+ *
+ * To run a query within a React component, call `useGetActivityZonesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetActivityZonesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetActivityZonesQuery({
+ *   variables: {
+ *      activityId: // value for 'activityId'
+ *   },
+ * });
+ */
+export function useGetActivityZonesQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetActivityZonesQuery, GetActivityZonesQueryVariables> & ({ variables: GetActivityZonesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetActivityZonesQuery, GetActivityZonesQueryVariables>(GetActivityZonesDocument, options);
+      }
+export function useGetActivityZonesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetActivityZonesQuery, GetActivityZonesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetActivityZonesQuery, GetActivityZonesQueryVariables>(GetActivityZonesDocument, options);
+        }
+export function useGetActivityZonesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetActivityZonesQuery, GetActivityZonesQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetActivityZonesQuery, GetActivityZonesQueryVariables>(GetActivityZonesDocument, options);
+        }
+export type GetActivityZonesQueryHookResult = ReturnType<typeof useGetActivityZonesQuery>;
+export type GetActivityZonesLazyQueryHookResult = ReturnType<typeof useGetActivityZonesLazyQuery>;
+export type GetActivityZonesSuspenseQueryHookResult = ReturnType<typeof useGetActivityZonesSuspenseQuery>;
+export type GetActivityZonesQueryResult = ApolloReactCommon.QueryResult<GetActivityZonesQuery, GetActivityZonesQueryVariables>;
 export const GetUsersDocument = gql`
     query GetUsers {
   users {

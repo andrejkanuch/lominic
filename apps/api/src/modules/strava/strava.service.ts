@@ -563,6 +563,8 @@ export class StravaService {
       }
     )
 
+    console.log('res', res)
+
     if (!res.ok) {
       const text = await res.text()
       throw new Error(`Failed to fetch activity zones: ${text}`)

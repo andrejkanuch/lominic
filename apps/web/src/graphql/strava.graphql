@@ -165,3 +165,14 @@ query GetActivityById($activityId: String!) {
     polyline
   }
 }
+
+query GetActivityZones($activityId: String!) {
+  getActivityZones(activityId: $activityId) {
+    score
+    type
+    sensor_based
+    points
+    custom_zones
+    max
+  }
+}
