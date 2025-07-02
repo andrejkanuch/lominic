@@ -18,7 +18,7 @@
     "trainingIntelligence": "Training Intelligence",
     "yourTrainingPartner": "Smarter Workout Insights from Your Favorite Devices",
     "withABrain": "With a Brain",
-    "description": "Upload your Garmin, Apple Watch or Strava workouts and get smart, AI-generated insights. Track performance, recovery, and trends with your new digital training partner.",
+    "description": "Upload your Garmin,  or Strava workouts and get smart, AI-generated insights. Track performance, recovery, and trends with your new digital training partner.",
     "tryFree": "Join Waitlist for Early Access",
     "lominicAppInterface": "Lominic App Interface"
   },
@@ -44,7 +44,7 @@
     "coachPlan": "Coach Plan:",
     "coachPlanPrice": "$19.99/month - Weekly reports & coaching",
     "fileSupport": "File Support:",
-    "fileSupportTypes": "FIT, GPX, Apple Health, Strava",
+    "fileSupportTypes": "FIT, GPX, , Strava",
     "aiAnalysis": "AI Analysis:",
     "aiAnalysisDescription": "Real-time insights & recommendations",
     "getEarlyAccess": "Get early access",
@@ -80,11 +80,11 @@
     "recoveryInsightsTitle": "Recovery Insights",
     "recoveryInsightsDescription": "Learn how to recover better and avoid overtraining with personalized recommendations based on your data.",
     "universalCompatibilityTitle": "Universal Compatibility",
-    "universalCompatibilityDescription": "Works with Garmin, Apple Health, Strava, and any .FIT or .GPX file from your favorite fitness devices."
+    "universalCompatibilityDescription": "Works with Garmin, , Strava, and any .FIT or .GPX file from your favorite fitness devices."
   },
   "OptimizedFeatures": {
     "worksWithDevicesTitle": "Works with Your Devices",
-    "worksWithDevicesDescription": "Seamlessly connect your Garmin, Apple Watch, or Strava account to automatically import workouts. Our platform supports all major fitness devices and file formats, so you can focus on training, not data management.",
+    "worksWithDevicesDescription": "Seamlessly connect your Garmin, , or Strava account to automatically import workouts. Our platform supports all major fitness devices and file formats, so you can focus on training, not data management.",
     "poweredByAITitle": "Powered by AI, Built for Athletes",
     "poweredByAIDescription": "Our advanced AI analyzes your training patterns, heart rate zones, and recovery metrics to provide personalized insights. Get recommendations that adapt to your fitness level and training goals.",
     "yourPrivacyTitle": "Your Privacy, Your Data",
@@ -156,7 +156,7 @@
     "whatIsLominic": "🤔 What is Lominic?",
     "whatIsLominicAnswer": "Lominic is an AI-powered training intelligence platform that turns your wearable data into meaningful, actionable insights.",
     "whichDevicesWork": "📱 Which devices work?",
-    "whichDevicesWorkAnswer": "We support Garmin, Apple Watch, Strava, and other popular fitness platforms. More integrations coming soon.",
+    "whichDevicesWorkAnswer": "We support Garmin, , Strava, and other popular fitness platforms. More integrations coming soon.",
     "howMuchDoesItCost": "💰 How much does it cost?",
     "howMuchDoesItCostAnswer": "We offer a free plan and premium plans starting at $9.99/month. Check our pricing page for details.",
     "isMyDataSafe": "🔒 Is my data safe?",
@@ -174,23 +174,23 @@
     "aiHumanIntelligence": "AI + Human Intelligence"
   },
   "Metadata": {
-    "title": "Lominic | Smarter Workout Insights from Garmin, Strava & Apple Watch",
-    "description": "Upload your Garmin, Apple Watch or Strava workouts and get smart, AI-generated insights. Track performance, recovery, and trends with your new digital training partner.",
-    "keywords": "workout insights, Garmin, Strava, Apple Watch, AI training analysis, fitness tracking, training partner, workout optimization, fitness app, recovery insights",
-    "ogTitle": "Lominic | Smarter Workout Insights from Garmin, Strava & Apple Watch",
-    "ogDescription": "Upload your Garmin, Apple Watch or Strava workouts and get smart, AI-generated insights. Track performance, recovery, and trends with your new digital training partner.",
-    "ogImageAlt": "Lominic - Smarter Workout Insights from Garmin, Strava & Apple Watch",
-    "twitterTitle": "Lominic | Smarter Workout Insights from Garmin, Strava & Apple Watch",
-    "twitterDescription": "Upload your Garmin, Apple Watch or Strava workouts and get smart, AI-generated insights. Track performance, recovery, and trends with your new digital training partner.",
-    "schemaDescription": "AI-powered workout analysis and training insights app that works with Garmin, Strava, and Apple Watch",
+    "title": "Lominic | Smarter Workout Insights from Garmin, Strava & ",
+    "description": "Upload your Garmin,  or Strava workouts and get smart, AI-generated insights. Track performance, recovery, and trends with your new digital training partner.",
+    "keywords": "workout insights, Garmin, Strava, , AI training analysis, fitness tracking, training partner, workout optimization, fitness app, recovery insights",
+    "ogTitle": "Lominic | Smarter Workout Insights from Garmin, Strava & ",
+    "ogDescription": "Upload your Garmin,  or Strava workouts and get smart, AI-generated insights. Track performance, recovery, and trends with your new digital training partner.",
+    "ogImageAlt": "Lominic - Smarter Workout Insights from Garmin, Strava & ",
+    "twitterTitle": "Lominic | Smarter Workout Insights from Garmin, Strava & ",
+    "twitterDescription": "Upload your Garmin,  or Strava workouts and get smart, AI-generated insights. Track performance, recovery, and trends with your new digital training partner.",
+    "schemaDescription": "AI-powered workout analysis and training insights app that works with Garmin, Strava, and ",
     "schemaOfferDescription": "Free trial available with smart workout insights",
     "schemaFeature1": "AI workout analysis",
     "schemaFeature2": "Garmin integration",
-    "schemaFeature3": "Apple Watch integration",
+    "schemaFeature3": " integration",
     "schemaFeature4": "Strava integration",
     "schemaFeature5": "Training insights",
     "schemaFeature6": "Workout optimization",
-    "organizationDescription": "AI-powered fitness training and workout analysis platform for Garmin, Strava, and Apple Watch users"
+    "organizationDescription": "AI-powered fitness training and workout analysis platform for Garmin, Strava, and  users"
   },
   "Privacy": {
     "title": "Privacy Policy",
@@ -224,7 +224,7 @@
         "description": "We integrate with the following platforms and collect data according to their respective APIs:",
         "garmin": "Activity data, device information, and performance metrics from your Garmin account",
         "strava": "Workout data, routes, and activity information from your Strava account",
-        "apple": "Health and fitness data from your Apple Health account"
+        "apple": "Health and fitness data from your  account"
       }
     },
     "dataUsage": {
