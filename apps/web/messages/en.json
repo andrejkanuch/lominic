@@ -128,7 +128,8 @@
     "viewPricing": "View Pricing"
   },
   "Footer": {
-    "copyright": "© 2024 Lominic. AI-powered training insights for athletes."
+    "copyright": "© 2024 Lominic. AI-powered training insights for athletes.",
+    "privacy": "Privacy Policy"
   },
   "ContactUs": {
     "getInTouch": "Get in Touch",
@@ -190,5 +191,125 @@
     "schemaFeature5": "Training insights",
     "schemaFeature6": "Workout optimization",
     "organizationDescription": "AI-powered fitness training and workout analysis platform for Garmin, Strava, and Apple Watch users"
+  },
+  "Privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated",
+    "lastUpdatedDate": "December 2024",
+    "introduction": {
+      "title": "Introduction",
+      "description": "At Lominic, we are committed to protecting your privacy and ensuring the security of your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered training intelligence platform.",
+      "commitment": "We are committed to transparency and will never sell your personal data to third parties."
+    },
+    "dataCollection": {
+      "title": "Information We Collect",
+      "description": "We collect information you provide directly to us and data from your connected fitness devices and platforms.",
+      "personalData": {
+        "title": "Personal Information",
+        "email": "Email address and account credentials",
+        "name": "Name and profile information",
+        "profile": "User preferences and settings"
+      },
+      "fitnessData": {
+        "title": "Fitness and Activity Data",
+        "description": "When you connect your fitness devices or platforms, we may collect:",
+        "workouts": "Workout data, including duration, distance, and performance metrics",
+        "heartRate": "Heart rate data and zones",
+        "gps": "GPS location data from your activities",
+        "device": "Device information and settings",
+        "performance": "Performance metrics and training load data"
+      },
+      "thirdParty": {
+        "title": "Third-Party Platform Data",
+        "description": "We integrate with the following platforms and collect data according to their respective APIs:",
+        "garmin": "Activity data, device information, and performance metrics from your Garmin account",
+        "strava": "Workout data, routes, and activity information from your Strava account",
+        "apple": "Health and fitness data from your Apple Health account"
+      }
+    },
+    "dataUsage": {
+      "title": "How We Use Your Information",
+      "description": "We use your information to provide, improve, and personalize our services.",
+      "purposes": {
+        "title": "Primary Purposes",
+        "insights": "Generate AI-powered training insights and recommendations",
+        "recommendations": "Provide personalized training advice and recovery suggestions",
+        "trends": "Analyze your training patterns and performance trends",
+        "service": "Provide and maintain our platform and services",
+        "communication": "Communicate with you about your account and our services",
+        "improvement": "Improve our AI algorithms and platform features"
+      },
+      "ai": {
+        "title": "AI and Machine Learning",
+        "description": "We use your fitness data to train and improve our AI models to provide better insights and recommendations. This data is anonymized and aggregated for model training purposes."
+      }
+    },
+    "dataSharing": {
+      "title": "Information Sharing and Disclosure",
+      "description": "We are committed to protecting your privacy and do not sell your personal data.",
+      "when": {
+        "title": "When We May Share Your Data",
+        "consent": "With your explicit consent",
+        "legal": "To comply with legal obligations or court orders",
+        "service": "With service providers who assist in operating our platform (under strict confidentiality agreements)",
+        "protection": "To protect our rights, property, or safety, or that of our users"
+      },
+      "never": {
+        "title": "What We Never Do",
+        "description": "We never sell your personal data to third parties for marketing or advertising purposes."
+      }
+    },
+    "dataSecurity": {
+      "title": "Data Security",
+      "description": "We implement industry-standard security measures to protect your data:",
+      "encryption": "End-to-end encryption for data transmission and storage",
+      "access": "Limited access controls and authentication requirements",
+      "monitoring": "Regular security monitoring and vulnerability assessments",
+      "compliance": "Compliance with applicable data protection regulations"
+    },
+    "yourRights": {
+      "title": "Your Rights and Choices",
+      "description": "You have the following rights regarding your personal data:",
+      "access": "Right of Access",
+      "accessDesc": "Request a copy of the personal data we hold about you",
+      "correction": "Right of Correction",
+      "correctionDesc": "Request correction of inaccurate or incomplete data",
+      "deletion": "Right of Deletion",
+      "deletionDesc": "Request deletion of your personal data",
+      "portability": "Right of Portability",
+      "portabilityDesc": "Request transfer of your data to another service",
+      "restriction": "Right of Restriction",
+      "restrictionDesc": "Request restriction of processing of your data",
+      "objection": "Right of Objection",
+      "objectionDesc": "Object to processing of your personal data"
+    },
+    "cookies": {
+      "title": "Cookies and Tracking Technologies",
+      "description": "We use cookies and similar technologies to enhance your experience:",
+      "types": {
+        "title": "Types of Cookies We Use",
+        "essential": "Essential Cookies",
+        "essentialDesc": "Required for basic platform functionality",
+        "analytics": "Analytics Cookies",
+        "analyticsDesc": "Help us understand how users interact with our platform",
+        "functional": "Functional Cookies",
+        "functionalDesc": "Remember your preferences and settings"
+      }
+    },
+    "children": {
+      "title": "Children's Privacy",
+      "description": "Our services are not intended for children under 13. We do not knowingly collect personal information from children under 13."
+    },
+    "changes": {
+      "title": "Changes to This Privacy Policy",
+      "description": "We may update this Privacy Policy from time to time to reflect changes in our practices or applicable laws.",
+      "notification": "We will notify you of any material changes by posting the new Privacy Policy on this page and updating the 'Last Updated' date."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "If you have any questions about this Privacy Policy or our data practices, please contact us:",
+      "email": "Email",
+      "address": "Address"
+    }
   }
 }

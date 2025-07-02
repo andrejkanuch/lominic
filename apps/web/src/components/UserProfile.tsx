@@ -12,7 +12,6 @@ import {
   useUpdateOwnProfileMutation,
   GetCurrentUserDocument,
   useGetStravaActivitiesQuery,
-  useCreateTestStravaAccountMutation,
 } from '@/generated/graphql'
 import { useApolloClient } from '@apollo/client'
 import { RoleBasedComponent } from '@/components/RoleBasedComponent'
@@ -30,9 +29,6 @@ export function UserProfile() {
     variables: { limit: 5 as never },
     skip: !user,
   })
-
-  const [createTestAccount, { loading: creatingTest }] =
-    useCreateTestStravaAccountMutation()
 
   const [updateProfile, { loading: saving }] = useUpdateOwnProfileMutation()
   const apolloClient = useApolloClient()
@@ -70,17 +66,6 @@ export function UserProfile() {
       email: user?.email || '',
     })
     setIsEditing(false)
-  }
-
-  const handleCreateTestAccount = async () => {
-    try {
-      await createTestAccount()
-      toast.success('Test Strava account created!')
-      await refetch()
-    } catch (error) {
-      toast.error('Failed to create test account')
-      console.error(error)
-    }
   }
 
   const handleStravaConnect = () => {
@@ -141,19 +126,8 @@ export function UserProfile() {
                   Connect your account to Strava to see recent activities.
                 </p>
                 <div className="flex gap-2">
-                  <Button
-                    onClick={handleStravaConnect}
-                    disabled={creatingTest}
-                    variant="outline"
-                  >
-                    {creatingTest ? 'Connecting...' : 'Connect with Strava'}
-                  </Button>
-                  <Button
-                    onClick={handleCreateTestAccount}
-                    disabled={creatingTest}
-                    variant="outline"
-                  >
-                    {creatingTest ? 'Creating...' : 'Create Test Account'}
+                  <Button onClick={handleStravaConnect} variant="outline">
+                    Connect with Strava
                   </Button>
                 </div>
               </div>
@@ -169,11 +143,6 @@ export function UserProfile() {
                         {Math.round(act.distance / 1000)} km –{' '}
                         {Math.round(act.moving_time / 60)} min
                       </div>
-                      {act.description && (
-                        <div className="text-xs text-gray-500 mt-1">
-                          {act.description}
-                        </div>
-                      )}
                     </li>
                   ))}
                 </ul>
