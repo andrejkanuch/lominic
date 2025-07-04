@@ -266,8 +266,6 @@ export class StravaService {
       `Successfully fetched ${activities.length} activities for user: ${userId}`
     )
 
-    console.log(activities[0])
-
     return activities.map(activity => ({
       id: activity.id.toString(),
       resource_state: activity.resource_state,
@@ -888,8 +886,24 @@ export class StravaService {
     }
     await this.refreshTokenIfNeeded(account)
 
+    // Request specific stream types that we need
+    const streamTypes = [
+      'time',
+      'distance',
+      'latlng',
+      'altitude',
+      'velocity_smooth',
+      'heartrate',
+      'cadence',
+      'watts',
+      'temp',
+      'moving',
+      'grade_smooth',
+    ]
+    const streamParams = streamTypes.join(',')
+
     const res = await fetch(
-      `https://www.strava.com/api/v3/activities/${activityId}/streams`,
+      `https://www.strava.com/api/v3/activities/${activityId}/streams?keys=${streamParams}&key_by_type=true`,
       {
         headers: {
           Authorization: `Bearer ${account.accessToken}`,
@@ -897,8 +911,6 @@ export class StravaService {
         },
       }
     )
-
-    console.log('res', res)
 
     if (!res.ok) {
       const text = await res.text()
@@ -908,15 +920,15 @@ export class StravaService {
     try {
       const text = await res.text()
       console.log('Response text:', text.substring(0, 500) + '...')
-      const streamSet = JSON.parse(text) as StreamSet
-      console.log('Parsed streamSet:', streamSet)
+      const streamSet = JSON.parse(text) as any
+      console.log('Parsed streams:', streamSet)
 
       // Map the streams to DTOs, handling LatLng data specially
       return {
         altitude: streamSet.altitude
           ? {
               type: streamSet.altitude.type,
-              data: streamSet.altitude.data,
+              data: streamSet.altitude.data.filter(val => val !== null),
               series_type: streamSet.altitude.series_type,
               original_size: streamSet.altitude.original_size,
               resolution: streamSet.altitude.resolution,
@@ -925,7 +937,7 @@ export class StravaService {
         cadence: streamSet.cadence
           ? {
               type: streamSet.cadence.type,
-              data: streamSet.cadence.data,
+              data: streamSet.cadence.data.filter(val => val !== null),
               series_type: streamSet.cadence.series_type,
               original_size: streamSet.cadence.original_size,
               resolution: streamSet.cadence.resolution,
@@ -934,7 +946,7 @@ export class StravaService {
         distance: streamSet.distance
           ? {
               type: streamSet.distance.type,
-              data: streamSet.distance.data,
+              data: streamSet.distance.data.filter(val => val !== null),
               series_type: streamSet.distance.series_type,
               original_size: streamSet.distance.original_size,
               resolution: streamSet.distance.resolution,
@@ -943,7 +955,25 @@ export class StravaService {
         heartrate: streamSet.heartrate
           ? {
               type: streamSet.heartrate.type,
-              data: streamSet.heartrate.data,
+              data: (() => {
+                console.log(
+                  'Original heart rate data length:',
+                  streamSet.heartrate.data.length
+                )
+                console.log(
+                  'First 10 heart rate values:',
+                  streamSet.heartrate.data.slice(0, 10)
+                )
+                const filtered = streamSet.heartrate.data.filter(val => {
+                  const isNull = val === null
+                  if (isNull) {
+                    console.log('Filtering out null heart rate value')
+                  }
+                  return val !== null
+                })
+                console.log('Filtered heart rate data length:', filtered.length)
+                return filtered
+              })(),
               series_type: streamSet.heartrate.series_type,
               original_size: streamSet.heartrate.original_size,
               resolution: streamSet.heartrate.resolution,
@@ -964,46 +994,46 @@ export class StravaService {
         moving: streamSet.moving
           ? {
               type: streamSet.moving.type,
-              data: streamSet.moving.data,
+              data: streamSet.moving.data.filter(val => val !== null),
               series_type: streamSet.moving.series_type,
               original_size: streamSet.moving.original_size,
               resolution: streamSet.moving.resolution,
             }
           : undefined,
-        power: streamSet.power
+        power: streamSet.watts
           ? {
-              type: streamSet.power.type,
-              data: streamSet.power.data,
-              series_type: streamSet.power.series_type,
-              original_size: streamSet.power.original_size,
-              resolution: streamSet.power.resolution,
+              type: streamSet.watts.type,
+              data: streamSet.watts.data.filter(val => val !== null),
+              series_type: streamSet.watts.series_type,
+              original_size: streamSet.watts.original_size,
+              resolution: streamSet.watts.resolution,
             }
           : undefined,
-        smooth_grade: streamSet.smooth_grade
+        smooth_grade: streamSet.grade_smooth
           ? {
-              type: streamSet.smooth_grade.type,
-              data: streamSet.smooth_grade.data,
-              series_type: streamSet.smooth_grade.series_type,
-              original_size: streamSet.smooth_grade.original_size,
-              resolution: streamSet.smooth_grade.resolution,
+              type: streamSet.grade_smooth.type,
+              data: streamSet.grade_smooth.data,
+              series_type: streamSet.grade_smooth.series_type,
+              original_size: streamSet.grade_smooth.original_size,
+              resolution: streamSet.grade_smooth.resolution,
             }
           : undefined,
-        smooth_velocity: streamSet.smooth_velocity
+        smooth_velocity: streamSet.velocity_smooth
           ? {
-              type: streamSet.smooth_velocity.type,
-              data: streamSet.smooth_velocity.data,
-              series_type: streamSet.smooth_velocity.series_type,
-              original_size: streamSet.smooth_velocity.original_size,
-              resolution: streamSet.smooth_velocity.resolution,
+              type: streamSet.velocity_smooth.type,
+              data: streamSet.velocity_smooth.data,
+              series_type: streamSet.velocity_smooth.series_type,
+              original_size: streamSet.velocity_smooth.original_size,
+              resolution: streamSet.velocity_smooth.resolution,
             }
           : undefined,
-        temperature: streamSet.temperature
+        temperature: streamSet.temp
           ? {
-              type: streamSet.temperature.type,
-              data: streamSet.temperature.data,
-              series_type: streamSet.temperature.series_type,
-              original_size: streamSet.temperature.original_size,
-              resolution: streamSet.temperature.resolution,
+              type: streamSet.temp.type,
+              data: streamSet.temp.data,
+              series_type: streamSet.temp.series_type,
+              original_size: streamSet.temp.original_size,
+              resolution: streamSet.temp.resolution,
             }
           : undefined,
         time: streamSet.time

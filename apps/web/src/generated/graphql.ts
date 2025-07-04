@@ -64,7 +64,7 @@ export type AltitudeStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type AuthResponse = {
@@ -79,7 +79,7 @@ export type CadenceStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type CommentDto = {
@@ -154,7 +154,7 @@ export type DistanceStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type HeartRateZone = {
@@ -171,7 +171,7 @@ export type HeartrateStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type KudoerDto = {
@@ -215,7 +215,7 @@ export type LatLngStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type LoginInput = {
@@ -235,7 +235,7 @@ export type MovingStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type Mutation = {
@@ -299,7 +299,7 @@ export type PowerStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type PowerZone = {
@@ -382,7 +382,7 @@ export type SmoothGradeStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type SmoothVelocityStreamDto = {
@@ -391,7 +391,7 @@ export type SmoothVelocityStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type SplitDto = {
@@ -557,7 +557,7 @@ export type TemperatureStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type TimeStreamDto = {
@@ -566,7 +566,7 @@ export type TimeStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type UpdateUserInput = {
@@ -666,7 +666,7 @@ export type GetActivityStreamsQueryVariables = Exact<{
 }>;
 
 
-export type GetActivityStreamsQuery = { __typename?: 'Query', getActivityStreams: { __typename?: 'StreamSetDto', altitude: { __typename?: 'AltitudeStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, cadence: { __typename?: 'CadenceStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, distance: { __typename?: 'DistanceStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, heartrate: { __typename?: 'HeartrateStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, moving: { __typename?: 'MovingStreamDto', type: string, data: Array<boolean>, series_type: string, original_size: number, resolution: string } | null, power: { __typename?: 'PowerStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, smooth_grade: { __typename?: 'SmoothGradeStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, smooth_velocity: { __typename?: 'SmoothVelocityStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, temperature: { __typename?: 'TemperatureStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, time: { __typename?: 'TimeStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null } };
+export type GetActivityStreamsQuery = { __typename?: 'Query', getActivityStreams: { __typename?: 'StreamSetDto', altitude: { __typename?: 'AltitudeStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, cadence: { __typename?: 'CadenceStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, distance: { __typename?: 'DistanceStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, heartrate: { __typename?: 'HeartrateStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, moving: { __typename?: 'MovingStreamDto', type: string | null, data: Array<boolean>, series_type: string, original_size: number, resolution: string } | null, power: { __typename?: 'PowerStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, smooth_grade: { __typename?: 'SmoothGradeStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, smooth_velocity: { __typename?: 'SmoothVelocityStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, temperature: { __typename?: 'TemperatureStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, time: { __typename?: 'TimeStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 

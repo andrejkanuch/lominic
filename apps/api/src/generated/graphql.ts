@@ -63,7 +63,7 @@ export type AltitudeStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type AuthResponse = {
@@ -78,7 +78,7 @@ export type CadenceStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type CommentDto = {
@@ -153,7 +153,7 @@ export type DistanceStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type HeartRateZone = {
@@ -170,7 +170,7 @@ export type HeartrateStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type KudoerDto = {
@@ -214,7 +214,7 @@ export type LatLngStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type LoginInput = {
@@ -234,7 +234,7 @@ export type MovingStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type Mutation = {
@@ -298,7 +298,7 @@ export type PowerStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type PowerZone = {
@@ -381,7 +381,7 @@ export type SmoothGradeStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type SmoothVelocityStreamDto = {
@@ -390,7 +390,7 @@ export type SmoothVelocityStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type SplitDto = {
@@ -556,7 +556,7 @@ export type TemperatureStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type TimeStreamDto = {
@@ -565,7 +565,7 @@ export type TimeStreamDto = {
   original_size: Scalars['Int']['output'];
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: Maybe<Scalars['String']['output']>;
 };
 
 export type UpdateUserInput = {
@@ -812,7 +812,7 @@ export type AltitudeStreamDtoResolvers<ContextType = GraphQLContext, ParentType 
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -827,7 +827,7 @@ export type CadenceStreamDtoResolvers<ContextType = GraphQLContext, ParentType e
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -898,7 +898,7 @@ export type DistanceStreamDtoResolvers<ContextType = GraphQLContext, ParentType 
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -915,7 +915,7 @@ export type HeartrateStreamDtoResolvers<ContextType = GraphQLContext, ParentType
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -963,7 +963,7 @@ export type LatLngStreamDtoResolvers<ContextType = GraphQLContext, ParentType ex
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -978,7 +978,7 @@ export type MovingStreamDtoResolvers<ContextType = GraphQLContext, ParentType ex
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1005,7 +1005,7 @@ export type PowerStreamDtoResolvers<ContextType = GraphQLContext, ParentType ext
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1039,7 +1039,7 @@ export type SmoothGradeStreamDtoResolvers<ContextType = GraphQLContext, ParentTy
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1048,7 +1048,7 @@ export type SmoothVelocityStreamDtoResolvers<ContextType = GraphQLContext, Paren
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1161,7 +1161,7 @@ export type TemperatureStreamDtoResolvers<ContextType = GraphQLContext, ParentTy
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1170,7 +1170,7 @@ export type TimeStreamDtoResolvers<ContextType = GraphQLContext, ParentType exte
   original_size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

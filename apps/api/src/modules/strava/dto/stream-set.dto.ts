@@ -2,8 +2,8 @@ import { ObjectType, Field, Float, Int } from '@nestjs/graphql'
 
 @ObjectType()
 export class BaseStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 
   @Field(() => [Float])
   data: number[]
@@ -20,32 +20,32 @@ export class BaseStreamDto {
 
 @ObjectType()
 export class AltitudeStreamDto extends BaseStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 }
 
 @ObjectType()
 export class CadenceStreamDto extends BaseStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 }
 
 @ObjectType()
 export class DistanceStreamDto extends BaseStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 }
 
 @ObjectType()
 export class HeartrateStreamDto extends BaseStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 }
 
 @ObjectType()
 export class LatLngStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 
   @Field(() => [LatLngDto])
   data: LatLngDto[]
@@ -71,8 +71,8 @@ export class LatLngDto {
 
 @ObjectType()
 export class MovingStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 
   @Field(() => [Boolean])
   data: boolean[]
@@ -89,32 +89,32 @@ export class MovingStreamDto {
 
 @ObjectType()
 export class PowerStreamDto extends BaseStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 }
 
 @ObjectType()
 export class SmoothGradeStreamDto extends BaseStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 }
 
 @ObjectType()
 export class SmoothVelocityStreamDto extends BaseStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 }
 
 @ObjectType()
 export class TemperatureStreamDto extends BaseStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 }
 
 @ObjectType()
 export class TimeStreamDto extends BaseStreamDto {
-  @Field(() => String)
-  type: string
+  @Field(() => String, { nullable: true })
+  type?: string
 }
 
 @ObjectType()
