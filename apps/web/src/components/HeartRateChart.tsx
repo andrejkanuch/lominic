@@ -38,30 +38,22 @@ function formatTime(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, '0')}`
 }
 
+// This component is deprecated - use ActivityStreamsChart instead
 export const HeartRateChart = ({ activityId }: HeartRateChartProps) => {
   const { data, loading, error } = useGetActivityStreamsQuery({
     variables: { activityId: activityId.toString() },
   })
 
   const chartData = useMemo(() => {
-    console.log('Heart rate data:', data?.getActivityStreams?.heartrate)
-    console.log('Time data:', data?.getActivityStreams?.time)
-
     if (
       !data?.getActivityStreams?.heartrate?.data ||
       !data?.getActivityStreams?.time?.data
     ) {
-      console.log('Missing heart rate or time data')
       return []
     }
 
     const heartrateData = data.getActivityStreams.heartrate.data
     const timeData = data.getActivityStreams.time.data
-
-    console.log('Heart rate data length:', heartrateData.length)
-    console.log('Time data length:', timeData.length)
-    console.log('First few HR values:', heartrateData.slice(0, 5))
-    console.log('First few time values:', timeData.slice(0, 5))
 
     // Downsample for performance (max 200 points)
     const maxPoints = 200
@@ -73,10 +65,6 @@ export const HeartRateChart = ({ activityId }: HeartRateChartProps) => {
       heartrate: hr,
       timeFormatted: formatTime(downsampledTime[index]),
     }))
-
-    console.log('Chart data length:', result.length)
-    console.log('First few chart data points:', result.slice(0, 3))
-    console.log('Chart data structure:', result[0])
 
     return result
   }, [data])
@@ -135,11 +123,6 @@ export const HeartRateChart = ({ activityId }: HeartRateChartProps) => {
     )
   }
 
-  // Debug: Show raw data if chart doesn't render
-  console.log('Rendering chart with data:', chartData.length, 'points')
-  console.log('Sample data point:', chartData[0])
-
-  // Calculate heart rate zones (simplified)
   const maxHR = Math.max(...chartData.map(d => d.heartrate))
   const minHR = Math.min(...chartData.map(d => d.heartrate))
 
@@ -213,34 +196,6 @@ export const HeartRateChart = ({ activityId }: HeartRateChartProps) => {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-
-        {/* Heart Rate Summary */}
-        <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div className="text-center">
-            <div className="text-gray-600">Max HR</div>
-            <div className="text-xl font-bold text-red-600">{maxHR} BPM</div>
-          </div>
-          <div className="text-center">
-            <div className="text-gray-600">Min HR</div>
-            <div className="text-xl font-bold text-blue-600">{minHR} BPM</div>
-          </div>
-          <div className="text-center">
-            <div className="text-gray-600">Avg HR</div>
-            <div className="text-xl font-bold text-green-600">
-              {Math.round(
-                chartData.reduce((sum, d) => sum + d.heartrate, 0) /
-                  chartData.length
-              )}{' '}
-              BPM
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-gray-600">Duration</div>
-            <div className="text-xl font-bold text-purple-600">
-              {formatTime(chartData[chartData.length - 1]?.time || 0)}
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>

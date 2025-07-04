@@ -24,7 +24,7 @@ import {
 import { ActivityMetrics } from './ActivityMetrics'
 import { ActivityMap } from './ActivityMap'
 import { ActivityChart } from './ActivityChart'
-import { HeartRateChart } from './HeartRateChart'
+import { ActivityStreamsChart } from './ActivityStreamsChart'
 import { SportType, useGetActivityByIdQuery } from '@/generated/graphql'
 
 interface ActivityDetailModalProps {
@@ -124,11 +124,9 @@ export const ActivityDetailModal = ({
           <ActivityMetrics activity={activity} />
 
           {/* Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             <ActivityChart activity={activity} type="speed" />
-            {activity.has_heartrate && (
-              <HeartRateChart activityId={parseInt(activity.id)} />
-            )}
+            <ActivityStreamsChart activityId={parseInt(activity.id)} />
           </div>
 
           {/* Route Map */}
