@@ -143,8 +143,8 @@ export class DetailedSegmentEffortDto {
   @Field(() => Int, { nullable: true })
   pr_rank?: number
 
-  @Field()
-  hidden: boolean
+  @Field({ nullable: true })
+  hidden?: boolean
 }
 
 @ObjectType()

@@ -135,7 +135,7 @@ export type DetailedSegmentEffortDto = {
   distance: Scalars['Float']['output'];
   elapsed_time: Scalars['Int']['output'];
   end_index: Scalars['Int']['output'];
-  hidden: Scalars['Boolean']['output'];
+  hidden: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   kom_rank: Maybe<Scalars['Int']['output']>;
   moving_time: Scalars['Int']['output'];
@@ -880,7 +880,7 @@ export type DetailedSegmentEffortDtoResolvers<ContextType = GraphQLContext, Pare
   distance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   elapsed_time?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   end_index?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  hidden?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  hidden?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   kom_rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   moving_time?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
