@@ -9,6 +9,7 @@ import {
   Timer,
   TrendingUp,
 } from 'lucide-react'
+import { SportType } from '@/generated/graphql'
 
 interface ActivityMetricsProps {
   activity: {
@@ -16,7 +17,8 @@ interface ActivityMetricsProps {
     moving_time: number
     total_elevation_gain: number
     average_speed: number
-    average_heartrate?: number
+    average_heartrate?: number | null
+    sport_type: SportType
   }
 }
 
@@ -36,7 +38,7 @@ export const ActivityMetrics = ({ activity }: ActivityMetricsProps) => {
     {
       icon: MapPin,
       label: 'Distance',
-      value: `${activity.distance.toFixed(2)} km`,
+      value: `${(activity.distance / 1000).toFixed(2)} km`,
       color: 'text-blue-500',
     },
     {
@@ -60,9 +62,11 @@ export const ActivityMetrics = ({ activity }: ActivityMetricsProps) => {
     {
       icon: TrendingUp,
       label: 'Average Pace',
-      value: `${(activity.moving_time / 60 / activity.distance).toFixed(
-        1
-      )} min/km`,
+      value: `${(
+        activity.moving_time /
+        60 /
+        (activity.distance / 1000)
+      ).toFixed(1)} min/km`,
       color: 'text-indigo-500',
     },
   ]

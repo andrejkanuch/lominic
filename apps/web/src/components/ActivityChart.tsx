@@ -7,19 +7,26 @@ import {
 } from '@/components/ui/chart'
 import { XAxis, YAxis, AreaChart, Area } from 'recharts'
 import { Activity, Heart, Zap } from 'lucide-react'
+import { useGetActivityStreamsQuery } from '@/generated/graphql'
 
 interface ActivityChartProps {
   activity: {
+    id: string
     distance: number
     moving_time: number
     average_speed: number
-    average_heartrate?: number
+    average_heartrate?: number | null
   }
   type: 'speed' | 'heartrate' | 'elevation'
 }
 
 export const ActivityChart = ({ activity, type }: ActivityChartProps) => {
-  // Generate mock data based on activity duration
+  const { data: streamsData } = useGetActivityStreamsQuery({
+    variables: { activityId: activity.id },
+    skip: type !== 'heartrate' || !activity.id,
+  })
+
+  // Generate mock data based on activity duration (fallback)
   const generateMockData = (type: string) => {
     const dataPoints = Math.min(Math.floor(activity.moving_time / 60), 60) // Max 60 points
     const data = []
@@ -52,7 +59,37 @@ export const ActivityChart = ({ activity, type }: ActivityChartProps) => {
     return data
   }
 
-  const data = generateMockData(type)
+  // Process real heart rate data from streams
+  const processHeartRateData = () => {
+    if (!streamsData?.getActivityStreams?.heartrate?.data) {
+      return generateMockData('heartrate')
+    }
+
+    const heartRateData = streamsData.getActivityStreams.heartrate.data
+    const timeData = streamsData.getActivityStreams.time?.data || []
+
+    return heartRateData
+      .map((hr, index) => {
+        const timeSeconds = timeData[index] || index * 60 // Fallback to 1-minute intervals
+        const timeMinutes = timeSeconds / 60
+
+        return {
+          time: timeMinutes.toFixed(1),
+          value: hr,
+          label: `${timeMinutes.toFixed(1)} min`,
+        }
+      })
+      .filter(point => point.value > 0) // Filter out invalid heart rate values
+  }
+
+  const getData = () => {
+    if (type === 'heartrate') {
+      return processHeartRateData()
+    }
+    return generateMockData(type)
+  }
+
+  const data = getData()
 
   const getChartConfig = () => {
     switch (type) {

@@ -93,7 +93,7 @@ export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
                 <span className="text-xs text-gray-500">Distance</span>
               </div>
               <p className="font-semibold text-gray-900">
-                {activity.distance.toFixed(1)} km
+                {(activity.distance / 1000).toFixed(1)} km
               </p>
             </div>
 

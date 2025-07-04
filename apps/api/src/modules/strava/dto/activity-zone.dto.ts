@@ -1,22 +1,26 @@
-import { ObjectType, Field, Float } from '@nestjs/graphql';
+import { ObjectType, Field, Float } from '@nestjs/graphql'
+import { ZoneBucket } from './zones.dto'
 
 @ObjectType()
 export class ActivityZoneDto {
   @Field(() => Float)
-  score: number;
+  score: number
 
   @Field()
-  type: string;
+  type: string
 
   @Field()
-  sensor_based: boolean;
+  sensor_based: boolean
 
   @Field(() => Float)
-  points: number;
+  points: number
 
   @Field()
-  custom_zones: boolean;
+  custom_zones: boolean
 
   @Field(() => Float)
-  max: number;
+  max: number
+
+  @Field(() => [ZoneBucket], { nullable: true })
+  distribution_buckets?: ZoneBucket[]
 }

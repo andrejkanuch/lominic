@@ -5,14 +5,16 @@ import { Repository } from 'typeorm'
 import fetch from 'node-fetch'
 import { StravaAccount } from '../../entities/strava-account.entity'
 import { StravaActivityDto } from './dto/strava-activity.dto'
+import { StreamSetDto } from './dto/stream-set.dto'
 import {
-  Activity,
+  DetailedActivity,
   DetailedAthlete,
   Zones,
   ActivityStats,
   Kudoer,
   ActivityZone,
   Comment as StravaComment,
+  StreamSet,
 } from '@lominic/strava-api-types'
 
 @Injectable()
@@ -138,7 +140,38 @@ export class StravaService {
       this.logger.error(
         `Token refresh failed for user ${account.userId}: ${text}`
       )
-      throw new Error(`Token refresh failed: ${text}`)
+
+      // Parse the error response to provide better error messages
+      let errorMessage = 'Token refresh failed'
+      try {
+        const errorData = JSON.parse(text)
+        if (errorData.message) {
+          errorMessage = errorData.message
+        } else if (errorData.error) {
+          errorMessage = errorData.error
+        }
+      } catch {
+        // If we can't parse the JSON, use the raw text
+        errorMessage = text
+      }
+
+      // Provide specific error messages based on common Strava errors
+      if (
+        errorMessage.includes('invalid_grant') ||
+        errorMessage.includes('invalid refresh token')
+      ) {
+        throw new Error(
+          'Your Strava connection has expired. Please reconnect your account.'
+        )
+      } else if (errorMessage.includes('invalid_client')) {
+        throw new Error(
+          'Strava application configuration error. Please contact support.'
+        )
+      } else if (errorMessage.includes('rate limit')) {
+        throw new Error('Strava rate limit exceeded. Please try again later.')
+      } else {
+        throw new Error(`Failed to refresh Strava token: ${errorMessage}`)
+      }
     }
 
     const data = (await res.json()) as {
@@ -175,9 +208,8 @@ export class StravaService {
       await this.refreshTokenIfNeeded(account)
     } catch (error) {
       this.logger.error(`Failed to refresh token for user ${userId}: ${error}`)
-      throw new Error(
-        'Failed to refresh Strava token. Please reconnect your account.'
-      )
+      // Re-throw the specific error message from refreshTokenIfNeeded
+      throw error
     }
 
     this.logger.log(`Fetching recent activities for user: ${userId}`)
@@ -194,10 +226,42 @@ export class StravaService {
       this.logger.error(
         `Failed to fetch activities for user ${userId}: ${text}`
       )
-      throw new Error(`Failed to fetch activities: ${text}`)
+
+      // Parse the error response to provide better error messages
+      let errorMessage = 'Failed to fetch activities'
+      try {
+        const errorData = JSON.parse(text)
+        if (errorData.message) {
+          errorMessage = errorData.message
+        } else if (errorData.error) {
+          errorMessage = errorData.error
+        }
+      } catch {
+        // If we can't parse the JSON, use the raw text
+        errorMessage = text
+      }
+
+      // Provide specific error messages based on common Strava API errors
+      if (res.status === 401) {
+        throw new Error(
+          'Your Strava access has expired. Please reconnect your account.'
+        )
+      } else if (res.status === 403) {
+        throw new Error(
+          'You do not have permission to access this data. Please check your Strava privacy settings.'
+        )
+      } else if (res.status === 429) {
+        throw new Error('Strava rate limit exceeded. Please try again later.')
+      } else if (res.status >= 500) {
+        throw new Error(
+          'Strava service is temporarily unavailable. Please try again later.'
+        )
+      } else {
+        throw new Error(`Failed to fetch activities: ${errorMessage}`)
+      }
     }
 
-    const activities = (await res.json()) as Activity[]
+    const activities = (await res.json()) as DetailedActivity[]
     this.logger.log(
       `Successfully fetched ${activities.length} activities for user: ${userId}`
     )
@@ -206,95 +270,193 @@ export class StravaService {
 
     return activities.map(activity => ({
       id: activity.id.toString(),
+      resource_state: activity.resource_state,
+      external_id: activity.external_id,
+      upload_id: activity.upload_id?.toString(),
+      athlete: {
+        id: activity.athlete.id,
+        resource_state: activity.athlete.resource_state,
+      },
       name: activity.name,
-      type: activity.type,
-      sport_type: activity.sport_type,
       distance: activity.distance,
       moving_time: activity.moving_time,
       elapsed_time: activity.elapsed_time,
       total_elevation_gain: activity.total_elevation_gain,
+      elev_high: activity.elev_high,
+      elev_low: activity.elev_low,
+      type: activity.type,
       start_date: activity.start_date,
       start_date_local: activity.start_date_local,
       timezone: activity.timezone,
-      utc_offset: activity.utc_offset,
       start_latlng: activity.start_latlng
-        ? [activity.start_latlng[0], activity.start_latlng[1]]
+        ? {
+            lat: activity.start_latlng[0],
+            lng: activity.start_latlng[1],
+          }
         : undefined,
       end_latlng: activity.end_latlng
-        ? [activity.end_latlng[0], activity.end_latlng[1]]
+        ? {
+            lat: activity.end_latlng[0],
+            lng: activity.end_latlng[1],
+          }
         : undefined,
       achievement_count: activity.achievement_count,
+      pr_count: activity.pr_count,
       kudos_count: activity.kudos_count,
       comment_count: activity.comment_count,
       athlete_count: activity.athlete_count,
       photo_count: activity.photo_count,
+      total_photo_count: activity.total_photo_count,
+      map: {
+        id: activity.map.id,
+        polyline: activity.map.polyline,
+        resource_state: activity.map.resource_state,
+        summary_polyline: activity.map.summary_polyline,
+      },
       trainer: activity.trainer,
       commute: activity.commute,
       manual: activity.manual,
       private: activity.private,
       flagged: activity.flagged,
+      workout_type: activity.workout_type,
       gear_id: activity.gear_id,
-      from_accepted_tag: activity.from_accepted_tag,
       average_speed: activity.average_speed,
       max_speed: activity.max_speed,
       average_cadence: activity.average_cadence,
       average_temp: activity.average_temp,
       average_watts: activity.average_watts,
+      max_watts: activity.max_watts,
       weighted_average_watts: activity.weighted_average_watts,
       kilojoules: activity.kilojoules,
       device_watts: activity.device_watts,
-      has_heartrate: activity.has_heartrate,
-      max_watts: activity.max_watts,
-      elev_high: activity.elev_high,
-      elev_low: activity.elev_low,
-      pr_count: activity.pr_count,
-      total_photo_count: activity.total_photo_count,
-      has_kudoed: activity.has_kudoed,
-      workout_type: activity.workout_type,
-      suffer_score: activity.suffer_score,
-      description: activity.description,
+      has_heartrate: true,
+      average_heartrate: activity.average_heartrate,
+      max_heartrate: activity.max_heartrate,
       calories: activity.calories,
-      polyline: activity.map?.summary_polyline,
-      // Additional fields from actual API response
-      resource_state: activity.resource_state,
-      external_id: activity.external_id,
-      upload_id: activity.upload_id,
-      upload_id_str: activity.upload_id_str,
+      suffer_score: activity.suffer_score,
+      has_kudoed: activity.has_kudoed,
+      // Deprecated fields
       location_city: activity.location_city,
       location_state: activity.location_state,
       location_country: activity.location_country,
-      visibility: activity.visibility,
-      average_heartrate: activity.average_heartrate,
-      max_heartrate: activity.max_heartrate,
-      heartrate_opt_out: activity.heartrate_opt_out,
-      display_hide_heartrate_option: activity.display_hide_heartrate_option,
+      // DetailedActivity only fields (if present)
+      description: activity.description,
+      gear: activity.gear
+        ? {
+            id: activity.gear.id,
+            primary: activity.gear.primary,
+            name: activity.gear.name,
+            resource_state: activity.gear.resource_state,
+            distance: activity.gear.distance,
+          }
+        : undefined,
+      segment_efforts: activity.segment_efforts?.map(effort => ({
+        id: effort.id.toString(),
+        resource_state: effort.resource_state,
+        name: effort.name,
+        athlete: {
+          id: effort.athlete.id,
+          resource_state: effort.athlete.resource_state,
+        },
+        elapsed_time: effort.elapsed_time,
+        moving_time: effort.moving_time,
+        start_date: effort.start_date,
+        start_date_local: effort.start_date_local,
+        distance: effort.distance,
+        start_index: effort.start_index,
+        end_index: effort.end_index,
+        average_cadence: effort.average_cadence,
+        device_watts: effort.device_watts,
+        average_watts: effort.average_watts,
+        kom_rank: effort.kom_rank,
+        pr_rank: effort.pr_rank,
+        hidden: effort.hidden,
+      })),
+      splits_metric: activity.splits_metric?.map(split => ({
+        distance: split.distance,
+        elapsed_time: split.elapsed_time,
+        elevation_difference: split.elevation_difference,
+        moving_time: split.moving_time,
+        split: split.split,
+        average_speed: split.average_speed,
+        pace_zone: split.pace_zone,
+      })),
+      splits_standard: activity.splits_standard?.map(split => ({
+        distance: split.distance,
+        elapsed_time: split.elapsed_time,
+        elevation_difference: split.elevation_difference,
+        moving_time: split.moving_time,
+        split: split.split,
+        average_speed: split.average_speed,
+        pace_zone: split.pace_zone,
+      })),
+      laps: activity.laps?.map(lap => ({
+        id: lap.id.toString(),
+        resource_state: lap.resource_state,
+        name: lap.name,
+        athlete: {
+          id: lap.athlete.id,
+          resource_state: lap.athlete.resource_state,
+        },
+        elapsed_time: lap.elapsed_time,
+        moving_time: lap.moving_time,
+        start_date: lap.start_date,
+        start_date_local: lap.start_date_local,
+        distance: lap.distance,
+        start_index: lap.start_index,
+        end_index: lap.end_index,
+        total_elevation_gain: lap.total_elevation_gain,
+        average_speed: lap.average_speed,
+        max_speed: lap.max_speed,
+        average_cadence: lap.average_cadence,
+        device_watts: lap.device_watts,
+        average_watts: lap.average_watts,
+        lap_index: lap.lap_index,
+        split: lap.split,
+      })),
+      best_efforts: activity.best_efforts?.map(effort => ({
+        id: effort.id.toString(),
+        resource_state: effort.resource_state,
+        name: effort.name,
+        athlete: {
+          id: effort.athlete.id,
+          resource_state: effort.athlete.resource_state,
+        },
+        elapsed_time: effort.elapsed_time,
+        moving_time: effort.moving_time,
+        start_date: effort.start_date,
+        start_date_local: effort.start_date_local,
+        distance: effort.distance,
+        start_index: effort.start_index,
+        end_index: effort.end_index,
+        average_cadence: effort.average_cadence,
+        device_watts: effort.device_watts,
+        average_watts: effort.average_watts,
+        kom_rank: effort.kom_rank,
+        pr_rank: effort.pr_rank,
+        hidden: effort.hidden,
+      })),
+      device_name: activity.device_name,
+      embed_token: activity.embed_token,
+      photos: activity.photos
+        ? {
+            count: activity.photos.count,
+            primary: activity.photos.primary
+              ? {
+                  id: activity.photos.primary.id,
+                  unique_id: activity.photos.primary.unique_id,
+                  urls: activity.photos.primary.urls,
+                  source: activity.photos.primary.source,
+                }
+              : undefined,
+            use_primary_photo: activity.photos.use_primary_photo,
+          }
+        : undefined,
+      // Additional fields (may not be available in all activity types)
+      sport_type: activity.sport_type,
+      from_accepted_tag: (activity as any).from_accepted_tag,
+      polyline: (activity as any).polyline,
     }))
-  }
-
-  /**
-   * Creates a test Strava account with hardcoded tokens for development.
-   * @param userId - The ID of the user.
-   * @returns The created test account.
-   */
-  async createTestAccount(userId: string): Promise<StravaAccount> {
-    this.logger.log(`Creating test Strava account for user: ${userId}`)
-
-    let account = await this.accounts.findOne({ where: { userId } })
-    if (!account) {
-      account = new StravaAccount()
-      account.userId = userId
-    }
-
-    // Use the refreshed token that should have the correct scope
-    // This token was refreshed and should have activity:read_all permission
-    account.accessToken = 'c7f75a09288d1cb61459507ce72d9bca4a7d32d9'
-    account.refreshToken = '2f5e6e7e672585ca6a7a5c5cec3be2a03bb5e31e'
-    account.expiresAt = Math.floor(
-      new Date('2025-06-27T12:31:35Z').getTime() / 1000
-    )
-    account.athleteId = 56926193 // Updated with real athlete ID from test
-
-    return this.accounts.save(account)
   }
 
   /**
@@ -435,7 +597,10 @@ export class StravaService {
    * @param activityId - The ID of the activity.
    * @returns The detailed activity data.
    */
-  async getActivityById(userId: string, activityId: number): Promise<Activity> {
+  async getActivityById(
+    userId: string,
+    activityId: number
+  ): Promise<StravaActivityDto> {
     const account = await this.findAccountByUserId(userId)
     if (!account) {
       this.logger.warn(`No Strava account found for user: ${userId}`)
@@ -470,12 +635,146 @@ export class StravaService {
       throw new Error(`Failed to fetch activity: ${text}`)
     }
 
-    const activity = (await res.json()) as Activity
+    const activity = (await res.json()) as DetailedActivity
     this.logger.log(
       `Successfully fetched activity ${activityId} for user: ${userId}`
     )
 
-    return activity
+    // Map to DTO with only official Strava API fields
+    return {
+      id: activity.id.toString(),
+      resource_state: activity.resource_state,
+      external_id: activity.external_id,
+      upload_id: activity.upload_id?.toString(),
+      athlete: activity.athlete,
+      name: activity.name,
+      distance: activity.distance,
+      moving_time: activity.moving_time,
+      elapsed_time: activity.elapsed_time,
+      total_elevation_gain: activity.total_elevation_gain,
+      elev_high: activity.elev_high,
+      elev_low: activity.elev_low,
+      type: activity.type,
+      start_date: activity.start_date,
+      start_date_local: activity.start_date_local,
+      timezone: activity.timezone,
+      start_latlng: activity.start_latlng
+        ? {
+            lat: activity.start_latlng[0],
+            lng: activity.start_latlng[1],
+          }
+        : undefined,
+      end_latlng: activity.end_latlng
+        ? {
+            lat: activity.end_latlng[0],
+            lng: activity.end_latlng[1],
+          }
+        : undefined,
+      achievement_count: activity.achievement_count,
+      pr_count: activity.pr_count,
+      kudos_count: activity.kudos_count,
+      comment_count: activity.comment_count,
+      athlete_count: activity.athlete_count,
+      photo_count: activity.photo_count,
+      total_photo_count: activity.total_photo_count,
+      map: activity.map,
+      trainer: activity.trainer,
+      commute: activity.commute,
+      manual: activity.manual,
+      private: activity.private,
+      flagged: activity.flagged,
+      workout_type: activity.workout_type,
+      gear_id: activity.gear_id,
+      average_speed: activity.average_speed,
+      max_speed: activity.max_speed,
+      average_cadence: activity.average_cadence,
+      average_temp: activity.average_temp,
+      average_watts: activity.average_watts,
+      max_watts: activity.max_watts,
+      weighted_average_watts: activity.weighted_average_watts,
+      kilojoules: activity.kilojoules,
+      device_watts: activity.device_watts,
+      has_heartrate: true,
+      average_heartrate: activity.average_heartrate,
+      max_heartrate: activity.max_heartrate,
+      calories: activity.calories,
+      suffer_score: activity.suffer_score,
+      has_kudoed: activity.has_kudoed,
+      location_city: activity.location_city,
+      location_state: activity.location_state,
+      location_country: activity.location_country,
+      description: activity.description,
+      gear: activity.gear,
+      segment_efforts: activity.segment_efforts?.map(effort => ({
+        id: effort.id.toString(),
+        resource_state: effort.resource_state,
+        name: effort.name,
+        athlete: effort.athlete,
+        elapsed_time: effort.elapsed_time,
+        moving_time: effort.moving_time,
+        start_date: effort.start_date,
+        start_date_local: effort.start_date_local,
+        distance: effort.distance,
+        start_index: effort.start_index,
+        end_index: effort.end_index,
+        average_cadence: effort.average_cadence,
+        device_watts: effort.device_watts,
+        average_watts: effort.average_watts,
+        kom_rank: effort.kom_rank,
+        pr_rank: effort.pr_rank,
+        hidden: effort.hidden,
+      })),
+      splits_metric: activity.splits_metric,
+      splits_standard: activity.splits_standard,
+      laps: activity.laps?.map(lap => ({
+        id: lap.id.toString(),
+        resource_state: lap.resource_state,
+        name: lap.name,
+        athlete: lap.athlete,
+        elapsed_time: lap.elapsed_time,
+        moving_time: lap.moving_time,
+        start_date: lap.start_date,
+        start_date_local: lap.start_date_local,
+        distance: lap.distance,
+        start_index: lap.start_index,
+        end_index: lap.end_index,
+        total_elevation_gain: lap.total_elevation_gain,
+        average_speed: lap.average_speed,
+        max_speed: lap.max_speed,
+        average_cadence: lap.average_cadence,
+        device_watts: lap.device_watts,
+        average_watts: lap.average_watts,
+        lap_index: lap.lap_index,
+        split: lap.split,
+      })),
+      best_efforts: activity.best_efforts?.map(effort => ({
+        id: effort.id.toString(),
+        resource_state: effort.resource_state,
+        name: effort.name,
+        athlete: effort.athlete,
+        elapsed_time: effort.elapsed_time,
+        moving_time: effort.moving_time,
+        start_date: effort.start_date,
+        start_date_local: effort.start_date_local,
+        distance: effort.distance,
+        start_index: effort.start_index,
+        end_index: effort.end_index,
+        average_cadence: effort.average_cadence,
+        device_watts: effort.device_watts,
+        average_watts: effort.average_watts,
+        kom_rank: effort.kom_rank,
+        pr_rank: effort.pr_rank,
+        hidden: effort.hidden,
+      })),
+      device_name: activity.device_name,
+      embed_token: activity.embed_token,
+      photos: activity.photos,
+
+      sport_type: activity.sport_type,
+      utc_offset: (activity as any).utc_offset,
+      from_accepted_tag: (activity as any).from_accepted_tag,
+      polyline: (activity as any).polyline,
+    }
   }
 
   /**
@@ -571,5 +870,159 @@ export class StravaService {
     }
 
     return (await res.json()) as ActivityZone[]
+  }
+
+  /**
+   * Gets activity streams from the Strava API.
+   * @param userId - The ID of the user.
+   * @param activityId - The ID of the activity.
+   * @returns The activity streams.
+   */
+  async getActivityStreams(
+    userId: string,
+    activityId: number
+  ): Promise<StreamSetDto> {
+    const account = await this.findAccountByUserId(userId)
+    if (!account) {
+      throw new NotFoundException('Strava account not found.')
+    }
+    await this.refreshTokenIfNeeded(account)
+
+    const res = await fetch(
+      `https://www.strava.com/api/v3/activities/${activityId}/streams`,
+      {
+        headers: {
+          Authorization: `Bearer ${account.accessToken}`,
+          'Accept-Encoding': 'gzip, deflate',
+        },
+      }
+    )
+
+    console.log('res', res)
+
+    if (!res.ok) {
+      const text = await res.text()
+      throw new Error(`Failed to fetch activity streams: ${text}`)
+    }
+
+    try {
+      const text = await res.text()
+      console.log('Response text:', text.substring(0, 500) + '...')
+      const streamSet = JSON.parse(text) as StreamSet
+      console.log('Parsed streamSet:', streamSet)
+
+      // Map the streams to DTOs, handling LatLng data specially
+      return {
+        altitude: streamSet.altitude
+          ? {
+              type: streamSet.altitude.type,
+              data: streamSet.altitude.data,
+              series_type: streamSet.altitude.series_type,
+              original_size: streamSet.altitude.original_size,
+              resolution: streamSet.altitude.resolution,
+            }
+          : undefined,
+        cadence: streamSet.cadence
+          ? {
+              type: streamSet.cadence.type,
+              data: streamSet.cadence.data,
+              series_type: streamSet.cadence.series_type,
+              original_size: streamSet.cadence.original_size,
+              resolution: streamSet.cadence.resolution,
+            }
+          : undefined,
+        distance: streamSet.distance
+          ? {
+              type: streamSet.distance.type,
+              data: streamSet.distance.data,
+              series_type: streamSet.distance.series_type,
+              original_size: streamSet.distance.original_size,
+              resolution: streamSet.distance.resolution,
+            }
+          : undefined,
+        heartrate: streamSet.heartrate
+          ? {
+              type: streamSet.heartrate.type,
+              data: streamSet.heartrate.data,
+              series_type: streamSet.heartrate.series_type,
+              original_size: streamSet.heartrate.original_size,
+              resolution: streamSet.heartrate.resolution,
+            }
+          : undefined,
+        latlng: streamSet.latlng
+          ? {
+              type: streamSet.latlng.type,
+              data: streamSet.latlng.data.map(latlng => ({
+                lat: latlng[0],
+                lng: latlng[1],
+              })),
+              series_type: streamSet.latlng.series_type,
+              original_size: streamSet.latlng.original_size,
+              resolution: streamSet.latlng.resolution,
+            }
+          : undefined,
+        moving: streamSet.moving
+          ? {
+              type: streamSet.moving.type,
+              data: streamSet.moving.data,
+              series_type: streamSet.moving.series_type,
+              original_size: streamSet.moving.original_size,
+              resolution: streamSet.moving.resolution,
+            }
+          : undefined,
+        power: streamSet.power
+          ? {
+              type: streamSet.power.type,
+              data: streamSet.power.data,
+              series_type: streamSet.power.series_type,
+              original_size: streamSet.power.original_size,
+              resolution: streamSet.power.resolution,
+            }
+          : undefined,
+        smooth_grade: streamSet.smooth_grade
+          ? {
+              type: streamSet.smooth_grade.type,
+              data: streamSet.smooth_grade.data,
+              series_type: streamSet.smooth_grade.series_type,
+              original_size: streamSet.smooth_grade.original_size,
+              resolution: streamSet.smooth_grade.resolution,
+            }
+          : undefined,
+        smooth_velocity: streamSet.smooth_velocity
+          ? {
+              type: streamSet.smooth_velocity.type,
+              data: streamSet.smooth_velocity.data,
+              series_type: streamSet.smooth_velocity.series_type,
+              original_size: streamSet.smooth_velocity.original_size,
+              resolution: streamSet.smooth_velocity.resolution,
+            }
+          : undefined,
+        temperature: streamSet.temperature
+          ? {
+              type: streamSet.temperature.type,
+              data: streamSet.temperature.data,
+              series_type: streamSet.temperature.series_type,
+              original_size: streamSet.temperature.original_size,
+              resolution: streamSet.temperature.resolution,
+            }
+          : undefined,
+        time: streamSet.time
+          ? {
+              type: streamSet.time.type,
+              data: streamSet.time.data,
+              series_type: streamSet.time.series_type,
+              original_size: streamSet.time.original_size,
+              resolution: streamSet.time.resolution,
+            }
+          : undefined,
+      }
+    } catch (error) {
+      console.error('Error parsing activity streams:', error)
+      throw new Error(
+        `Failed to parse activity streams: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      )
+    }
   }
 }

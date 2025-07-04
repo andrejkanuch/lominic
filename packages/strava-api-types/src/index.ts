@@ -1,7 +1,30 @@
+// ============================================================================
+// CORE TYPES
+// ============================================================================
+
 export interface LatLng {
   0: number
   1: number
 }
+
+export interface MetaAthlete {
+  id: number
+  resource_state: number
+}
+
+export interface MetaActivity {
+  id: number
+  resource_state: number
+}
+
+export interface MetaClub {
+  id: number
+  resource_state: number
+}
+
+// ============================================================================
+// MAP & LOCATION TYPES
+// ============================================================================
 
 export interface PolylineMap {
   id: string
@@ -10,10 +33,14 @@ export interface PolylineMap {
   resource_state: number
 }
 
-export interface MetaAthlete {
-  id: number
-  resource_state: number
+export interface Waypoint {
+  latlng: LatLng
+  target: LatLng
 }
+
+// ============================================================================
+// GEAR TYPES
+// ============================================================================
 
 export interface SummaryGear {
   id: string
@@ -22,6 +49,22 @@ export interface SummaryGear {
   resource_state: number
   distance: number
 }
+
+export interface DetailedGear {
+  id: string
+  primary: boolean
+  name: string
+  resource_state: number
+  distance: number
+  brand_name: string
+  model_name: string
+  frame_type: number
+  description: string
+}
+
+// ============================================================================
+// PHOTO TYPES
+// ============================================================================
 
 export interface PhotoSummary {
   id: number | null
@@ -36,28 +79,9 @@ export interface PhotosSummary {
   count: number
 }
 
-export interface DetailedSegmentEffort {
-  id: number
-  resource_state: number
-  name: string
-  activity: MetaAthlete // Re-using MetaAthlete as it has id and resource_state
-  athlete: MetaAthlete
-  elapsed_time: number
-  moving_time: number
-  start_date: string
-  start_date_local: string
-  distance: number
-  start_index: number
-  end_index: number
-  average_cadence: number
-  device_watts: boolean
-  average_watts: number
-  segment: SummarySegment
-  kom_rank: number | null
-  pr_rank: number | null
-  achievements: unknown[] // Define more specifically if needed
-  hidden: boolean
-}
+// ============================================================================
+// SEGMENT TYPES
+// ============================================================================
 
 export interface SummarySegment {
   id: number
@@ -80,21 +104,22 @@ export interface SummarySegment {
   starred: boolean
 }
 
-export interface Split {
-  distance: number
-  elapsed_time: number
-  elevation_difference: number
-  moving_time: number
-  split: number
-  average_speed: number
-  pace_zone: number
+export interface DetailedSegment extends SummarySegment {
+  created_at: string
+  updated_at: string
+  total_elevation_gain: number
+  map: PolylineMap
+  effort_count: number
+  athlete_count: number
+  star_count: number
+  athlete_segment_stats: unknown // Define more specifically if needed
 }
 
-export interface Lap {
+export interface SummarySegmentEffort {
   id: number
   resource_state: number
   name: string
-  activity: MetaAthlete
+  activity: MetaActivity
   athlete: MetaAthlete
   elapsed_time: number
   moving_time: number
@@ -103,24 +128,195 @@ export interface Lap {
   distance: number
   start_index: number
   end_index: number
-  total_elevation_gain: number
-  average_speed: number
-  max_speed: number
   average_cadence: number
   device_watts: boolean
   average_watts: number
-  lap_index: number
-  split: number
+  segment: SummarySegment
+  kom_rank: number | null
+  pr_rank: number | null
+  achievements: unknown[] // Define more specifically if needed
+  hidden: boolean
 }
 
-export interface HighlightedKudosers {
-  destination_url: string
-  display_name: string
-  avatar_url: string
-  show_name: boolean
+export interface DetailedSegmentEffort {
+  id: number
+  resource_state: number
+  name: string
+  activity: MetaActivity
+  athlete: MetaAthlete
+  elapsed_time: number
+  moving_time: number
+  start_date: string
+  start_date_local: string
+  distance: number
+  start_index: number
+  end_index: number
+  average_cadence: number
+  device_watts: boolean
+  average_watts: number
+  segment: SummarySegment
+  kom_rank: number | null
+  pr_rank: number | null
+  achievements: unknown[] // Define more specifically if needed
+  hidden: boolean
 }
+
+// ============================================================================
+// ACTIVITY TYPES
+// ============================================================================
 
 export interface SummaryActivity {
+  id: number
+  resource_state: number
+  external_id: string | null
+  upload_id: number | null
+  athlete: MetaAthlete
+  name: string
+  distance: number
+  moving_time: number
+  elapsed_time: number
+  total_elevation_gain: number
+  elev_high: number | null
+  elev_low: number | null
+  type: string
+  start_date: string
+  start_date_local: string
+  timezone: string
+  start_latlng: LatLng | null
+  end_latlng: LatLng | null
+  achievement_count: number
+  pr_count: number
+  kudos_count: number
+  comment_count: number
+  athlete_count: number
+  photo_count: number
+  total_photo_count: number
+  map: PolylineMap
+  trainer: boolean
+  commute: boolean
+  manual: boolean
+  private: boolean
+  flagged: boolean
+  workout_type: number | null
+  gear_id: string | null
+  average_speed: number
+  max_speed: number
+  average_cadence: number | null
+  average_temp: number | null
+  average_watts: number | null
+  max_watts: number | null
+  weighted_average_watts: number | null
+  kilojoules: number | null
+  device_watts: boolean | null
+  has_heartrate: boolean
+  average_heartrate: number | null
+  max_heartrate: number | null
+  calories: number | null
+  suffer_score: number | null
+  has_kudoed: boolean
+  // Deprecated fields (still present in some responses, but not guaranteed)
+  location_city?: string | null
+  location_state?: string | null
+  location_country?: string | null
+}
+
+export interface DetailedActivity extends SummaryActivity {
+  description: string | null
+  gear: SummaryGear | null
+  segment_efforts: DetailedSegmentEffort[]
+  splits_metric: Split[]
+  splits_standard: Split[]
+  laps: Lap[]
+  best_efforts: DetailedSegmentEffort[]
+  device_name: string | null
+  embed_token: string | null
+  photos: PhotosSummary | null
+  sport_type: SportType
+}
+
+export interface UpdatableActivity {
+  commute: boolean
+  trainer: boolean
+  hide_from_home: boolean
+  description: string
+  name: string
+  type: string
+  sport_type: string
+  gear_id: string | null
+}
+
+// ============================================================================
+// ATHLETE TYPES
+// ============================================================================
+
+export interface SummaryAthlete {
+  id: number
+  resource_state: number
+  firstname: string
+  lastname: string
+  profile_medium: string
+  profile: string
+  city: string
+  state: string
+  country: string
+  sex: string
+  premium: boolean
+  summit: boolean
+  created_at: string
+  updated_at: string
+  badge_type_id: number
+  weight: number
+  ftp: number | null
+  bikes: SummaryGear[]
+  shoes: SummaryGear[]
+}
+
+export interface DetailedAthlete extends SummaryAthlete {
+  follower_count: number
+  friend_count: number
+  mutual_friend_count: number
+  athlete_type: number
+  date_preference: string
+  measurement_preference: string
+  clubs: SummaryClub[]
+  username: string
+}
+
+// ============================================================================
+// CLUB TYPES
+// ============================================================================
+
+export interface SummaryClub {
+  id: number
+  resource_state: number
+  name: string
+  profile_medium: string
+  cover_photo: string
+  cover_photo_small: string
+  sport_type: string
+  activity_types: ActivityType[]
+  city: string
+  state: string
+  country: string
+  private: boolean
+  member_count: number
+  featured: boolean
+  verified: boolean
+  url: string
+  membership: string
+  admin: boolean
+  owner: boolean
+  following_count: number
+}
+
+export interface DetailedClub extends SummaryClub {
+  description: string
+  club_type: string
+  overall_activity_count: number
+  recent_activity_count: number
+}
+
+export interface ClubActivity {
   id: number
   resource_state: number
   external_id: string | null
@@ -150,52 +346,120 @@ export interface SummaryActivity {
   manual: boolean
   private: boolean
   flagged: boolean
-  gear_id: string | null
-  from_accepted_tag: boolean
+  workout_type: number | null
+  upload_id_str: string | null
   average_speed: number
   max_speed: number
+  has_kudoed: boolean
+  hide_from_home: boolean
+  gear_id: string | null
+  kilojoules: number | null
+  average_watts: number | null
+  device_watts: boolean | null
   average_cadence: number | null
   average_temp: number | null
-  average_watts: number | null
-  weighted_average_watts: number | null
-  kilojoules: number | null
-  device_watts: boolean | null
-  has_heartrate: boolean
-  max_watts: number | null
+  average_heartrate: number | null
+  max_heartrate: number | null
   elev_high: number | null
   elev_low: number | null
   pr_count: number
   total_photo_count: number
-  has_kudoed: boolean
-  workout_type: number | null
   suffer_score: number | null
-  location_city?: string | null
-  location_state?: string | null
-  location_country?: string | null
-  average_heartrate?: number
-  max_heartrate?: number
+  from_accepted_tag: boolean
+  location_city: string | null
+  location_state: string | null
+  location_country: string | null
 }
 
-export interface CommentAthlete {
+export interface ClubAthlete {
   firstname: string
   lastname: string
+  member: string
+  admin: boolean
+  owner: boolean
 }
 
-export interface Comment {
+// ============================================================================
+// ROUTE TYPES
+// ============================================================================
+
+export interface Route {
+  athlete: SummaryAthlete
+  description: string
+  distance: number
+  elevation_gain: number
   id: number
-  activity_id: number
-  post_id: number | null
+  id_str: string
+  map: PolylineMap
+  name: string
+  private: boolean
   resource_state: number
-  text: string
-  mentions_metadata: null
-  created_at: string
-  athlete: CommentAthlete
-  cursor: string
+  starred: boolean
+  sub_type: number
+  timestamp: number
+  type: number
+  waypoints: Waypoint[]
 }
 
-export interface Kudoer {
-  firstname: string
-  lastname:string
+// ============================================================================
+// LAP & SPLIT TYPES
+// ============================================================================
+
+export interface Lap {
+  id: number
+  resource_state: number
+  name: string
+  activity: MetaActivity
+  athlete: MetaAthlete
+  elapsed_time: number
+  moving_time: number
+  start_date: string
+  start_date_local: string
+  distance: number
+  start_index: number
+  end_index: number
+  total_elevation_gain: number
+  average_speed: number
+  max_speed: number
+  average_cadence: number
+  device_watts: boolean
+  average_watts: number
+  lap_index: number
+  split: number
+}
+
+export interface Split {
+  distance: number
+  elapsed_time: number
+  elevation_difference: number
+  moving_time: number
+  split: number
+  average_speed: number
+  pace_zone: number
+}
+
+// ============================================================================
+// ZONE TYPES
+// ============================================================================
+
+export interface ZoneBucket {
+  max: number
+  min: number
+  time: number
+}
+
+export interface ZoneRange {
+  min: number
+  max: number
+}
+
+export interface HeartRateZoneRanges {
+  custom_zones: boolean
+  zones: ZoneRange[]
+}
+
+export interface PowerZoneRanges {
+  zones: ZoneRange[]
 }
 
 export interface ActivityZone {
@@ -206,119 +470,6 @@ export interface ActivityZone {
   points: number
   custom_zones: boolean
   max: number
-}
-
-export interface Activity {
-  id: number
-  resource_state: number
-  external_id: string
-  upload_id: number
-  upload_id_str?: string
-  athlete: MetaAthlete
-  name: string
-  distance: number
-  moving_time: number
-  elapsed_time: number
-  total_elevation_gain: number
-  type: string
-  sport_type: string
-  start_date: string
-  start_date_local: string
-  timezone: string
-  utc_offset: number
-  start_latlng: LatLng
-  end_latlng: LatLng
-  achievement_count: number
-  kudos_count: number
-  comment_count: number
-  athlete_count: number
-  photo_count: number
-  map: PolylineMap
-  trainer: boolean
-  commute: boolean
-  manual: boolean
-  private: boolean
-  flagged: boolean
-  gear_id: string
-  from_accepted_tag: boolean
-  average_speed: number
-  max_speed: number
-  average_cadence: number
-  average_temp: number
-  average_watts: number
-  weighted_average_watts: number
-  kilojoules: number
-  device_watts: boolean
-  has_heartrate: boolean
-  max_watts: number
-  elev_high: number
-  elev_low: number
-  pr_count: number
-  total_photo_count: number
-  has_kudoed: boolean
-  workout_type: number
-  suffer_score: number | null
-  description: string
-  calories: number
-  segment_efforts: DetailedSegmentEffort[]
-  splits_metric: Split[]
-  laps: Lap[]
-  gear: SummaryGear
-  partner_brand_tag: string | null
-  photos: PhotosSummary
-  highlighted_kudosers: HighlightedKudosers[]
-  hide_from_home: boolean
-  device_name: string
-  embed_token: string
-  segment_leaderboard_opt_out: boolean
-  leaderboard_opt_out: boolean
-  location_city?: string | null
-  location_state?: string | null
-  location_country?: string | null
-  visibility?: string
-  average_heartrate?: number
-  max_heartrate?: number
-  heartrate_opt_out?: boolean
-  display_hide_heartrate_option?: boolean
-}
-
-export interface SummaryAthlete {
-  id: number
-  resource_state: number
-  firstname: string
-  lastname: string
-  profile_medium: string
-  profile: string
-  city: string
-  state: string
-  country: string
-  sex: string
-  premium: boolean
-  created_at: string
-  updated_at: string
-  badge_type_id: number
-  weight: number
-  ftp: number | null
-  bikes: SummaryGear[]
-  shoes: SummaryGear[]
-}
-
-export interface DetailedAthlete extends SummaryAthlete {
-  follower_count: number
-  friend_count: number
-  mutual_friend_count: number
-  athlete_type: number
-  date_preference: string
-  measurement_preference: string
-  clubs: unknown[] // Define more specifically if needed
-  username: string
-  // Add other fields from the sample response that are not in SummaryAthlete
-}
-
-export interface ZoneBucket {
-  max: number
-  min: number
-  time: number
 }
 
 export interface HeartRateZone {
@@ -342,6 +493,145 @@ export interface Zones {
   power?: PowerZone
 }
 
+export interface TimedZoneRange {
+  min: number
+  max: number
+  time: number
+}
+
+export interface TimedZoneDistribution {
+  heart_rate: TimedZoneRange[]
+  power: TimedZoneRange[]
+}
+
+// ============================================================================
+// STREAM TYPES
+// ============================================================================
+
+export interface BaseStream {
+  type: string
+  data: number[]
+  series_type: string
+  original_size: number
+  resolution: string
+}
+
+export interface AltitudeStream extends BaseStream {
+  type: 'altitude'
+}
+
+export interface CadenceStream extends BaseStream {
+  type: 'cadence'
+}
+
+export interface DistanceStream extends BaseStream {
+  type: 'distance'
+}
+
+export interface HeartrateStream extends BaseStream {
+  type: 'heartrate'
+}
+
+export interface LatLngStream {
+  type: 'latlng'
+  data: LatLng[]
+  series_type: string
+  original_size: number
+  resolution: string
+}
+
+export interface MovingStream {
+  type: 'moving'
+  data: boolean[]
+  series_type: string
+  original_size: number
+  resolution: string
+}
+
+export interface PowerStream extends BaseStream {
+  type: 'power'
+}
+
+export interface SmoothGradeStream extends BaseStream {
+  type: 'smooth_grade'
+}
+
+export interface SmoothVelocityStream extends BaseStream {
+  type: 'smooth_velocity'
+}
+
+export interface TemperatureStream extends BaseStream {
+  type: 'temperature'
+}
+
+export interface TimeStream extends BaseStream {
+  type: 'time'
+}
+
+export interface StreamSet {
+  altitude?: AltitudeStream
+  cadence?: CadenceStream
+  distance?: DistanceStream
+  heartrate?: HeartrateStream
+  latlng?: LatLngStream
+  moving?: MovingStream
+  power?: PowerStream
+  smooth_grade?: SmoothGradeStream
+  smooth_velocity?: SmoothVelocityStream
+  temperature?: TemperatureStream
+  time?: TimeStream
+}
+
+// ============================================================================
+// COMMENT & KUDO TYPES
+// ============================================================================
+
+export interface CommentAthlete {
+  firstname: string
+  lastname: string
+}
+
+export interface Comment {
+  id: number
+  activity_id: number
+  post_id: number | null
+  resource_state: number
+  text: string
+  mentions_metadata: null
+  created_at: string
+  athlete: CommentAthlete
+  cursor: string
+}
+
+export interface Kudoer {
+  firstname: string
+  lastname: string
+}
+
+export interface HighlightedKudosers {
+  destination_url: string
+  display_name: string
+  avatar_url: string
+  show_name: boolean
+}
+
+// ============================================================================
+// UPLOAD TYPES
+// ============================================================================
+
+export interface Upload {
+  id: number
+  id_str: string
+  external_id: string
+  error: string | null
+  status: string
+  activity_id: number | null
+}
+
+// ============================================================================
+// STATS & TOTALS TYPES
+// ============================================================================
+
 export interface ActivityTotal {
   count: number
   distance: number
@@ -364,3 +654,108 @@ export interface ActivityStats {
   all_ride_totals: ActivityTotal
   ytd_run_totals: ActivityTotal
 }
+
+// ============================================================================
+// ENUM TYPES
+// ============================================================================
+
+export interface ActivityType {
+  meta: boolean
+  name: string
+}
+
+export type SportType =
+  | 'AlpineSki'
+  | 'BackcountrySki'
+  | 'Badminton'
+  | 'Canoeing'
+  | 'Crossfit'
+  | 'EBikeRide'
+  | 'Elliptical'
+  | 'EMountainBikeRide'
+  | 'Golf'
+  | 'GravelRide'
+  | 'Handcycle'
+  | 'HighIntensityIntervalTraining'
+  | 'Hike'
+  | 'IceSkate'
+  | 'InlineSkate'
+  | 'Kayaking'
+  | 'Kitesurf'
+  | 'MountainBikeRide'
+  | 'NordicSki'
+  | 'Pickleball'
+  | 'Pilates'
+  | 'Racquetball'
+  | 'Ride'
+  | 'RockClimbing'
+  | 'RollerSki'
+  | 'Rowing'
+  | 'Run'
+  | 'Sail'
+  | 'Skateboard'
+  | 'Snowboard'
+  | 'Snowshoe'
+  | 'Soccer'
+  | 'Squash'
+  | 'StairStepper'
+  | 'StandUpPaddling'
+  | 'Surfing'
+  | 'Swim'
+  | 'TableTennis'
+  | 'Tennis'
+  | 'TrailRun'
+  | 'Velomobile'
+  | 'VirtualRide'
+  | 'VirtualRow'
+  | 'VirtualRun'
+  | 'Walk'
+  | 'WeightTraining'
+  | 'Wheelchair'
+  | 'Windsurf'
+  | 'Workout'
+  | 'Yoga'
+
+// ============================================================================
+// ERROR TYPES
+// ============================================================================
+
+export interface Error {
+  code: string
+  field: string
+  resource: string
+}
+
+export interface Fault {
+  message: string
+  errors: Error[]
+}
+
+// ============================================================================
+// EXPLORER TYPES
+// ============================================================================
+
+export interface ExplorerSegment {
+  id: number
+  name: string
+  climb_category: number
+  climb_category_desc: string
+  avg_grade: number
+  start_latlng: LatLng
+  end_latlng: LatLng
+  elev_difference: number
+  distance: number
+  points: string
+  starred: boolean
+}
+
+export interface ExplorerResponse {
+  segments: ExplorerSegment[]
+}
+
+// ============================================================================
+// LEGACY ALIASES FOR BACKWARD COMPATIBILITY
+// ============================================================================
+
+// Keep the old Activity interface as an alias for DetailedActivity
+export type Activity = DetailedActivity

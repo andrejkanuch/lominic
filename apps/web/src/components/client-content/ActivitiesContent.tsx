@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -8,10 +9,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Search, Filter, TrendingUp } from 'lucide-react'
+import {
+  Search,
+  Filter,
+  TrendingUp,
+  RefreshCw,
+  AlertTriangle,
+} from 'lucide-react'
 import { ActivityCard } from '@/components/ActivityCard'
 import { ActivityDetailModal } from '@/components/ActivityDetailModal'
 import { useGetStravaActivitiesQuery } from '@/generated/graphql'
+import { useStravaError } from '@/hooks/use-strava-error'
 
 const ActivitiesContent: React.FC = () => {
   const [selectedActivityId, setSelectedActivityId] = useState<number | null>(
@@ -22,9 +30,11 @@ const ActivitiesContent: React.FC = () => {
   const [selectedSport, setSelectedSport] = useState('all')
   const [selectedTimeRange, setSelectedTimeRange] = useState('all')
 
-  const { data, loading, error } = useGetStravaActivitiesQuery({
+  const { data, loading, error, refetch } = useGetStravaActivitiesQuery({
     variables: { limit: 50 },
   })
+
+  const { analyzeError, handleReconnect } = useStravaError()
 
   const activities = data?.getStravaActivities || []
 
@@ -41,6 +51,16 @@ const ActivitiesContent: React.FC = () => {
     setSelectedActivityId(activityId)
     setIsDetailModalOpen(true)
   }
+
+  const handleRetry = async () => {
+    try {
+      await refetch()
+    } catch {
+      // Error will be handled by the Apollo client error link
+    }
+  }
+
+  const errorInfo = error ? analyzeError(error) : null
 
   const sportTypes = Array.from(new Set(activities.map(a => a.sport_type)))
 
@@ -93,11 +113,38 @@ const ActivitiesContent: React.FC = () => {
         <Card className="text-center py-12">
           <CardContent>
             <div className="text-muted-foreground">
-              <TrendingUp className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              {errorInfo?.suggestedAction === 'reconnect' ? (
+                <AlertTriangle className="w-12 h-12 mx-auto mb-4 text-orange-500" />
+              ) : (
+                <TrendingUp className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              )}
               <h3 className="text-lg font-semibold mb-2">
-                Failed to load activities
+                {errorInfo?.suggestedAction === 'reconnect'
+                  ? 'Strava Connection Issue'
+                  : 'Failed to load activities'}
               </h3>
-              <p>Please try again later or check your Strava connection</p>
+              <p className="mb-6">
+                {errorInfo?.errorMessage ||
+                  'Please try again later or check your connection'}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button
+                  onClick={handleRetry}
+                  variant="outline"
+                  className="flex items-center gap-2"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Try Again
+                </Button>
+                {errorInfo?.suggestedAction === 'reconnect' && (
+                  <Button
+                    onClick={handleReconnect}
+                    className="flex items-center gap-2"
+                  >
+                    Reconnect Strava
+                  </Button>
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -151,8 +198,8 @@ const ActivitiesContent: React.FC = () => {
                 <SelectContent>
                   <SelectItem value="all">All Sports</SelectItem>
                   {sportTypes.map(type => (
-                    <SelectItem key={type} value={type}>
-                      {type.replace(/([A-Z])/g, ' $1').trim()}
+                    <SelectItem key={type} value={type || ''}>
+                      {type?.replace(/([A-Z])/g, ' $1').trim()}
                     </SelectItem>
                   ))}
                 </SelectContent>

@@ -19,11 +19,12 @@ import {
   Activity,
   Map as MapIcon,
   X,
+  Zap,
 } from 'lucide-react'
 import { ActivityMetrics } from './ActivityMetrics'
 import { ActivityMap } from './ActivityMap'
 import { ActivityChart } from './ActivityChart'
-import { useGetActivityByIdQuery } from '@/generated/graphql'
+import { SportType, useGetActivityByIdQuery } from '@/generated/graphql'
 
 interface ActivityDetailModalProps {
   activityId: number
@@ -56,7 +57,7 @@ export const ActivityDetailModal = ({
     })
   }
 
-  const getSportIcon = (sportType: string) => {
+  const getSportIcon = (sportType: SportType) => {
     switch (sportType) {
       case 'MountainBikeRide':
       case 'Ride':
@@ -68,7 +69,7 @@ export const ActivityDetailModal = ({
     }
   }
 
-  const getSportColor = (sportType: string) => {
+  const getSportColor = (sportType: SportType) => {
     switch (sportType) {
       case 'MountainBikeRide':
       case 'Ride':
@@ -80,7 +81,7 @@ export const ActivityDetailModal = ({
     }
   }
 
-  const SportIcon = getSportIcon(activity.sport_type)
+  const SportIcon = getSportIcon(activity.sport_type!)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -109,6 +110,7 @@ export const ActivityDetailModal = ({
         </DialogHeader>
 
         <div className="space-y-6">
+          {/* Description */}
           {activity.description && (
             <Card>
               <CardContent className="pt-6">
@@ -117,15 +119,18 @@ export const ActivityDetailModal = ({
             </Card>
           )}
 
+          {/* Activity Metrics */}
           <ActivityMetrics activity={activity} />
 
+          {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ActivityChart activity={activity} type="speed" />
-            {/* {activity.average_heartrate && (
-                <ActivityChart activity={activity} type="heartrate" />
-              )} */}
+            {activity.has_heartrate && (
+              <ActivityChart activity={activity} type="heartrate" />
+            )}
           </div>
 
+          {/* Route Map */}
           {activity.polyline && activity.start_latlng && (
             <Card>
               <CardHeader>
@@ -140,74 +145,346 @@ export const ActivityDetailModal = ({
             </Card>
           )}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card>
-              <CardContent className="pt-6 text-center">
-                <div className="flex items-center justify-center space-x-2 mb-2">
-                  <ThumbsUp className="w-5 h-5 text-pulse-500" />
-                  <span className="text-sm font-medium text-gray-600">
-                    Kudos
-                  </span>
-                </div>
-                <p className="text-2xl font-bold text-gray-900">
-                  {activity.kudos_count}
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6 text-center">
-                <div className="flex items-center justify-center space-x-2 mb-2">
-                  <Target className="w-5 h-5 text-green-500" />
-                  <span className="text-sm font-medium text-gray-600">
-                    Max Speed
-                  </span>
-                </div>
-                <p className="text-2xl font-bold text-gray-900">
-                  {activity.max_speed ? activity.max_speed.toFixed(1) : 'N/A'}
-                </p>
-                <p className="text-sm text-gray-500">km/h</p>
-              </CardContent>
-            </Card>
-
-            {activity.has_heartrate && activity.max_watts && (
-              <Card>
-                <CardContent className="pt-6 text-center">
+          {/* Performance Metrics */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <TrendingUp className="w-5 h-5 text-blue-500" />
+                <span>Performance Metrics</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center">
                   <div className="flex items-center justify-center space-x-2 mb-2">
-                    <Heart className="w-5 h-5 text-red-500" />
+                    <Target className="w-5 h-5 text-green-500" />
                     <span className="text-sm font-medium text-gray-600">
-                      Max HR
+                      Max Speed
                     </span>
                   </div>
                   <p className="text-2xl font-bold text-gray-900">
-                    {activity.max_watts.toFixed(1)}
+                    {activity.max_speed ? activity.max_speed.toFixed(1) : 'N/A'}
                   </p>
-                  <p className="text-sm text-gray-500">BPM</p>
+                  <p className="text-sm text-gray-500">km/h</p>
+                </div>
+
+                {activity.average_cadence && (
+                  <div className="text-center">
+                    <div className="flex items-center justify-center space-x-2 mb-2">
+                      <Activity className="w-5 h-5 text-purple-500" />
+                      <span className="text-sm font-medium text-gray-600">
+                        Cadence
+                      </span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {activity.average_cadence.toFixed(1)}
+                    </p>
+                    <p className="text-sm text-gray-500">spm</p>
+                  </div>
+                )}
+
+                {activity.average_watts && (
+                  <div className="text-center">
+                    <div className="flex items-center justify-center space-x-2 mb-2">
+                      <Zap className="w-5 h-5 text-yellow-500" />
+                      <span className="text-sm font-medium text-gray-600">
+                        Avg Power
+                      </span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {activity.average_watts.toFixed(0)}
+                    </p>
+                    <p className="text-sm text-gray-500">W</p>
+                  </div>
+                )}
+
+                {activity.max_watts && (
+                  <div className="text-center">
+                    <div className="flex items-center justify-center space-x-2 mb-2">
+                      <Zap className="w-5 h-5 text-orange-500" />
+                      <span className="text-sm font-medium text-gray-600">
+                        Max Power
+                      </span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {activity.max_watts.toFixed(0)}
+                    </p>
+                    <p className="text-sm text-gray-500">W</p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Heart Rate Data */}
+          {activity.has_heartrate &&
+            (activity.average_heartrate || activity.max_heartrate) && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Heart className="w-5 h-5 text-red-500" />
+                    <span>Heart Rate</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {activity.average_heartrate && (
+                      <div className="text-center">
+                        <div className="flex items-center justify-center space-x-2 mb-2">
+                          <Heart className="w-5 h-5 text-red-500" />
+                          <span className="text-sm font-medium text-gray-600">
+                            Average HR
+                          </span>
+                        </div>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {activity.average_heartrate}
+                        </p>
+                        <p className="text-sm text-gray-500">BPM</p>
+                      </div>
+                    )}
+
+                    {activity.max_heartrate && (
+                      <div className="text-center">
+                        <div className="flex items-center justify-center space-x-2 mb-2">
+                          <Heart className="w-5 h-5 text-red-600" />
+                          <span className="text-sm font-medium text-gray-600">
+                            Max HR
+                          </span>
+                        </div>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {activity.max_heartrate}
+                        </p>
+                        <p className="text-sm text-gray-500">BPM</p>
+                      </div>
+                    )}
+
+                    {activity.kilojoules && (
+                      <div className="text-center">
+                        <div className="flex items-center justify-center space-x-2 mb-2">
+                          <Zap className="w-5 h-5 text-yellow-600" />
+                          <span className="text-sm font-medium text-gray-600">
+                            Energy
+                          </span>
+                        </div>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {activity.kilojoules.toFixed(0)}
+                        </p>
+                        <p className="text-sm text-gray-500">kJ</p>
+                      </div>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             )}
 
+          {/* Elevation Data */}
+          {(activity.elev_high ||
+            activity.elev_low ||
+            activity.total_elevation_gain) && (
             <Card>
-              <CardContent className="pt-6 text-center">
-                <div className="flex items-center justify-center space-x-2 mb-2">
-                  <TrendingUp className="w-5 h-5 text-blue-500" />
-                  <span className="text-sm font-medium text-gray-600">
-                    Pace
-                  </span>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Mountain className="w-5 h-5 text-green-500" />
+                  <span>Elevation</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center">
+                    <div className="flex items-center justify-center space-x-2 mb-2">
+                      <Mountain className="w-5 h-5 text-green-500" />
+                      <span className="text-sm font-medium text-gray-600">
+                        Elevation Gain
+                      </span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {activity.total_elevation_gain}
+                    </p>
+                    <p className="text-sm text-gray-500">m</p>
+                  </div>
+
+                  {activity.elev_high && (
+                    <div className="text-center">
+                      <div className="flex items-center justify-center space-x-2 mb-2">
+                        <Mountain className="w-5 h-5 text-green-600" />
+                        <span className="text-sm font-medium text-gray-600">
+                          Highest Point
+                        </span>
+                      </div>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {activity.elev_high.toFixed(0)}
+                      </p>
+                      <p className="text-sm text-gray-500">m</p>
+                    </div>
+                  )}
+
+                  {activity.elev_low && (
+                    <div className="text-center">
+                      <div className="flex items-center justify-center space-x-2 mb-2">
+                        <Mountain className="w-5 h-5 text-green-400" />
+                        <span className="text-sm font-medium text-gray-600">
+                          Lowest Point
+                        </span>
+                      </div>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {activity.elev_low.toFixed(0)}
+                      </p>
+                      <p className="text-sm text-gray-500">m</p>
+                    </div>
+                  )}
                 </div>
-                <p className="text-2xl font-bold text-gray-900">
-                  {activity.moving_time && activity.distance
-                    ? (
-                        activity.moving_time /
-                        60 /
-                        (activity.distance / 1000)
-                      ).toFixed(1)
-                    : 'N/A'}
-                </p>
-                <p className="text-sm text-gray-500">min/km</p>
               </CardContent>
             </Card>
-          </div>
+          )}
+
+          {/* Social & Achievements */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <ThumbsUp className="w-5 h-5 text-pulse-500" />
+                <span>Social & Achievements</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <div className="flex items-center justify-center space-x-2 mb-2">
+                    <ThumbsUp className="w-5 h-5 text-pulse-500" />
+                    <span className="text-sm font-medium text-gray-600">
+                      Kudos
+                    </span>
+                  </div>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {activity.kudos_count}
+                  </p>
+                </div>
+
+                {activity.achievement_count > 0 && (
+                  <div className="text-center">
+                    <div className="flex items-center justify-center space-x-2 mb-2">
+                      <Target className="w-5 h-5 text-yellow-500" />
+                      <span className="text-sm font-medium text-gray-600">
+                        Achievements
+                      </span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {activity.achievement_count}
+                    </p>
+                  </div>
+                )}
+
+                {activity.pr_count > 0 && (
+                  <div className="text-center">
+                    <div className="flex items-center justify-center space-x-2 mb-2">
+                      <TrendingUp className="w-5 h-5 text-green-500" />
+                      <span className="text-sm font-medium text-gray-600">
+                        PRs
+                      </span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {activity.pr_count}
+                    </p>
+                  </div>
+                )}
+
+                {activity.comment_count > 0 && (
+                  <div className="text-center">
+                    <div className="flex items-center justify-center space-x-2 mb-2">
+                      <Activity className="w-5 h-5 text-blue-500" />
+                      <span className="text-sm font-medium text-gray-600">
+                        Comments
+                      </span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {activity.comment_count}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Activity Details */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Activity className="w-5 h-5 text-gray-500" />
+                <span>Activity Details</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Activity ID:</span>
+                    <span className="font-mono text-gray-900">
+                      {activity.id}
+                    </span>
+                  </div>
+                  {activity.external_id && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">External ID:</span>
+                      <span className="font-mono text-gray-900">
+                        {activity.external_id}
+                      </span>
+                    </div>
+                  )}
+                  {activity.upload_id && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Upload ID:</span>
+                      <span className="font-mono text-gray-900">
+                        {activity.upload_id}
+                      </span>
+                    </div>
+                  )}
+                  {activity.gear_id && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Gear:</span>
+                      <span className="font-mono text-gray-900">
+                        {activity.gear_id}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Timezone:</span>
+                    <span className="text-gray-900">{activity.timezone}</span>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Trainer:</span>
+                    <span className="text-gray-900">
+                      {activity.trainer ? 'Yes' : 'No'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Commute:</span>
+                    <span className="text-gray-900">
+                      {activity.commute ? 'Yes' : 'No'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Manual:</span>
+                    <span className="text-gray-900">
+                      {activity.manual ? 'Yes' : 'No'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Private:</span>
+                    <span className="text-gray-900">
+                      {activity.private ? 'Yes' : 'No'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Device Watts:</span>
+                    <span className="text-gray-900">
+                      {activity.device_watts ? 'Yes' : 'No'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </DialogContent>
     </Dialog>

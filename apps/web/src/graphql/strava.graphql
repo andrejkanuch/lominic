@@ -1,43 +1,194 @@
 query getStravaActivities($limit: Int) {
   getStravaActivities(limit: $limit) {
     id
+    resource_state
+    external_id
+    upload_id
+    athlete {
+      id
+      resource_state
+    }
     name
-    sport_type
     distance
     moving_time
+    elapsed_time
     total_elevation_gain
+    elev_high
+    elev_low
+    type
     start_date
-    average_speed
+    start_date_local
+    timezone
+    start_latlng {
+      lat
+      lng
+    }
+    end_latlng {
+      lat
+      lng
+    }
+    achievement_count
+    pr_count
     kudos_count
+    comment_count
+    athlete_count
+    photo_count
+    total_photo_count
+    map {
+      id
+      polyline
+      resource_state
+      summary_polyline
+    }
+    trainer
+    commute
+    manual
+    private
+    flagged
+    workout_type
+    gear_id
+    average_speed
+    max_speed
+    average_cadence
+    average_temp
+    average_watts
+    max_watts
+    weighted_average_watts
+    kilojoules
+    device_watts
+    has_heartrate
+    average_heartrate
+    max_heartrate
+    calories
+    suffer_score
+    has_kudoed
+    location_city
+    location_state
+    location_country
+    description
+    gear {
+      id
+      primary
+      name
+      resource_state
+      distance
+    }
+    segment_efforts {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      average_cadence
+      device_watts
+      average_watts
+      kom_rank
+      pr_rank
+      hidden
+    }
+    splits_metric {
+      distance
+      elapsed_time
+      elevation_difference
+      moving_time
+      split
+      average_speed
+      pace_zone
+    }
+    splits_standard {
+      distance
+      elapsed_time
+      elevation_difference
+      moving_time
+      split
+      average_speed
+      pace_zone
+    }
+    laps {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      total_elevation_gain
+      average_speed
+      max_speed
+      average_cadence
+      device_watts
+      average_watts
+      lap_index
+      split
+    }
+    best_efforts {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      average_cadence
+      device_watts
+      average_watts
+      kom_rank
+      pr_rank
+      hidden
+    }
+    device_name
+    embed_token
+    photos
+    sport_type
   }
 }
 
 query GetAthleteZones {
   getAthleteZones {
     heart_rate {
-      min
-      max
+      custom_zones
+      zones {
+        min
+        max
+      }
     }
     power {
-      zone {
+      zones {
         min
         max
       }
-      distribution_buckets {
-        max
-        min
-        time
-      }
-      type
-      resource_state
-      sensor_based
     }
   }
 }
 
 query GetAthleteStats {
   getAthleteStats {
-    recent_run_totals {
+    biggest_ride_distance
+    biggest_climb_elevation_gain
+    recent_ride_totals {
       count
       distance
       moving_time
@@ -45,7 +196,7 @@ query GetAthleteStats {
       elevation_gain
       achievement_count
     }
-    all_run_totals {
+    recent_run_totals {
       count
       distance
       moving_time
@@ -61,41 +212,7 @@ query GetAthleteStats {
       elevation_gain
       achievement_count
     }
-    biggest_ride_distance
-    ytd_swim_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    all_swim_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    recent_ride_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    biggest_climb_elevation_gain
     ytd_ride_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    all_ride_totals {
       count
       distance
       moving_time
@@ -111,57 +228,206 @@ query GetAthleteStats {
       elevation_gain
       achievement_count
     }
+    ytd_swim_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    all_ride_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    all_run_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    all_swim_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
   }
 }
 
 query GetActivityById($activityId: String!) {
   getActivityById(activityId: $activityId) {
     id
+    resource_state
+    external_id
+    upload_id
+    athlete {
+      id
+      resource_state
+    }
     name
-    type
-    sport_type
     distance
     moving_time
     elapsed_time
     total_elevation_gain
+    elev_high
+    elev_low
+    type
     start_date
     start_date_local
-    description
     timezone
-    utc_offset
-    start_latlng
-    end_latlng
+    start_latlng {
+      lat
+      lng
+    }
+    end_latlng {
+      lat
+      lng
+    }
     achievement_count
+    pr_count
     kudos_count
     comment_count
     athlete_count
     photo_count
+    total_photo_count
+    map {
+      id
+      polyline
+      resource_state
+      summary_polyline
+    }
     trainer
     commute
     manual
     private
     flagged
+    workout_type
     gear_id
-    from_accepted_tag
     average_speed
     max_speed
     average_cadence
     average_temp
     average_watts
+    max_watts
     weighted_average_watts
     kilojoules
     device_watts
     has_heartrate
-    max_watts
-    elev_high
-    elev_low
-    pr_count
-    total_photo_count
-    has_kudoed
-    workout_type
-    suffer_score
-    description
+    average_heartrate
+    max_heartrate
     calories
+    suffer_score
+    has_kudoed
+    location_city
+    location_state
+    location_country
+    description
+    gear {
+      id
+      primary
+      name
+      resource_state
+      distance
+    }
+    segment_efforts {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      average_cadence
+      device_watts
+      average_watts
+      kom_rank
+      pr_rank
+      hidden
+    }
+    splits_metric {
+      distance
+      elapsed_time
+      elevation_difference
+      moving_time
+      split
+      average_speed
+      pace_zone
+    }
+    splits_standard {
+      distance
+      elapsed_time
+      elevation_difference
+      moving_time
+      split
+      average_speed
+      pace_zone
+    }
+    laps {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      total_elevation_gain
+      average_speed
+      max_speed
+      average_cadence
+      device_watts
+      average_watts
+      lap_index
+      split
+    }
+    best_efforts {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      average_cadence
+      device_watts
+      average_watts
+      kom_rank
+      pr_rank
+      hidden
+    }
+    device_name
+    embed_token
+    photos
+    sport_type
     polyline
   }
 }
@@ -169,10 +435,90 @@ query GetActivityById($activityId: String!) {
 query GetActivityZones($activityId: String!) {
   getActivityZones(activityId: $activityId) {
     score
+    distribution_buckets {
+      min
+      max
+      time
+    }
     type
     sensor_based
     points
     custom_zones
     max
+  }
+}
+
+query GetActivityStreams($activityId: String!) {
+  getActivityStreams(activityId: $activityId) {
+    altitude {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    cadence {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    distance {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    heartrate {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    moving {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    power {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    smooth_grade {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    smooth_velocity {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    temperature {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    time {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
   }
 }

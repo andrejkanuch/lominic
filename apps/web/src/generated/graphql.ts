@@ -22,56 +22,6 @@ export type Scalars = {
   JSON: { input: Record<string, any>; output: Record<string, any>; }
 };
 
-export type ActivityDto = {
-  __typename?: 'ActivityDto';
-  achievement_count: Scalars['Float']['output'];
-  athlete_count: Scalars['Float']['output'];
-  average_cadence: Maybe<Scalars['Float']['output']>;
-  average_speed: Scalars['Float']['output'];
-  average_temp: Maybe<Scalars['Float']['output']>;
-  average_watts: Maybe<Scalars['Float']['output']>;
-  calories: Maybe<Scalars['Float']['output']>;
-  comment_count: Scalars['Float']['output'];
-  commute: Scalars['Boolean']['output'];
-  description: Maybe<Scalars['String']['output']>;
-  device_watts: Maybe<Scalars['Boolean']['output']>;
-  distance: Scalars['Float']['output'];
-  elapsed_time: Scalars['Float']['output'];
-  elev_high: Maybe<Scalars['Float']['output']>;
-  elev_low: Maybe<Scalars['Float']['output']>;
-  end_latlng: Maybe<Array<Scalars['Float']['output']>>;
-  flagged: Scalars['Boolean']['output'];
-  from_accepted_tag: Scalars['Boolean']['output'];
-  gear_id: Maybe<Scalars['String']['output']>;
-  has_heartrate: Scalars['Boolean']['output'];
-  has_kudoed: Scalars['Boolean']['output'];
-  id: Scalars['ID']['output'];
-  kilojoules: Maybe<Scalars['Float']['output']>;
-  kudos_count: Scalars['Float']['output'];
-  manual: Scalars['Boolean']['output'];
-  max_speed: Scalars['Float']['output'];
-  max_watts: Maybe<Scalars['Float']['output']>;
-  moving_time: Scalars['Float']['output'];
-  name: Scalars['String']['output'];
-  photo_count: Scalars['Float']['output'];
-  polyline: Maybe<Scalars['String']['output']>;
-  pr_count: Scalars['Float']['output'];
-  private: Scalars['Boolean']['output'];
-  sport_type: Scalars['String']['output'];
-  start_date: Scalars['String']['output'];
-  start_date_local: Scalars['String']['output'];
-  start_latlng: Maybe<Array<Scalars['Float']['output']>>;
-  suffer_score: Maybe<Scalars['Float']['output']>;
-  timezone: Scalars['String']['output'];
-  total_elevation_gain: Scalars['Float']['output'];
-  total_photo_count: Scalars['Float']['output'];
-  trainer: Scalars['Boolean']['output'];
-  type: Scalars['String']['output'];
-  utc_offset: Scalars['Float']['output'];
-  weighted_average_watts: Maybe<Scalars['Float']['output']>;
-  workout_type: Maybe<Scalars['Float']['output']>;
-};
-
 export type ActivityStats = {
   __typename?: 'ActivityStats';
   all_ride_totals: ActivityTotal;
@@ -100,6 +50,7 @@ export type ActivityTotal = {
 export type ActivityZoneDto = {
   __typename?: 'ActivityZoneDto';
   custom_zones: Scalars['Boolean']['output'];
+  distribution_buckets: Maybe<Array<ZoneBucket>>;
   max: Scalars['Float']['output'];
   points: Scalars['Float']['output'];
   score: Scalars['Float']['output'];
@@ -107,10 +58,28 @@ export type ActivityZoneDto = {
   type: Scalars['String']['output'];
 };
 
+export type AltitudeStreamDto = {
+  __typename?: 'AltitudeStreamDto';
+  data: Array<Scalars['Float']['output']>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
 export type AuthResponse = {
   __typename?: 'AuthResponse';
   access_token: Scalars['String']['output'];
   user: User;
+};
+
+export type CadenceStreamDto = {
+  __typename?: 'CadenceStreamDto';
+  data: Array<Scalars['Float']['output']>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type CommentDto = {
@@ -158,10 +127,51 @@ export type DetailedAthlete = {
   weight: Scalars['Int']['output'];
 };
 
+export type DetailedSegmentEffortDto = {
+  __typename?: 'DetailedSegmentEffortDto';
+  athlete: MetaAthleteDto;
+  average_cadence: Maybe<Scalars['Float']['output']>;
+  average_watts: Maybe<Scalars['Float']['output']>;
+  device_watts: Maybe<Scalars['Boolean']['output']>;
+  distance: Scalars['Float']['output'];
+  elapsed_time: Scalars['Int']['output'];
+  end_index: Scalars['Int']['output'];
+  hidden: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  kom_rank: Maybe<Scalars['Int']['output']>;
+  moving_time: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  pr_rank: Maybe<Scalars['Int']['output']>;
+  resource_state: Scalars['Int']['output'];
+  start_date: Scalars['String']['output'];
+  start_date_local: Scalars['String']['output'];
+  start_index: Scalars['Int']['output'];
+};
+
+export type DistanceStreamDto = {
+  __typename?: 'DistanceStreamDto';
+  data: Array<Scalars['Float']['output']>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
 export type HeartRateZone = {
   __typename?: 'HeartRateZone';
+  custom_zones: Maybe<Scalars['Boolean']['output']>;
   max: Scalars['Int']['output'];
   min: Scalars['Int']['output'];
+  zones: Maybe<Array<ZoneBucket>>;
+};
+
+export type HeartrateStreamDto = {
+  __typename?: 'HeartrateStreamDto';
+  data: Array<Scalars['Float']['output']>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type KudoerDto = {
@@ -170,14 +180,66 @@ export type KudoerDto = {
   lastname: Scalars['String']['output'];
 };
 
+export type LapDto = {
+  __typename?: 'LapDto';
+  athlete: MetaAthleteDto;
+  average_cadence: Maybe<Scalars['Float']['output']>;
+  average_speed: Scalars['Float']['output'];
+  average_watts: Maybe<Scalars['Float']['output']>;
+  device_watts: Maybe<Scalars['Boolean']['output']>;
+  distance: Scalars['Float']['output'];
+  elapsed_time: Scalars['Int']['output'];
+  end_index: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  lap_index: Scalars['Int']['output'];
+  max_speed: Scalars['Float']['output'];
+  moving_time: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  resource_state: Scalars['Int']['output'];
+  split: Scalars['Int']['output'];
+  start_date: Scalars['String']['output'];
+  start_date_local: Scalars['String']['output'];
+  start_index: Scalars['Int']['output'];
+  total_elevation_gain: Scalars['Float']['output'];
+};
+
+export type LatLngDto = {
+  __typename?: 'LatLngDto';
+  lat: Maybe<Scalars['Float']['output']>;
+  lng: Maybe<Scalars['Float']['output']>;
+};
+
+export type LatLngStreamDto = {
+  __typename?: 'LatLngStreamDto';
+  data: Array<LatLngDto>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
 export type LoginInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
 
+export type MetaAthleteDto = {
+  __typename?: 'MetaAthleteDto';
+  id: Scalars['Int']['output'];
+  resource_state: Scalars['Int']['output'];
+};
+
+export type MovingStreamDto = {
+  __typename?: 'MovingStreamDto';
+  data: Array<Scalars['Boolean']['output']>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  createTestStravaAccount: Scalars['Boolean']['output'];
   createUser: User;
   login: AuthResponse;
   register: AuthResponse;
@@ -223,6 +285,23 @@ export type MutationUpdateUserArgs = {
   updateUserInput: UpdateUserInput;
 };
 
+export type PolylineMapDto = {
+  __typename?: 'PolylineMapDto';
+  id: Scalars['String']['output'];
+  polyline: Maybe<Scalars['String']['output']>;
+  resource_state: Scalars['Int']['output'];
+  summary_polyline: Maybe<Scalars['String']['output']>;
+};
+
+export type PowerStreamDto = {
+  __typename?: 'PowerStreamDto';
+  data: Array<Scalars['Float']['output']>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
 export type PowerZone = {
   __typename?: 'PowerZone';
   distribution_buckets: Array<ZoneBucket>;
@@ -230,13 +309,15 @@ export type PowerZone = {
   sensor_based: Scalars['Boolean']['output'];
   type: Scalars['String']['output'];
   zone: HeartRateZone;
+  zones: Maybe<Array<ZoneBucket>>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  getActivityById: ActivityDto;
+  getActivityById: StravaActivityDto;
   getActivityComments: Array<CommentDto>;
   getActivityKudoers: Array<KudoerDto>;
+  getActivityStreams: StreamSetDto;
   getActivityZones: Array<ActivityZoneDto>;
   getAthlete: DetailedAthlete;
   getAthleteStats: ActivityStats;
@@ -259,6 +340,11 @@ export type QueryGetActivityCommentsArgs = {
 
 
 export type QueryGetActivityKudoersArgs = {
+  activityId: Scalars['String']['input'];
+};
+
+
+export type QueryGetActivityStreamsArgs = {
   activityId: Scalars['String']['input'];
 };
 
@@ -290,66 +376,170 @@ export type Role =
   | 'SUPER_ADMIN'
   | 'USER';
 
+export type SmoothGradeStreamDto = {
+  __typename?: 'SmoothGradeStreamDto';
+  data: Array<Scalars['Float']['output']>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type SmoothVelocityStreamDto = {
+  __typename?: 'SmoothVelocityStreamDto';
+  data: Array<Scalars['Float']['output']>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type SplitDto = {
+  __typename?: 'SplitDto';
+  average_speed: Scalars['Float']['output'];
+  distance: Scalars['Float']['output'];
+  elapsed_time: Scalars['Int']['output'];
+  elevation_difference: Scalars['Float']['output'];
+  moving_time: Scalars['Int']['output'];
+  pace_zone: Scalars['Int']['output'];
+  split: Scalars['Int']['output'];
+};
+
+/** Strava sport types */
+export type SportType =
+  | 'AlpineSki'
+  | 'BackcountrySki'
+  | 'Badminton'
+  | 'Canoeing'
+  | 'Crossfit'
+  | 'EBikeRide'
+  | 'EMountainBikeRide'
+  | 'Elliptical'
+  | 'Golf'
+  | 'GravelRide'
+  | 'Handcycle'
+  | 'HighIntensityIntervalTraining'
+  | 'Hike'
+  | 'IceSkate'
+  | 'InlineSkate'
+  | 'Kayaking'
+  | 'Kitesurf'
+  | 'MountainBikeRide'
+  | 'NordicSki'
+  | 'Pickleball'
+  | 'Pilates'
+  | 'Racquetball'
+  | 'Ride'
+  | 'RockClimbing'
+  | 'RollerSki'
+  | 'Rowing'
+  | 'Run'
+  | 'Sail'
+  | 'Skateboard'
+  | 'Snowboard'
+  | 'Snowshoe'
+  | 'Soccer'
+  | 'Squash'
+  | 'StairStepper'
+  | 'StandUpPaddling'
+  | 'Surfing'
+  | 'Swim'
+  | 'TableTennis'
+  | 'Tennis'
+  | 'TrailRun'
+  | 'Velomobile'
+  | 'VirtualRide'
+  | 'VirtualRow'
+  | 'VirtualRun'
+  | 'Walk'
+  | 'WeightTraining'
+  | 'Wheelchair'
+  | 'Windsurf'
+  | 'Workout'
+  | 'Yoga';
+
 export type StravaActivityDto = {
   __typename?: 'StravaActivityDto';
   achievement_count: Scalars['Int']['output'];
+  athlete: MetaAthleteDto;
   athlete_count: Scalars['Int']['output'];
   average_cadence: Maybe<Scalars['Float']['output']>;
   average_heartrate: Maybe<Scalars['Float']['output']>;
   average_speed: Scalars['Float']['output'];
   average_temp: Maybe<Scalars['Float']['output']>;
   average_watts: Maybe<Scalars['Float']['output']>;
+  best_efforts: Maybe<Array<DetailedSegmentEffortDto>>;
   calories: Maybe<Scalars['Float']['output']>;
   comment_count: Scalars['Int']['output'];
   commute: Scalars['Boolean']['output'];
   description: Maybe<Scalars['String']['output']>;
+  device_name: Maybe<Scalars['String']['output']>;
   device_watts: Maybe<Scalars['Boolean']['output']>;
-  display_hide_heartrate_option: Maybe<Scalars['Boolean']['output']>;
   distance: Scalars['Float']['output'];
   elapsed_time: Scalars['Int']['output'];
   elev_high: Maybe<Scalars['Float']['output']>;
   elev_low: Maybe<Scalars['Float']['output']>;
-  end_latlng: Maybe<Scalars['JSON']['output']>;
+  embed_token: Maybe<Scalars['String']['output']>;
+  end_latlng: Maybe<LatLngDto>;
   external_id: Maybe<Scalars['String']['output']>;
   flagged: Scalars['Boolean']['output'];
-  from_accepted_tag: Scalars['Boolean']['output'];
+  from_accepted_tag: Maybe<Scalars['Boolean']['output']>;
+  gear: Maybe<SummaryGearDto>;
   gear_id: Maybe<Scalars['String']['output']>;
   has_heartrate: Scalars['Boolean']['output'];
   has_kudoed: Scalars['Boolean']['output'];
-  heartrate_opt_out: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   kilojoules: Maybe<Scalars['Float']['output']>;
   kudos_count: Scalars['Int']['output'];
+  laps: Maybe<Array<LapDto>>;
   location_city: Maybe<Scalars['String']['output']>;
   location_country: Maybe<Scalars['String']['output']>;
   location_state: Maybe<Scalars['String']['output']>;
   manual: Scalars['Boolean']['output'];
+  map: PolylineMapDto;
   max_heartrate: Maybe<Scalars['Float']['output']>;
   max_speed: Scalars['Float']['output'];
   max_watts: Maybe<Scalars['Float']['output']>;
   moving_time: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   photo_count: Scalars['Int']['output'];
-  polyline: Maybe<Scalars['JSON']['output']>;
+  photos: Maybe<Scalars['JSON']['output']>;
+  polyline: Maybe<Scalars['String']['output']>;
   pr_count: Scalars['Int']['output'];
   private: Scalars['Boolean']['output'];
-  resource_state: Maybe<Scalars['Int']['output']>;
-  sport_type: Scalars['String']['output'];
+  resource_state: Scalars['Int']['output'];
+  segment_efforts: Maybe<Array<DetailedSegmentEffortDto>>;
+  splits_metric: Maybe<Array<SplitDto>>;
+  splits_standard: Maybe<Array<SplitDto>>;
+  sport_type: SportType;
   start_date: Scalars['String']['output'];
   start_date_local: Scalars['String']['output'];
-  start_latlng: Maybe<Scalars['JSON']['output']>;
+  start_latlng: Maybe<LatLngDto>;
   suffer_score: Maybe<Scalars['Int']['output']>;
   timezone: Scalars['String']['output'];
   total_elevation_gain: Scalars['Float']['output'];
   total_photo_count: Scalars['Int']['output'];
   trainer: Scalars['Boolean']['output'];
   type: Scalars['String']['output'];
-  upload_id: Maybe<Scalars['Int']['output']>;
-  upload_id_str: Maybe<Scalars['String']['output']>;
-  utc_offset: Scalars['Int']['output'];
-  visibility: Maybe<Scalars['String']['output']>;
+  upload_id: Maybe<Scalars['String']['output']>;
+  utc_offset: Maybe<Scalars['Int']['output']>;
   weighted_average_watts: Maybe<Scalars['Float']['output']>;
   workout_type: Maybe<Scalars['Int']['output']>;
+};
+
+export type StreamSetDto = {
+  __typename?: 'StreamSetDto';
+  altitude: Maybe<AltitudeStreamDto>;
+  cadence: Maybe<CadenceStreamDto>;
+  distance: Maybe<DistanceStreamDto>;
+  heartrate: Maybe<HeartrateStreamDto>;
+  latlng: Maybe<LatLngStreamDto>;
+  moving: Maybe<MovingStreamDto>;
+  power: Maybe<PowerStreamDto>;
+  smooth_grade: Maybe<SmoothGradeStreamDto>;
+  smooth_velocity: Maybe<SmoothVelocityStreamDto>;
+  temperature: Maybe<TemperatureStreamDto>;
+  time: Maybe<TimeStreamDto>;
 };
 
 export type SummaryGearDto = {
@@ -359,6 +549,24 @@ export type SummaryGearDto = {
   name: Scalars['String']['output'];
   primary: Scalars['Boolean']['output'];
   resource_state: Scalars['Int']['output'];
+};
+
+export type TemperatureStreamDto = {
+  __typename?: 'TemperatureStreamDto';
+  data: Array<Scalars['Float']['output']>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type TimeStreamDto = {
+  __typename?: 'TimeStreamDto';
+  data: Array<Scalars['Float']['output']>;
+  original_size: Scalars['Int']['output'];
+  resolution: Scalars['String']['output'];
+  series_type: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type UpdateUserInput = {
@@ -427,31 +635,38 @@ export type GetStravaActivitiesQueryVariables = Exact<{
 }>;
 
 
-export type GetStravaActivitiesQuery = { __typename?: 'Query', getStravaActivities: Array<{ __typename?: 'StravaActivityDto', id: string, name: string, sport_type: string, distance: number, moving_time: number, total_elevation_gain: number, start_date: string, average_speed: number, kudos_count: number }> };
+export type GetStravaActivitiesQuery = { __typename?: 'Query', getStravaActivities: Array<{ __typename?: 'StravaActivityDto', id: string, resource_state: number, external_id: string | null, upload_id: string | null, name: string, distance: number, moving_time: number, elapsed_time: number, total_elevation_gain: number, elev_high: number | null, elev_low: number | null, type: string, start_date: string, start_date_local: string, timezone: string, achievement_count: number, pr_count: number, kudos_count: number, comment_count: number, athlete_count: number, photo_count: number, total_photo_count: number, trainer: boolean, commute: boolean, manual: boolean, private: boolean, flagged: boolean, workout_type: number | null, gear_id: string | null, average_speed: number, max_speed: number, average_cadence: number | null, average_temp: number | null, average_watts: number | null, max_watts: number | null, weighted_average_watts: number | null, kilojoules: number | null, device_watts: boolean | null, has_heartrate: boolean, average_heartrate: number | null, max_heartrate: number | null, calories: number | null, suffer_score: number | null, has_kudoed: boolean, location_city: string | null, location_state: string | null, location_country: string | null, description: string | null, device_name: string | null, embed_token: string | null, photos: Record<string, any> | null, sport_type: SportType, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number }, start_latlng: { __typename?: 'LatLngDto', lat: number | null, lng: number | null } | null, end_latlng: { __typename?: 'LatLngDto', lat: number | null, lng: number | null } | null, map: { __typename?: 'PolylineMapDto', id: string, polyline: string | null, resource_state: number, summary_polyline: string | null }, gear: { __typename?: 'SummaryGearDto', id: string, primary: boolean, name: string, resource_state: number, distance: number } | null, segment_efforts: Array<{ __typename?: 'DetailedSegmentEffortDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, kom_rank: number | null, pr_rank: number | null, hidden: boolean, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null, splits_metric: Array<{ __typename?: 'SplitDto', distance: number, elapsed_time: number, elevation_difference: number, moving_time: number, split: number, average_speed: number, pace_zone: number }> | null, splits_standard: Array<{ __typename?: 'SplitDto', distance: number, elapsed_time: number, elevation_difference: number, moving_time: number, split: number, average_speed: number, pace_zone: number }> | null, laps: Array<{ __typename?: 'LapDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, total_elevation_gain: number, average_speed: number, max_speed: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, lap_index: number, split: number, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null, best_efforts: Array<{ __typename?: 'DetailedSegmentEffortDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, kom_rank: number | null, pr_rank: number | null, hidden: boolean, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null }> };
 
 export type GetAthleteZonesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAthleteZonesQuery = { __typename?: 'Query', getAthleteZones: { __typename?: 'Zones', heart_rate: { __typename?: 'HeartRateZone', min: number, max: number } | null, power: { __typename?: 'PowerZone', type: string, resource_state: number, sensor_based: boolean, zone: { __typename?: 'HeartRateZone', min: number, max: number }, distribution_buckets: Array<{ __typename?: 'ZoneBucket', max: number, min: number, time: number }> } | null } };
+export type GetAthleteZonesQuery = { __typename?: 'Query', getAthleteZones: { __typename?: 'Zones', heart_rate: { __typename?: 'HeartRateZone', custom_zones: boolean | null, zones: Array<{ __typename?: 'ZoneBucket', min: number, max: number }> | null } | null, power: { __typename?: 'PowerZone', zones: Array<{ __typename?: 'ZoneBucket', min: number, max: number }> | null } | null } };
 
 export type GetAthleteStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAthleteStatsQuery = { __typename?: 'Query', getAthleteStats: { __typename?: 'ActivityStats', biggest_ride_distance: number, biggest_climb_elevation_gain: number, recent_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, recent_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, recent_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null } } };
+export type GetAthleteStatsQuery = { __typename?: 'Query', getAthleteStats: { __typename?: 'ActivityStats', biggest_ride_distance: number, biggest_climb_elevation_gain: number, recent_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, recent_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, recent_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null } } };
 
 export type GetActivityByIdQueryVariables = Exact<{
   activityId: Scalars['String']['input'];
 }>;
 
 
-export type GetActivityByIdQuery = { __typename?: 'Query', getActivityById: { __typename?: 'ActivityDto', id: string, name: string, type: string, sport_type: string, distance: number, moving_time: number, elapsed_time: number, total_elevation_gain: number, start_date: string, start_date_local: string, description: string | null, timezone: string, utc_offset: number, start_latlng: Array<number> | null, end_latlng: Array<number> | null, achievement_count: number, kudos_count: number, comment_count: number, athlete_count: number, photo_count: number, trainer: boolean, commute: boolean, manual: boolean, private: boolean, flagged: boolean, gear_id: string | null, from_accepted_tag: boolean, average_speed: number, max_speed: number, average_cadence: number | null, average_temp: number | null, average_watts: number | null, weighted_average_watts: number | null, kilojoules: number | null, device_watts: boolean | null, has_heartrate: boolean, max_watts: number | null, elev_high: number | null, elev_low: number | null, pr_count: number, total_photo_count: number, has_kudoed: boolean, workout_type: number | null, suffer_score: number | null, calories: number | null, polyline: string | null } };
+export type GetActivityByIdQuery = { __typename?: 'Query', getActivityById: { __typename?: 'StravaActivityDto', id: string, resource_state: number, external_id: string | null, upload_id: string | null, name: string, distance: number, moving_time: number, elapsed_time: number, total_elevation_gain: number, elev_high: number | null, elev_low: number | null, type: string, start_date: string, start_date_local: string, timezone: string, achievement_count: number, pr_count: number, kudos_count: number, comment_count: number, athlete_count: number, photo_count: number, total_photo_count: number, trainer: boolean, commute: boolean, manual: boolean, private: boolean, flagged: boolean, workout_type: number | null, gear_id: string | null, average_speed: number, max_speed: number, average_cadence: number | null, average_temp: number | null, average_watts: number | null, max_watts: number | null, weighted_average_watts: number | null, kilojoules: number | null, device_watts: boolean | null, has_heartrate: boolean, average_heartrate: number | null, max_heartrate: number | null, calories: number | null, suffer_score: number | null, has_kudoed: boolean, location_city: string | null, location_state: string | null, location_country: string | null, description: string | null, device_name: string | null, embed_token: string | null, photos: Record<string, any> | null, sport_type: SportType, polyline: string | null, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number }, start_latlng: { __typename?: 'LatLngDto', lat: number | null, lng: number | null } | null, end_latlng: { __typename?: 'LatLngDto', lat: number | null, lng: number | null } | null, map: { __typename?: 'PolylineMapDto', id: string, polyline: string | null, resource_state: number, summary_polyline: string | null }, gear: { __typename?: 'SummaryGearDto', id: string, primary: boolean, name: string, resource_state: number, distance: number } | null, segment_efforts: Array<{ __typename?: 'DetailedSegmentEffortDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, kom_rank: number | null, pr_rank: number | null, hidden: boolean, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null, splits_metric: Array<{ __typename?: 'SplitDto', distance: number, elapsed_time: number, elevation_difference: number, moving_time: number, split: number, average_speed: number, pace_zone: number }> | null, splits_standard: Array<{ __typename?: 'SplitDto', distance: number, elapsed_time: number, elevation_difference: number, moving_time: number, split: number, average_speed: number, pace_zone: number }> | null, laps: Array<{ __typename?: 'LapDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, total_elevation_gain: number, average_speed: number, max_speed: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, lap_index: number, split: number, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null, best_efforts: Array<{ __typename?: 'DetailedSegmentEffortDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, kom_rank: number | null, pr_rank: number | null, hidden: boolean, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null } };
 
 export type GetActivityZonesQueryVariables = Exact<{
   activityId: Scalars['String']['input'];
 }>;
 
 
-export type GetActivityZonesQuery = { __typename?: 'Query', getActivityZones: Array<{ __typename?: 'ActivityZoneDto', score: number, type: string, sensor_based: boolean, points: number, custom_zones: boolean, max: number }> };
+export type GetActivityZonesQuery = { __typename?: 'Query', getActivityZones: Array<{ __typename?: 'ActivityZoneDto', score: number, type: string, sensor_based: boolean, points: number, custom_zones: boolean, max: number, distribution_buckets: Array<{ __typename?: 'ZoneBucket', min: number, max: number, time: number }> | null }> };
+
+export type GetActivityStreamsQueryVariables = Exact<{
+  activityId: Scalars['String']['input'];
+}>;
+
+
+export type GetActivityStreamsQuery = { __typename?: 'Query', getActivityStreams: { __typename?: 'StreamSetDto', altitude: { __typename?: 'AltitudeStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, cadence: { __typename?: 'CadenceStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, distance: { __typename?: 'DistanceStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, heartrate: { __typename?: 'HeartrateStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, moving: { __typename?: 'MovingStreamDto', type: string, data: Array<boolean>, series_type: string, original_size: number, resolution: string } | null, power: { __typename?: 'PowerStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, smooth_grade: { __typename?: 'SmoothGradeStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, smooth_velocity: { __typename?: 'SmoothVelocityStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, temperature: { __typename?: 'TemperatureStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, time: { __typename?: 'TimeStreamDto', type: string, data: Array<number>, series_type: string, original_size: number, resolution: string } | null } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -718,14 +933,168 @@ export const GetStravaActivitiesDocument = gql`
     query getStravaActivities($limit: Int) {
   getStravaActivities(limit: $limit) {
     id
+    resource_state
+    external_id
+    upload_id
+    athlete {
+      id
+      resource_state
+    }
     name
-    sport_type
     distance
     moving_time
+    elapsed_time
     total_elevation_gain
+    elev_high
+    elev_low
+    type
     start_date
-    average_speed
+    start_date_local
+    timezone
+    start_latlng {
+      lat
+      lng
+    }
+    end_latlng {
+      lat
+      lng
+    }
+    achievement_count
+    pr_count
     kudos_count
+    comment_count
+    athlete_count
+    photo_count
+    total_photo_count
+    map {
+      id
+      polyline
+      resource_state
+      summary_polyline
+    }
+    trainer
+    commute
+    manual
+    private
+    flagged
+    workout_type
+    gear_id
+    average_speed
+    max_speed
+    average_cadence
+    average_temp
+    average_watts
+    max_watts
+    weighted_average_watts
+    kilojoules
+    device_watts
+    has_heartrate
+    average_heartrate
+    max_heartrate
+    calories
+    suffer_score
+    has_kudoed
+    location_city
+    location_state
+    location_country
+    description
+    gear {
+      id
+      primary
+      name
+      resource_state
+      distance
+    }
+    segment_efforts {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      average_cadence
+      device_watts
+      average_watts
+      kom_rank
+      pr_rank
+      hidden
+    }
+    splits_metric {
+      distance
+      elapsed_time
+      elevation_difference
+      moving_time
+      split
+      average_speed
+      pace_zone
+    }
+    splits_standard {
+      distance
+      elapsed_time
+      elevation_difference
+      moving_time
+      split
+      average_speed
+      pace_zone
+    }
+    laps {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      total_elevation_gain
+      average_speed
+      max_speed
+      average_cadence
+      device_watts
+      average_watts
+      lap_index
+      split
+    }
+    best_efforts {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      average_cadence
+      device_watts
+      average_watts
+      kom_rank
+      pr_rank
+      hidden
+    }
+    device_name
+    embed_token
+    photos
+    sport_type
   }
 }
     `;
@@ -766,22 +1135,17 @@ export const GetAthleteZonesDocument = gql`
     query GetAthleteZones {
   getAthleteZones {
     heart_rate {
-      min
-      max
+      custom_zones
+      zones {
+        min
+        max
+      }
     }
     power {
-      zone {
+      zones {
         min
         max
       }
-      distribution_buckets {
-        max
-        min
-        time
-      }
-      type
-      resource_state
-      sensor_based
     }
   }
 }
@@ -821,7 +1185,9 @@ export type GetAthleteZonesQueryResult = ApolloReactCommon.QueryResult<GetAthlet
 export const GetAthleteStatsDocument = gql`
     query GetAthleteStats {
   getAthleteStats {
-    recent_run_totals {
+    biggest_ride_distance
+    biggest_climb_elevation_gain
+    recent_ride_totals {
       count
       distance
       moving_time
@@ -829,7 +1195,7 @@ export const GetAthleteStatsDocument = gql`
       elevation_gain
       achievement_count
     }
-    all_run_totals {
+    recent_run_totals {
       count
       distance
       moving_time
@@ -845,33 +1211,23 @@ export const GetAthleteStatsDocument = gql`
       elevation_gain
       achievement_count
     }
-    biggest_ride_distance
-    ytd_swim_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    all_swim_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    recent_ride_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    biggest_climb_elevation_gain
     ytd_ride_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    ytd_run_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    ytd_swim_totals {
       count
       distance
       moving_time
@@ -887,7 +1243,15 @@ export const GetAthleteStatsDocument = gql`
       elevation_gain
       achievement_count
     }
-    ytd_run_totals {
+    all_run_totals {
+      count
+      distance
+      moving_time
+      elapsed_time
+      elevation_gain
+      achievement_count
+    }
+    all_swim_totals {
       count
       distance
       moving_time
@@ -934,51 +1298,168 @@ export const GetActivityByIdDocument = gql`
     query GetActivityById($activityId: String!) {
   getActivityById(activityId: $activityId) {
     id
+    resource_state
+    external_id
+    upload_id
+    athlete {
+      id
+      resource_state
+    }
     name
-    type
-    sport_type
     distance
     moving_time
     elapsed_time
     total_elevation_gain
+    elev_high
+    elev_low
+    type
     start_date
     start_date_local
-    description
     timezone
-    utc_offset
-    start_latlng
-    end_latlng
+    start_latlng {
+      lat
+      lng
+    }
+    end_latlng {
+      lat
+      lng
+    }
     achievement_count
+    pr_count
     kudos_count
     comment_count
     athlete_count
     photo_count
+    total_photo_count
+    map {
+      id
+      polyline
+      resource_state
+      summary_polyline
+    }
     trainer
     commute
     manual
     private
     flagged
+    workout_type
     gear_id
-    from_accepted_tag
     average_speed
     max_speed
     average_cadence
     average_temp
     average_watts
+    max_watts
     weighted_average_watts
     kilojoules
     device_watts
     has_heartrate
-    max_watts
-    elev_high
-    elev_low
-    pr_count
-    total_photo_count
-    has_kudoed
-    workout_type
-    suffer_score
-    description
+    average_heartrate
+    max_heartrate
     calories
+    suffer_score
+    has_kudoed
+    location_city
+    location_state
+    location_country
+    description
+    gear {
+      id
+      primary
+      name
+      resource_state
+      distance
+    }
+    segment_efforts {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      average_cadence
+      device_watts
+      average_watts
+      kom_rank
+      pr_rank
+      hidden
+    }
+    splits_metric {
+      distance
+      elapsed_time
+      elevation_difference
+      moving_time
+      split
+      average_speed
+      pace_zone
+    }
+    splits_standard {
+      distance
+      elapsed_time
+      elevation_difference
+      moving_time
+      split
+      average_speed
+      pace_zone
+    }
+    laps {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      total_elevation_gain
+      average_speed
+      max_speed
+      average_cadence
+      device_watts
+      average_watts
+      lap_index
+      split
+    }
+    best_efforts {
+      id
+      resource_state
+      name
+      athlete {
+        id
+        resource_state
+      }
+      elapsed_time
+      moving_time
+      start_date
+      start_date_local
+      distance
+      start_index
+      end_index
+      average_cadence
+      device_watts
+      average_watts
+      kom_rank
+      pr_rank
+      hidden
+    }
+    device_name
+    embed_token
+    photos
+    sport_type
     polyline
   }
 }
@@ -1020,6 +1501,11 @@ export const GetActivityZonesDocument = gql`
     query GetActivityZones($activityId: String!) {
   getActivityZones(activityId: $activityId) {
     score
+    distribution_buckets {
+      min
+      max
+      time
+    }
     type
     sensor_based
     points
@@ -1061,6 +1547,115 @@ export type GetActivityZonesQueryHookResult = ReturnType<typeof useGetActivityZo
 export type GetActivityZonesLazyQueryHookResult = ReturnType<typeof useGetActivityZonesLazyQuery>;
 export type GetActivityZonesSuspenseQueryHookResult = ReturnType<typeof useGetActivityZonesSuspenseQuery>;
 export type GetActivityZonesQueryResult = ApolloReactCommon.QueryResult<GetActivityZonesQuery, GetActivityZonesQueryVariables>;
+export const GetActivityStreamsDocument = gql`
+    query GetActivityStreams($activityId: String!) {
+  getActivityStreams(activityId: $activityId) {
+    altitude {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    cadence {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    distance {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    heartrate {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    moving {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    power {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    smooth_grade {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    smooth_velocity {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    temperature {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+    time {
+      type
+      data
+      series_type
+      original_size
+      resolution
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetActivityStreamsQuery__
+ *
+ * To run a query within a React component, call `useGetActivityStreamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetActivityStreamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetActivityStreamsQuery({
+ *   variables: {
+ *      activityId: // value for 'activityId'
+ *   },
+ * });
+ */
+export function useGetActivityStreamsQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetActivityStreamsQuery, GetActivityStreamsQueryVariables> & ({ variables: GetActivityStreamsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>(GetActivityStreamsDocument, options);
+      }
+export function useGetActivityStreamsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>(GetActivityStreamsDocument, options);
+        }
+export function useGetActivityStreamsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>(GetActivityStreamsDocument, options);
+        }
+export type GetActivityStreamsQueryHookResult = ReturnType<typeof useGetActivityStreamsQuery>;
+export type GetActivityStreamsLazyQueryHookResult = ReturnType<typeof useGetActivityStreamsLazyQuery>;
+export type GetActivityStreamsSuspenseQueryHookResult = ReturnType<typeof useGetActivityStreamsSuspenseQuery>;
+export type GetActivityStreamsQueryResult = ApolloReactCommon.QueryResult<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>;
 export const GetUsersDocument = gql`
     query GetUsers {
   users {

@@ -19,6 +19,12 @@ export class HeartRateZone {
 
   @Field(() => Int)
   max: number
+
+  @Field(() => Boolean, { nullable: true })
+  custom_zones?: boolean
+
+  @Field(() => [ZoneBucket], { nullable: true })
+  zones?: ZoneBucket[]
 }
 
 @ObjectType()
@@ -37,6 +43,9 @@ export class PowerZone {
 
   @Field()
   sensor_based: boolean
+
+  @Field(() => [ZoneBucket], { nullable: true })
+  zones?: ZoneBucket[]
 }
 
 @ObjectType()
