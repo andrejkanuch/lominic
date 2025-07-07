@@ -1,6 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { UsersService } from '../users/users.service'
+import { EmailService } from '../email/email.service'
+import { DataRetentionService } from '../data-retention/data-retention.service'
 import { LoginInput } from './dto/login.input'
 import { RegisterInput } from './dto/register.input'
 import { AuthResponse } from './dto/auth-response'
@@ -20,7 +22,9 @@ type UserWithoutPassword = Omit<
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private emailService: EmailService,
+    private dataRetentionService: DataRetentionService
   ) {}
 
   async validateUser(
@@ -41,6 +45,9 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials')
     }
 
+    // Update last login timestamp for data retention
+    await this.dataRetentionService.updateUserLastLogin(user.id)
+
     const payload: JwtPayload = { email: user.email, sub: user.id }
     return {
       access_token: this.jwtService.sign(payload),
@@ -58,6 +65,12 @@ export class AuthService {
 
     const user = await this.usersService.createUser(registerInput)
     const { password: _unused, ...result } = user
+
+    // Send thank you email asynchronously (don't await to avoid blocking registration)
+    this.emailService.sendThankYouEmail(
+      user.email,
+      user.firstName || user.email
+    )
 
     const payload: JwtPayload = { email: user.email, sub: user.id }
     return {

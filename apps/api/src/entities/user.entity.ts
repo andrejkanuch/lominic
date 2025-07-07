@@ -56,7 +56,23 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @OneToMany(() => StravaAccount, (account) => account.user)
+  @Field()
+  @Column({ type: 'timestamp', nullable: true })
+  lastLoginAt: Date
+
+  @Field()
+  @Column({ type: 'timestamp', nullable: true })
+  dataRetentionExpiresAt: Date
+
+  @Field()
+  @Column({ default: false })
+  isMarkedForDeletion: boolean
+
+  @Field()
+  @Column({ type: 'timestamp', nullable: true })
+  markedForDeletionAt: Date
+
+  @OneToMany(() => StravaAccount, account => account.user)
   stravaAccounts: StravaAccount[]
 
   @BeforeInsert()

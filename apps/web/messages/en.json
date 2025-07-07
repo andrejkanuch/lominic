@@ -129,7 +129,8 @@
   },
   "Footer": {
     "copyright": "© 2024 Lominic. AI-powered training insights for athletes.",
-    "privacy": "Privacy Policy"
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
   },
   "ContactUs": {
     "getInTouch": "Get in Touch",
@@ -310,6 +311,185 @@
       "description": "If you have any questions about this Privacy Policy or our data practices, please contact us:",
       "email": "Email",
       "address": "Address"
+    }
+  },
+  "Terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last Updated",
+    "lastUpdatedDate": "December 2024",
+    "introduction": {
+      "title": "Introduction",
+      "description": "Welcome to Lominic. These Terms of Service govern your use of our AI-powered training intelligence platform and services.",
+      "agreement": "By accessing or using our service, you agree to be bound by these terms and all applicable laws and regulations."
+    },
+    "definitions": {
+      "title": "Definitions",
+      "service": "Service",
+      "serviceDesc": "The Lominic platform, including all features, functionality, and content",
+      "user": "User",
+      "userDesc": "Any individual or entity that accesses or uses our service",
+      "data": "Data",
+      "dataDesc": "Any information, including personal and fitness data, provided by users",
+      "content": "Content",
+      "contentDesc": "Any text, images, data, or other materials created or shared through our service"
+    },
+    "acceptance": {
+      "title": "Acceptance of Terms",
+      "description": "By using our service, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.",
+      "continued": "Your continued use of the service constitutes acceptance of any modifications to these terms."
+    },
+    "serviceDescription": {
+      "title": "Description of Service",
+      "description": "Lominic provides AI-powered training intelligence and insights by analyzing fitness data from connected devices and platforms.",
+      "features": {
+        "title": "Service Features",
+        "ai": "AI-powered workout analysis and insights",
+        "analysis": "Training load and recovery analysis",
+        "insights": "Personalized training recommendations",
+        "tracking": "Performance tracking and trend analysis",
+        "integration": "Integration with fitness platforms and devices"
+      },
+      "availability": {
+        "title": "Service Availability",
+        "description": "We strive to maintain high service availability but do not guarantee uninterrupted access. We may modify, suspend, or discontinue the service at any time."
+      }
+    },
+    "userAccounts": {
+      "title": "User Accounts",
+      "description": "To access certain features of our service, you must create an account and provide accurate information.",
+      "registration": {
+        "title": "Account Registration",
+        "accurate": "Provide accurate, current, and complete information",
+        "secure": "Maintain the security of your account credentials",
+        "notify": "Notify us immediately of any unauthorized use",
+        "responsible": "You are responsible for all activities under your account"
+      },
+      "prohibited": {
+        "title": "Prohibited Account Activities",
+        "sharing": "Sharing your account credentials with others",
+        "unauthorized": "Creating accounts for unauthorized purposes",
+        "commercial": "Using accounts for commercial purposes without permission",
+        "harmful": "Using accounts to harm our service or other users"
+      }
+    },
+    "thirdPartyIntegrations": {
+      "title": "Third-Party Integrations",
+      "description": "Our service integrates with third-party fitness platforms and devices. Your use of these integrations is subject to their respective terms of service.",
+      "strava": {
+        "title": "Strava Integration",
+        "description": "Our integration with Strava is subject to the Strava API Agreement and their terms of service.",
+        "data": "We only access and display your Strava data to you, not to other users",
+        "privacy": "We respect your privacy choices and Strava's privacy settings",
+        "attribution": "We provide proper attribution to Strava as required by their API Agreement",
+        "compliance": "We comply with all Strava API usage restrictions and rate limits",
+        "agreement": "For complete details, please review the",
+        "link": "Strava API Agreement"
+      },
+      "garmin": {
+        "title": "Garmin Integration",
+        "description": "Our integration with Garmin Connect is subject to Garmin's terms of service and API usage policies."
+      },
+      "apple": {
+        "title": "Apple Health Integration",
+        "description": "Our integration with Apple Health is subject to Apple's HealthKit terms and privacy policies."
+      }
+    },
+    "dataPrivacy": {
+      "title": "Data Privacy and Usage",
+      "description": "We are committed to protecting your privacy and handling your data responsibly.",
+      "collection": {
+        "title": "Data Collection",
+        "account": "Account information and preferences",
+        "fitness": "Fitness and activity data from connected platforms",
+        "usage": "Service usage data and analytics",
+        "technical": "Technical data for service optimization"
+      },
+      "usage": {
+        "title": "Data Usage",
+        "service": "To provide and improve our services",
+        "improvement": "To enhance our AI algorithms and features",
+        "communication": "To communicate with you about our services",
+        "legal": "To comply with legal obligations"
+      },
+      "sharing": {
+        "title": "Data Sharing",
+        "description": "We do not sell your personal data. We may share data only with your consent, for legal compliance, or with service providers under strict confidentiality agreements."
+      }
+    },
+    "intellectualProperty": {
+      "title": "Intellectual Property",
+      "description": "All content, features, and functionality of our service are owned by Lominic or our licensors.",
+      "ownership": {
+        "title": "Ownership Rights",
+        "service": "Our service, including all software, algorithms, and platform features",
+        "content": "Content we create, including AI insights and recommendations",
+        "user": "User-generated content remains your property"
+      },
+      "license": {
+        "title": "License Grant",
+        "description": "We grant you a limited, non-exclusive license to use our service for personal, non-commercial purposes in accordance with these terms."
+      }
+    },
+    "prohibitedUses": {
+      "title": "Prohibited Uses",
+      "description": "You agree not to use our service for any unlawful or prohibited purposes.",
+      "illegal": "Any illegal or unauthorized purpose",
+      "harmful": "Activities that could harm our service or other users",
+      "unauthorized": "Unauthorized access to our systems or data",
+      "spam": "Sending spam or unsolicited communications",
+      "reverse": "Reverse engineering or attempting to extract our source code",
+      "competition": "Creating competing services that replicate our functionality"
+    },
+    "disclaimers": {
+      "title": "Disclaimers",
+      "description": "We provide our service on an 'as is' and 'as available' basis.",
+      "warranties": {
+        "title": "No Warranties",
+        "description": "We make no warranties about the accuracy, reliability, or completeness of our service or any content provided."
+      },
+      "accuracy": {
+        "title": "AI Insights Accuracy",
+        "description": "While we strive for accuracy, AI-generated insights are for informational purposes only and should not replace professional medical or training advice."
+      },
+      "thirdParty": {
+        "title": "Third-Party Services",
+        "description": "We are not responsible for the availability, accuracy, or content of third-party services we integrate with."
+      }
+    },
+    "limitationOfLiability": {
+      "title": "Limitation of Liability",
+      "description": "To the maximum extent permitted by law, Lominic shall not be liable for any indirect, incidental, special, or consequential damages.",
+      "maximum": "Our total liability shall not exceed the amount you paid for our service in the 12 months preceding the claim."
+    },
+    "termination": {
+      "title": "Termination",
+      "description": "We may terminate or suspend your access to our service at any time, with or without cause.",
+      "grounds": {
+        "title": "Grounds for Termination",
+        "violation": "Violation of these terms or applicable laws",
+        "inactivity": "Extended periods of account inactivity",
+        "request": "Your request to terminate your account",
+        "discontinuation": "Discontinuation of our service"
+      },
+      "effects": {
+        "title": "Effects of Termination",
+        "description": "Upon termination, your right to use the service ceases immediately, and we may delete your account and data in accordance with our privacy policy."
+      }
+    },
+    "governingLaw": {
+      "title": "Governing Law",
+      "description": "These terms are governed by and construed in accordance with the laws of the jurisdiction where Lominic operates.",
+      "jurisdiction": "Any disputes shall be resolved in the courts of our jurisdiction, unless otherwise required by applicable law."
+    },
+    "changes": {
+      "title": "Changes to Terms",
+      "description": "We may modify these terms at any time by posting updated terms on our website.",
+      "notification": "Continued use of our service after changes constitutes acceptance of the modified terms."
+    },
+    "contact": {
+      "title": "Contact Information",
+      "description": "If you have questions about these Terms of Service, please contact us:",
+      "email": "Email"
     }
   }
 }

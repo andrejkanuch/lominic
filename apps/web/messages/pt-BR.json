@@ -1,0 +1,316 @@
+{
+  "Home": {
+    "title": "Olá, mundo!",
+    "about": "Ir para a página sobre"
+  },
+  "HomePage": {
+    "title": "Olá, mundo!",
+    "about": "Ir para a página sobre"
+  },
+  "Navbar": {
+    "home": "Início",
+    "features": "Funcionalidades",
+    "pricing": "Preços",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
+  },
+  "Hero": {
+    "trainingIntelligence": "Inteligência de Treinamento",
+    "yourTrainingPartner": "Insights de Treino Mais Inteligentes dos Seus Dispositivos Favoritos",
+    "withABrain": "Com um Cérebro",
+    "description": "Carregue seus treinos do Garmin, ou Strava e obtenha insights inteligentes gerados por IA. Acompanhe o desempenho, a recuperação e as tendências com seu novo parceiro de treino digital.",
+    "tryFree": "Entre na Lista de Espera para Acesso Antecipado",
+    "lominicAppInterface": "Interface do Aplicativo Lominic"
+  },
+  "HumanoidSection": {
+    "trainingIntelligence": "Inteligência de Treinamento",
+    "whyAITrainingAnalysis": "Por que Análise de Treino com IA",
+    "theVision": "A visão",
+    "sportsScienceAccessible": "Estamos tornando a ciência do esporte acessível a todos os atletas",
+    "aiInsightsToWhereYouTrain": "Estamos levando insights de IA para onde você treina",
+    "creatingTrainingPartners": "Estamos criando parceiros de treino, não apenas dados"
+  },
+  "SpecsSection": {
+    "howItWorks": "Como Funciona",
+    "description": "lominic trabalha com seus dados, não contra eles. Ao analisar zonas de frequência cardíaca, carga de treino, padrões de recuperação e aprender com cada treino, nossa IA helps os atletas a se concentrarem no que fazem de melhor: treinar de forma mais inteligente, recuperar-se melhor e ter um desempenho consistente."
+  },
+  "DetailsSection": {
+    "pricingAndPlans": "Preços e Planos",
+    "aiPoweredInsights": "Insights baseados em IA para cada atleta",
+    "freePlan": "Plano Gratuito:",
+    "basicSummaries": "Resumos básicos e 5 uploads/mês",
+    "proPlan": "Plano Pro:",
+    "proPlanPrice": "$9.99/mês - Uploads ilimitados e perguntas e respostas com IA",
+    "coachPlan": "Plano de Treinador:",
+    "coachPlanPrice": "$19.99/mês - Relatórios semanais e coaching",
+    "fileSupport": "Suporte a Arquivos:",
+    "fileSupportTypes": "FIT, GPX, , Strava",
+    "aiAnalysis": "Análise de IA:",
+    "aiAnalysisDescription": "Insights e recomendações em tempo real",
+    "getEarlyAccess": "Obtenha acesso antecipado",
+    "startTrainingSmarter": "Comece a treinar de forma mais inteligente",
+    "fullName": "Nome completo",
+    "emailAddress": "Endereço de e-mail",
+    "sportActivityOptional": "Esporte/Atividade (opcional)",
+    "messagePlaceholder": "Fale-nos sobre o seu esporte/atividades, que tipo de relatórios procura, etc.",
+    "validationError": "Por favor, preencha todos os campos obrigatórios",
+    "successMessage": "Solicitação enviada com sucesso! Entraremos em contato em breve.",
+    "errorMessage": "Falha ao enviar a solicitação. Por favor, tente novamente.",
+    "sending": "Enviando..."
+  },
+  "ImageShowcaseSection": {
+    "experienceAITrainingAnalysis": "Experimente a Análise de Treino com IA",
+    "description": "Nossa plataforma com tecnologia de IA transforma seus dados de treino em insights acionáveis que o ajudam a treinar de forma mais inteligente e a se recuperar melhor.",
+    "lominicAppInterfaceAlt": "Interface do aplicativo Lominic mostrando insights de treinamento de IA",
+    "smartTrainingIntelligence": "Inteligência de Treinamento Inteligente",
+    "smartTrainingIntelligenceDescription": "Construída com IA avançada e ciência do esporte, nossa plataforma analisa perfeitamente seus treinos de qualquer dispositivo, fornecendo insights e recomendações personalizadas para otimizar seu treinamento."
+  },
+  "Features": {
+    "smartFeatures": "Recursos Inteligentes",
+    "aiPoweredTrainingIntelligence": "Inteligência de Treinamento Potencializada por IA",
+    "transformWorkoutData": "Transforme seus dados de treino em insights acionáveis que o ajudam a treinar de forma mais inteligente e a se recuperar melhor.",
+    "smartSummariesTitle": "Resumos Inteligentes",
+    "smartSummariesDescription": "Obtenha resumos instantâneos gerados por IA de cada sessão de treinamento em linguagem simples - não é necessário diploma em ciências do esporte.",
+    "askQuestionsTitle": "Faça Perguntas",
+    "askQuestionsDescription": "Converse com seus dados! Pergunte 'Isso foi bom para a Zona 2?' ou 'Eu treinei demais esta semana?' e obtenha respostas inteligentes.",
+    "trackProgressTitle": "Acompanhe o Progresso",
+    "trackProgressDescription": "Monitore a carga de treinamento semanal, as tendências da frequência cardíaca e as áreas de melhoria com análises inteligentes ao longo do tempo.",
+    "compareWithFriendsTitle": "Compare com Amigos",
+    "compareWithFriendsDescription": "Compartilhe o progresso e compare insights de treinamento com amigos ou parceiros de treino para se manter motivado.",
+    "recoveryInsightsTitle": "Insights de Recuperação",
+    "recoveryInsightsDescription": "Aprenda a se recuperar melhor e a evitar o overtraining com recomendações personalizadas com base em seus dados.",
+    "universalCompatibilityTitle": "Compatibilidade Universal",
+    "universalCompatibilityDescription": "Funciona com Garmin, , Strava e qualquer arquivo .FIT ou .GPX de seus dispositivos de fitness favoritos."
+  },
+  "OptimizedFeatures": {
+    "worksWithDevicesTitle": "Funciona com Seus Dispositivos",
+    "worksWithDevicesDescription": "Conecte perfeitamente sua conta Garmin, ou Strava para importar treinos automaticamente. Nossa plataforma suporta todos os principais dispositivos de fitness e formatos de arquivo, para que você possa se concentrar no treinamento, não no gerenciamento de dados.",
+    "poweredByAITitle": "Potencializado por IA, Construído para Atletas",
+    "poweredByAIDescription": "Nossa IA avançada analisa seus padrões de treinamento, zonas de frequência cardíaca e métricas de recuperação para fornecer insights personalizados. Obtenha recomendações que se adaptam ao seu nível de condicionamento físico e metas de treinamento.",
+    "yourPrivacyTitle": "Sua Privacidade, Seus Dados",
+    "yourPrivacyDescription": "Seus dados de treino permanecem privados e seguros. Usamos criptografia de nível empresarial e nunca compartilhamos suas informações pessoais. Você controla quais dados compartilha e pode excluí-los a qualquer momento.",
+    "seeYourTrendsTitle": "Veja Suas Tendências, Não Apenas Números",
+    "seeYourTrendsDescription": "Vá além das estatísticas básicas com análise de tendências inteligente. Entenda sua carga de treinamento, padrões de recuperação e melhorias de desempenho ao longo do tempo com insights claros e acionáveis."
+  },
+  "Testimonials": {
+    "testimonials": "Depoimentos",
+    "whatOthersSay": "O que os outros dizem",
+    "testimonial1Content": "A Lominic transformou meu treinamento, tornando dados complexos realmente compreensíveis. Finalmente sei se estou treinando demais ou se minha recuperação está no ponto.",
+    "testimonial1Author": "Sarah Chen",
+    "testimonial1Role": "Corredora de Maratona, 3:45 PR",
+    "testimonial2Content": "Como treinador de ciclismo, recomendo isso a todos os meus atletas. Os insights da IA os ajudam a entender melhor sua carga de treinamento e necessidades de recuperação do que qualquer aplicativo que eu já vi.",
+    "testimonial2Author": "Michael Rodriguez",
+    "testimonial2Role": "Treinador de Ciclismo, Performance de Elite",
+    "testimonial3Content": "A IA conversacional é incrível. Posso perguntar 'Esta foi uma boa sessão de Zona 2?' e obter uma explicação detalhada que realmente faz sentido. Mudou o jogo para o meu treinamento.",
+    "testimonial3Author": "Dra. Amara Patel",
+    "testimonial3Role": "Triatleta, Finalista do Ironman",
+    "testimonial4Content": "Finalmente, um aplicativo que não apenas me mostra números, mas me diz o que eles significam. Os insights semanais me ajudaram a evitar o overtraining e a melhorar meu desempenho.",
+    "testimonial4Author": "Jason Lee",
+    "testimonial4Role": "Corredor de Ultra, Finalista de 100K"
+  },
+  "Newsletter": {
+    "newsletter": "Boletim informativo",
+    "subscribeToNewsletter": "Assine o boletim informativo",
+    "newsletterDescription": "Seja o primeiro a saber sobre novos recursos, insights de treinamento e melhorias de IA",
+    "emailAddress": "Endereço de e-mail",
+    "validationError": "Por favor, insira seu endereço de e-mail",
+    "successMessage": "Obrigado por se inscrever! Você receberá atualizações sobre a Lominic em breve.",
+    "errorMessage": "Falha ao se inscrever. Por favor, tente novamente.",
+    "submitting": "Enviando...",
+    "submit": "Enviar"
+  },
+  "CTA": {
+    "freeToStart": "Grátis para Começar",
+    "startTrainingSmarter": "Comece a Treinar de Forma Mais Inteligente",
+    "today": "Hoje",
+    "description": "Junte-se a milhares de atletas que já estão treinando de forma mais inteligente com insights baseados em IA. Comece gratuitamente e atualize para desbloquear coaching avançado e relatórios semanais.",
+    "startFreeTrial": "Comece o Teste Gratuito",
+    "viewPricing": "Ver Preços"
+  },
+  "Footer": {
+    "copyright": "© 2024 Lominic. Insights de treinamento baseados em IA para atletas.",
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Serviço"
+  },
+  "ContactUs": {
+    "getInTouch": "Entre em Contato",
+    "letsTalkTraining": "Vamos Falar de Treino",
+    "heroDescription": "Tem perguntas sobre a Lominic? Quer compartilhar feedback? Adoraríamos ouvir de você.",
+    "howToReachUs": "Como nos Alcançar",
+    "reachUsDescription": "Estamos aqui para ajudar com qualquer dúvida sobre a Lominic, parcerias ou apenas para conversar sobre treinamento.",
+    "emailUs": "Envie-nos um E-mail",
+    "emailUsDescription": "Envie-nos uma mensagem detalhada e retornaremos em 24 horas.",
+    "feedback": "Feedback",
+    "feedbackDescription": "Compartilhe suas ideias, sugestões ou relate quaisquer problemas que tenha encontrado.",
+    "weReadEveryMessage": "Lemos todas as mensagens",
+    "sendUsMessage": "Envie-nos uma mensagem",
+    "fullName": "Nome completo *",
+    "emailAddress": "Endereço de e-mail *",
+    "companyOrganization": "Empresa/Organização (opcional)",
+    "yourMessage": "Sua mensagem *",
+    "sendMessage": "Enviar Mensagem",
+    "sending": "Enviando...",
+    "validationError": "Por favor, preencha todos os campos obrigatórios",
+    "successMessage": "Mensagem enviada com sucesso! Retornaremos em 24 horas.",
+    "errorMessage": "Falha ao enviar a mensagem. Por favor, tente novamente.",
+    "frequentlyAskedQuestions": "Perguntas Frequentes",
+    "whatIsLominic": "🤔 O que é a Lominic?",
+    "whatIsLominicAnswer": "A Lominic é uma plataforma de inteligência de treinamento baseada em IA que transforma seus dados de wearables em insights significativos e acionáveis.",
+    "whichDevicesWork": "📱 Quais dispositivos funcionam?",
+    "whichDevicesWorkAnswer": "Suportamos Garmin, , Strava e outras plataformas de fitness populares. Mais integrações em breve.",
+    "howMuchDoesItCost": "💰 Quanto custa?",
+    "howMuchDoesItCostAnswer": "Oferecemos um plano gratuito e planos premium a partir de $9.99/mês. Consulte nossa página de preços para mais detalhes.",
+    "isMyDataSafe": "🔒 Meus dados estão seguros?",
+    "isMyDataSafeAnswer": "Absolutamente. Nunca vendemos seus dados e usamos segurança de nível empresarial para proteger suas informações.",
+    "wellGetBackToYouQuickly": "Retornaremos Rapidamente",
+    "responseTimeDescription": "Normalmente respondemos a todas as consultas em 24 horas, muitas vezes muito antes.",
+    "responseTime": "Tempo de Resposta",
+    "responseTimeDetail": "Nosso objetivo é responder em 24 horas",
+    "responseRate": "Taxa de Resposta",
+    "responseRateDetail": "Respondemos a todas as mensagens",
+    "support": "Suporte",
+    "supportDetail": "Estamos aqui quando você precisar de nós"
+  },
+  "MadeByHumans": {
+    "aiHumanIntelligence": "IA + Inteligência Humana"
+  },
+  "Metadata": {
+    "title": "Lominic | Insights de Treino Mais Inteligentes de Garmin, Strava & ",
+    "description": "Carregue seus treinos do Garmin, ou Strava e obtenha insights inteligentes gerados por IA. Acompanhe o desempenho, a recuperação e as tendências com seu novo parceiro de treino digital.",
+    "keywords": "insights de treino, Garmin, Strava, , análise de treino com IA, monitoramento de fitness, parceiro de treino, otimização de treino, aplicativo de fitness, insights de recuperação",
+    "ogTitle": "Lominic | Insights de Treino Mais Inteligentes de Garmin, Strava & ",
+    "ogDescription": "Carregue seus treinos do Garmin, ou Strava e obtenha insights inteligentes gerados por IA. Acompanhe o desempenho, a recuperação e as tendências com seu novo parceiro de treino digital.",
+    "ogImageAlt": "Lominic - Insights de Treino Mais Inteligentes de Garmin, Strava & ",
+    "twitterTitle": "Lominic | Insights de Treino Mais Inteligentes de Garmin, Strava & ",
+    "twitterDescription": "Carregue seus treinos do Garmin, ou Strava e obtenha insights inteligentes gerados por IA. Acompanhe o desempenho, a recuperação e as tendendas com seu novo parceiro de treino digital.",
+    "schemaDescription": "Aplicativo de análise de treino e insights de treinamento com tecnologia de IA que funciona com Garmin, Strava e ",
+    "schemaOfferDescription": "Avaliação gratuita disponível com insights de treino inteligentes",
+    "schemaFeature1": "Análise de treino com IA",
+    "schemaFeature2": "Integração com Garmin",
+    "schemaFeature3": "Integração com ",
+    "schemaFeature4": "Integração com Strava",
+    "schemaFeature5": "Insights de treinamento",
+    "schemaFeature6": "Otimização de treino",
+    "organizationDescription": "Plataforma de treinamento físico e análise de treino com tecnologia de IA para usuários de Garmin, Strava e "
+  },
+  "Privacy": {
+    "title": "Política de Privacidade",
+    "lastUpdated": "Última Atualização",
+    "lastUpdatedDate": "Dezembro de 2024",
+    "introduction": {
+      "title": "Introdução",
+      "description": "Na Lominic, estamos comprometidos em proteger sua privacidade e garantir a segurança de seus dados pessoais. Esta Política de Privacidade explica como coletamos, usamos, divulgamos e protegemos suas informações quando você usa nossa plataforma de inteligência de treinamento com tecnologia de IA.",
+      "commitment": "Estamos comprometidos com a transparência e nunca venderemos seus dados pessoais a terceiros."
+    },
+    "dataCollection": {
+      "title": "Informações que Coletamos",
+      "description": "Coletamos informações que você nos fornece diretamente e dados de seus dispositivos e plataformas de fitness conectados.",
+      "personalData": {
+        "title": "Informações Pessoais",
+        "email": "Endereço de e-mail e credenciais da conta",
+        "name": "Nome e informações do perfil",
+        "profile": "Preferências e configurações do usuário"
+      },
+      "fitnessData": {
+        "title": "Dados de Fitness e Atividade",
+        "description": "Quando você conecta seus dispositivos ou plataformas de fitness, podemos coletar:",
+        "workouts": "Dados de treino, incluindo duração, distância e métricas de desempenho",
+        "heartRate": "Dados de frequência cardíaca e zonas",
+        "gps": "Dados de localização GPS de suas atividades",
+        "device": "Informações e configurações do dispositivo",
+        "performance": "Métricas de desempenho e dados de carga de treinamento"
+      },
+      "thirdParty": {
+        "title": "Dados de Plataformas de Terceiros",
+        "description": "Integramos com as seguintes plataformas e coletamos dados de acordo com suas respectivas APIs:",
+        "garmin": "Dados de atividade, informações do dispositivo e métricas de desempenho de sua conta Garmin",
+        "strava": "Dados de treino, rotas e informações de atividade de sua conta Strava",
+        "apple": "Dados de saúde e fitness de sua conta "
+      }
+    },
+    "dataUsage": {
+      "title": "Como Usamos Suas Informações",
+      "description": "Usamos suas informações para fornecer, melhorar e personalizar nossos serviços.",
+      "purposes": {
+        "title": "Fins Principais",
+        "insights": "Gerar insights e recomendações de treinamento com tecnologia de IA",
+        "recommendations": "Fornecer conselhos de treinamento personalizados e sugestões de recuperação",
+        "trends": "Analisar seus padrões de treinamento e tendências de desempenho",
+        "service": "Fornecer e manter nossa plataforma e serviços",
+        "communication": "Comunicar com você sobre sua conta e nossos serviços",
+        "improvement": "Melhorar nossos algoritmos de IA e recursos da plataforma"
+      },
+      "ai": {
+        "title": "IA e Aprendizado de Máquina",
+        "description": "Usamos seus dados de fitness para treinar e melhorar nossos modelos de IA para fornecer melhores insights e recomendações. Esses dados são anonimizados e agregados para fins de treinamento de modelo."
+      }
+    },
+    "dataSharing": {
+      "title": "Compartilhamento e Divulgação de Informações",
+      "description": "Estamos comprometidos em proteger sua privacidade e não vendemos seus dados pessoais.",
+      "when": {
+        "title": "Quando Podemos Compartilhar Seus Dados",
+        "consent": "Com seu consentimento explícito",
+        "legal": "Para cumprir obrigações legais ou ordens judiciais",
+        "service": "Com provedores de serviços que auxiliam na operação de nossa plataforma (sob rigorosos acordos de confidencialidade)",
+        "protection": "Para proteger nossos direitos, propriedade ou segurança, ou a de nossos usuários"
+      },
+      "never": {
+        "title": "O que Nunca Fazemos",
+        "description": "Nunca vendemos seus dados pessoais a terceiros para fins de marketing ou publicidade."
+      }
+    },
+    "dataSecurity": {
+      "title": "Segurança dos Dados",
+      "description": "Implementamos medidas de segurança padrão da indústria para proteger seus dados:",
+      "encryption": "Criptografia de ponta a ponta para transmissão e armazenamento de dados",
+      "access": "Controles de acesso limitados e requisitos de autenticação",
+      "monitoring": "Monitoramento regular de segurança e avaliações de vulnerabilidade",
+      "compliance": "Conformidade com os regulamentos de proteção de dados aplicáveis"
+    },
+    "yourRights": {
+      "title": "Seus Direitos e Escolhas",
+      "description": "Você tem os seguintes direitos em relação aos seus dados pessoais:",
+      "access": "Direito de Acesso",
+      "accessDesc": "Solicitar uma cópia dos dados pessoais que mantemos sobre você",
+      "correction": "Direito de Correção",
+      "correctionDesc": "Solicitar a correção de dados imprecisos ou incompletos",
+      "deletion": "Direito de Exclusão",
+      "deletionDesc": "Solicitar a exclusão de seus dados pessoais",
+      "portability": "Direito de Portabilidade",
+      "portabilityDesc": "Solicitar a transferência de seus dados para outro serviço",
+      "restriction": "Direito de Restrição",
+      "restrictionDesc": "Solicitar a restrição do processamento de seus dados",
+      "objection": "Direito de Oposição",
+      "objectionDesc": "Opor-se ao processamento de seus dados pessoais"
+    },
+    "cookies": {
+      "title": "Cookies e Tecnologias de Rastreamento",
+      "description": "Usamos cookies e tecnologias semelhantes para aprimorar sua experiência:",
+      "types": {
+        "title": "Tipos de Cookies que Usamos",
+        "essential": "Cookies Essenciais",
+        "essentialDesc": "Necessários para a funcionalidade básica da plataforma",
+        "analytics": "Cookies Analíticos",
+        "analyticsDesc": "Ajudam-nos a entender como os usuários interagem com nossa plataforma",
+        "functional": "Cookies Funcionais",
+        "functionalDesc": "Lembram suas preferências e configurações"
+      }
+    },
+    "children": {
+      "title": "Privacidade Infantil",
+      "description": "Nossos serviços não se destinam a crianças menores de 13 anos. Não coletamos intencionalmente informações pessoais de crianças menores de 13 anos."
+    },
+    "changes": {
+      "title": "Alterações a esta Política de Privacidade",
+      "description": "Podemos atualizar esta Política de Privacidade de tempos em tempos para refletir alterações em nossas práticas ou leis aplicáveis.",
+      "notification": "Notificaremos você sobre quaisquer alterações materiais publicando a nova Política de Privacidade nesta página e atualizando a data da 'Última Atualização'."
+    },
+    "contact": {
+      "title": "Contate-nos",
+      "description": "Se você tiver alguma dúvida sobre esta Política de Privacidade ou nossas práticas de dados, entre em contato conosco:",
+      "email": "E-mail",
+      "address": "Endereço"
+    }
+  }
+}

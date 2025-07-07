@@ -6,6 +6,7 @@ import fetch from 'node-fetch'
 import { StravaAccount } from '../../entities/strava-account.entity'
 import { StravaActivityDto } from './dto/strava-activity.dto'
 import { StreamSetDto } from './dto/stream-set.dto'
+import { DataRetentionService } from '../data-retention/data-retention.service'
 import {
   DetailedActivity,
   DetailedAthlete,
@@ -29,7 +30,8 @@ export class StravaService {
   constructor(
     @InjectRepository(StravaAccount)
     private accounts: Repository<StravaAccount>,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private dataRetentionService: DataRetentionService
   ) {}
 
   /**
@@ -265,6 +267,9 @@ export class StravaService {
     this.logger.log(
       `Successfully fetched ${activities.length} activities for user: ${userId}`
     )
+
+    // Update last sync timestamp for data retention
+    await this.dataRetentionService.updateStravaAccountLastSync(account.id)
 
     return activities.map(activity => ({
       id: activity.id.toString(),

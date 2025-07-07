@@ -11,12 +11,20 @@ const Footer = () => {
           <p className="text-center text-muted-foreground text-sm">
             {t('copyright')}
           </p>
-          <Link
-            href="/privacy"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {t('privacy')}
-          </Link>
+          <div className="flex gap-4">
+            <Link
+              href="/privacy"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {t('privacy')}
+            </Link>
+            <Link
+              href="/terms"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {t('terms')}
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

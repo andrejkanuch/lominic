@@ -129,7 +129,8 @@
   },
   "Footer": {
     "copyright": "© 2024 Lominic. Información de entrenamiento impulsada por IA para atletas.",
-    "privacy": "Política de Privacidad"
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio"
   },
   "ContactUs": {
     "getInTouch": "Ponte en Contacto",

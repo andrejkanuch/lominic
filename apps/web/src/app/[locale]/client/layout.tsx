@@ -1,5 +1,6 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { ClientSidebar } from '@/components/ClientSidebar'
 import { ClientHeader } from '@/components/ClientHeader'
@@ -17,10 +18,34 @@ import ProfileContent from '@/components/client-content/ProfileContent'
 import SettingsContent from '@/components/client-content/SettingsContent'
 
 export default function ClientLayout() {
-  const [activeItem, setActiveItem] = useState('/client/dashboard')
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [activeItem, setActiveItem] = useState('/client/activities')
+
+  // Read active tab from URL on mount and when URL changes
+  useEffect(() => {
+    if (searchParams) {
+      const tab = searchParams.get('tab')
+      if (tab) {
+        setActiveItem(`/client/${tab}`)
+      } else {
+        // Set default to activities if no tab in URL
+        setActiveItem('/client/activities')
+      }
+    } else {
+      // Set default to activities if no searchParams
+      setActiveItem('/client/activities')
+    }
+  }, [searchParams])
 
   const handleMenuItemClick = (url: string) => {
+    const tab = url.replace('/client/', '')
     setActiveItem(url)
+
+    // Update URL with the selected tab
+    const params = new URLSearchParams(searchParams || '')
+    params.set('tab', tab)
+    router.push(`?${params.toString()}`, { scroll: false })
   }
 
   const renderContent = () => {
@@ -48,7 +73,7 @@ export default function ClientLayout() {
       case '/client/settings':
         return <SettingsContent />
       default:
-        return <DashboardContent />
+        return <ActivitiesContent />
     }
   }
 

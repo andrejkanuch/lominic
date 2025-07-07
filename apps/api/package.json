@@ -30,7 +30,8 @@
     "schema:drop": "pnpm typeorm schema:drop -d src/config/typeorm.config.ts",
     "schema:sync": "pnpm typeorm schema:sync -d src/config/typeorm.config.ts",
     "codegen": "graphql-codegen --config codegen.yml",
-    "codegen:watch": "graphql-codegen --config codegen.yml --watch"
+    "codegen:watch": "graphql-codegen --config codegen.yml --watch",
+    "test:email": "node test-email.js"
   },
   "dependencies": {
     "@lominic/strava-api-types": "workspace:^",
@@ -42,6 +43,7 @@
     "@nestjs/jwt": "^10.0.0",
     "@nestjs/passport": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/schedule": "^6.0.0",
     "@nestjs/typeorm": "^10.0.0",
     "apollo-server-express": "^3.12.0",
     "bcryptjs": "^2.4.3",
@@ -57,6 +59,7 @@
     "passport-local": "^1.0.0",
     "pg": "^8.11.0",
     "reflect-metadata": "^0.1.13",
+    "resend": "^4.6.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.17"
   },
