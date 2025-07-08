@@ -12,11 +12,19 @@ async function bootstrap() {
 
     // Enable CORS
     console.log('🌐 Configuring CORS...')
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      process.env.FRONTEND_URL,
+    ].filter(Boolean)
+
     app.enableCors({
-      origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+      origin: allowedOrigins,
       credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
     })
-    console.log('✅ CORS configured')
+    console.log('✅ CORS configured for origins:', allowedOrigins)
 
     // Global validation pipe
     console.log('🔍 Setting up validation pipe...')
@@ -35,12 +43,25 @@ async function bootstrap() {
     console.log('✅ API prefix set to /api')
 
     const port = process.env.PORT || 4000
+    const isProduction = process.env.NODE_ENV === 'production'
+    const baseUrl = isProduction
+      ? `https://${
+          process.env.RENDER_EXTERNAL_HOSTNAME || 'your-app.onrender.com'
+        }`
+      : `http://localhost:${port}`
+
     console.log(`🌍 Starting server on port ${port}...`)
     await app.listen(port)
 
-    console.log(`🚀 Application is running on: http://localhost:${port}`)
-    console.log(`📊 GraphQL Playground: http://localhost:${port}/graphql`)
-    console.log(`🔗 API Endpoints: http://localhost:${port}/api`)
+    console.log(`🚀 Application is running on: ${baseUrl}`)
+    console.log(`📊 GraphQL Playground: ${baseUrl}/graphql`)
+    console.log(`🔗 API Endpoints: ${baseUrl}/api`)
+
+    if (!isProduction) {
+      console.log(`🔧 Development mode - Local URLs shown above`)
+    } else {
+      console.log(`🚀 Production mode - Deployed on Render`)
+    }
   } catch (error) {
     console.error('❌ Failed to start application:', error)
     // console.error("Stack trace:", error.stack);
