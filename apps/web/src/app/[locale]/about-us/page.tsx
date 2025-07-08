@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Brain, Mountain, Shield, Users, Zap } from 'lucide-react'
 
 const AboutUs = () => {
@@ -92,10 +93,11 @@ const AboutUs = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-dark-900 rounded-2xl -z-10 shadow-xl"></div>
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl">
-                  <img
+                  <Image
                     src="/generic-image.png"
                     alt="Story"
-                    className="w-full h-full object-cover"
+                    layout="fill"
+                    objectFit="cover"
                   />
                 </div>
               </div>

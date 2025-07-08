@@ -12,6 +12,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { logout } from '@/lib/apollo-client'
 import { useRBAC } from '@/hooks/use-rbac'
+import { StravaApiLogo } from '@/components/ui/strava-api-logo'
 
 export function ClientHeader() {
   const { user } = useRBAC()
@@ -36,6 +37,15 @@ export function ClientHeader() {
         </div>
 
         <div className="flex items-center space-x-4">
+          {/* Strava API Logo */}
+          <StravaApiLogo
+            type="powered"
+            variant="horizontal"
+            color="black"
+            size="1x"
+            height={20}
+          />
+
           {/* Search */}
           {/* <div className="relative hidden md:block">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />

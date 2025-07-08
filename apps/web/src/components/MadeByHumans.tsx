@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 const MadeByHumans = () => {
   const t = useTranslations("MadeByHumans");
@@ -16,9 +17,11 @@ const MadeByHumans = () => {
             }}
           >
             <div className="flex items-center text-white">
-              <img
+              <Image
                 src="/lominic_logo_true.svg"
                 alt="Lominic Logo"
+                width={24}
+                height={24}
                 className="h-5 sm:h-6 w-auto mr-3 invert"
               />
               <span className="text-white text-xl font-medium"></span>

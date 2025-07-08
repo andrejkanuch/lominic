@@ -15,14 +15,14 @@ export class DataRetentionResolver {
 
   @Query(() => String)
   @Roles(Role.ADMIN, Role.SUPER_ADMIN)
-  async getRetentionStats(@CurrentUser() user: User) {
+  async getRetentionStats(@CurrentUser() _user: User) {
     const stats = await this.dataRetentionService.getRetentionStats()
     return JSON.stringify(stats, null, 2)
   }
 
   @Mutation(() => String)
   @Roles(Role.SUPER_ADMIN)
-  async performDataRetentionCleanup(@CurrentUser() user: User) {
+  async performDataRetentionCleanup(@CurrentUser() _user: User) {
     const result = await this.dataRetentionService.performManualCleanup()
     return JSON.stringify(result, null, 2)
   }
@@ -31,7 +31,7 @@ export class DataRetentionResolver {
   @Roles(Role.SUPER_ADMIN)
   async restoreUserFromDeletion(
     @Args('userId') userId: string,
-    @CurrentUser() user: User
+    @CurrentUser() _user: User
   ) {
     await this.dataRetentionService.restoreUserFromDeletion(userId)
     return `User ${userId} restored from deletion`
@@ -41,7 +41,7 @@ export class DataRetentionResolver {
   @Roles(Role.SUPER_ADMIN)
   async restoreStravaAccountFromDeletion(
     @Args('accountId') accountId: string,
-    @CurrentUser() user: User
+    @CurrentUser() _user: User
   ) {
     await this.dataRetentionService.restoreStravaAccountFromDeletion(accountId)
     return `Strava account ${accountId} restored from deletion`

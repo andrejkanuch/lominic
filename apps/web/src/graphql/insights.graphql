@@ -1,0 +1,3 @@
+query getActivityInsights($activityId: String!) {
+  getActivityInsights(activityId: $activityId)
+}

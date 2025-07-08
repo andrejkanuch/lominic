@@ -33,7 +33,8 @@ export class AuthService {
   ): Promise<UserWithoutPassword | null> {
     const user = await this.usersService.findByEmail(email)
     if (user && (await user.validatePassword(password))) {
-      const { password: _unused, ...result } = user
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user
       return result
     }
     return null
@@ -51,7 +52,7 @@ export class AuthService {
     const payload: JwtPayload = { email: user.email, sub: user.id }
     return {
       access_token: this.jwtService.sign(payload),
-      user: user as any,
+      user: user as User,
     }
   }
 
@@ -64,7 +65,8 @@ export class AuthService {
     }
 
     const user = await this.usersService.createUser(registerInput)
-    const { password: _unused, ...result } = user
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = user
 
     // Send thank you email asynchronously (don't await to avoid blocking registration)
     this.emailService.sendThankYouEmail(
@@ -75,7 +77,7 @@ export class AuthService {
     const payload: JwtPayload = { email: user.email, sub: user.id }
     return {
       access_token: this.jwtService.sign(payload),
-      user: result as any,
+      user: result as User,
     }
   }
 }

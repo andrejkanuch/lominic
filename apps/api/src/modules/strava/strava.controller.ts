@@ -9,9 +9,14 @@ export class StravaController {
   constructor(private readonly stravaService: StravaService) {}
 
   @Get('connect')
-  connect(@Query('state') userId: string, @Res() res: Response) {
+  connect(
+    @Query('state') userId: string,
+    @Query('force') force: string,
+    @Res() res: Response
+  ) {
     this.logger.log(`Received Strava connect request for user: ${userId}`)
-    const url = this.stravaService.getAuthorizationUrl(userId)
+    const forceReauthorize = force === 'true'
+    const url = this.stravaService.getAuthorizationUrl(userId, forceReauthorize)
     this.logger.log(`Redirecting to Strava authorization URL: ${url}`)
     res.redirect(url)
   }

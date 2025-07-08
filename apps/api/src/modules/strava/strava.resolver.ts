@@ -160,4 +160,21 @@ export class StravaResolver {
       throw new Error(`Failed to fetch activity streams: ${errorMessage}`)
     }
   }
+
+  @Query(() => [String])
+  async getActivityInsights(
+    @CurrentUser() user: User,
+    @Args('activityId', { type: () => String }) activityId: string,
+  ): Promise<string[]> {
+    try {
+      return await this.stravaService.getActivityInsights(
+        user.id,
+        parseInt(activityId),
+      )
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred'
+      throw new Error(`Failed to fetch activity insights: ${errorMessage}`)
+    }
+  }
 }

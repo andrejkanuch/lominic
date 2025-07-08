@@ -1,24 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Clock, MapPin, Zap, Mountain, Timer } from 'lucide-react'
-
-interface Activity {
-  id: number
-  name: string
-  sport_type: string
-  date: string
-  distance: number
-  moving_time: number
-  average_speed: number
-  total_elevation_gain: number
-}
+import { Button } from '@/components/ui/button'
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Zap,
+  Mountain,
+  Timer,
+  BrainCircuit,
+} from 'lucide-react'
+import { ActivityDetailModal } from '../ActivityDetailModal'
+import {
+  GetStravaActivitiesQuery,
+  useGetActivityInsightsLazyQuery,
+} from '@/generated/graphql'
 
 interface RecentActivitiesProps {
-  activities: Activity[]
+  activities: GetStravaActivitiesQuery['getStravaActivities']
 }
 
 export const RecentActivities = ({ activities }: RecentActivitiesProps) => {
+  const [selectedActivity, setSelectedActivity] = useState<
+    GetStravaActivitiesQuery['getStravaActivities'][number] | null
+  >(null)
+  const [getInsights, { loading, data }] = useGetActivityInsightsLazyQuery()
+
+  const handleViewInsights = (
+    activity: GetStravaActivitiesQuery['getStravaActivities'][number]
+  ) => {
+    setSelectedActivity(activity)
+    getInsights({ variables: { activityId: activity.id.toString() } })
+  }
+
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
@@ -67,7 +82,7 @@ export const RecentActivities = ({ activities }: RecentActivitiesProps) => {
       <CardContent>
         <div className="space-y-4">
           {activities.map(activity => {
-            const SportIcon = getSportIcon(activity.sport_type)
+            const SportIcon = getSportIcon(activity.type)
             return (
               <div
                 key={activity.id}
@@ -83,7 +98,7 @@ export const RecentActivities = ({ activities }: RecentActivitiesProps) => {
                       {activity.name}
                     </h4>
                     <p className="text-sm text-gray-500">
-                      {formatDate(activity.date)}
+                      {formatDate(activity.start_date)}
                     </p>
                   </div>
                 </div>
@@ -101,11 +116,28 @@ export const RecentActivities = ({ activities }: RecentActivitiesProps) => {
                     <Zap className="w-4 h-4" />
                     <span>{activity.average_speed.toFixed(1)} km/h</span>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleViewInsights(activity)}
+                  >
+                    <BrainCircuit className="w-4 h-4 mr-2" />
+                    View Insights
+                  </Button>
                 </div>
               </div>
             )
           })}
         </div>
+        {selectedActivity && (
+          <ActivityDetailModal
+            isOpen={!!selectedActivity}
+            onClose={() => setSelectedActivity(null)}
+            activityId={selectedActivity.id}
+            insights={data?.getActivityInsights}
+            loadingInsights={loading}
+          />
+        )}
       </CardContent>
     </Card>
   )

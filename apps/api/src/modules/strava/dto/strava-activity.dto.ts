@@ -416,7 +416,7 @@ export class StravaActivityDto {
   embed_token?: string
 
   @Field(() => GraphQLJSON, { nullable: true })
-  photos?: any
+  photos?: Record<string, unknown>
 
   @Field(() => Int, { nullable: true })
   utc_offset?: number

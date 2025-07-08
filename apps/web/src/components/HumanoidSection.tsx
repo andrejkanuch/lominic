@@ -76,8 +76,9 @@ const HumanoidSection = () => {
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      const currentSectionRef = sectionRef.current;
+      if (currentSectionRef) {
+        observer.unobserve(currentSectionRef);
       }
     };
   }, []);

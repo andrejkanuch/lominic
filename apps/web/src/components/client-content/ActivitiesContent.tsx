@@ -20,6 +20,7 @@ import { ActivityCard } from '@/components/ActivityCard'
 import { ActivityDetailModal } from '@/components/ActivityDetailModal'
 import { useGetStravaActivitiesQuery } from '@/generated/graphql'
 import { useStravaError } from '@/hooks/use-strava-error'
+import { StravaConnectButton } from '@/components/ui/strava-connect-button'
 
 const ActivitiesContent: React.FC = () => {
   const [selectedActivityId, setSelectedActivityId] = useState<number | null>(
@@ -137,12 +138,7 @@ const ActivitiesContent: React.FC = () => {
                   Try Again
                 </Button>
                 {errorInfo?.suggestedAction === 'reconnect' && (
-                  <Button
-                    onClick={handleReconnect}
-                    className="flex items-center gap-2"
-                  >
-                    Reconnect Strava
-                  </Button>
+                  <StravaConnectButton onClick={handleReconnect} />
                 )}
               </div>
             </div>

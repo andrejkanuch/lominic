@@ -28,8 +28,12 @@ import {
 import { EditProfileDialog } from '@/components/profile/EditProfileDialog'
 import { useQuery } from '@apollo/client'
 import { GetAthleteDocument, GetAthleteQuery } from '@/generated/graphql'
+import { StravaConnectButton } from '@/components/ui/strava-connect-button'
+import { useRBAC } from '@/hooks/use-rbac'
+import { toast } from 'sonner'
 
 const ProfileContent = () => {
+  const { user } = useRBAC()
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
   // Fetch Strava athlete data
@@ -189,11 +193,11 @@ const ProfileContent = () => {
                   <MapPin className="w-4 h-4" />
                   <span className="text-sm font-medium">Location</span>
                 </div>
-                <p className="text-foreground">
+                {/* <p className="text-foreground">
                   {stravaData?.getAthlete
                     ? `${stravaData.getAthlete.city}, ${stravaData.getAthlete.state}`
                     : userData.location}
-                </p>
+                </p> */}
               </div>
 
               <div className="space-y-2">
@@ -460,6 +464,40 @@ const ProfileContent = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* Strava Connection Prompt */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="text-center space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Connect your Strava account to sync your activities and get
+              personalized insights
+            </p>
+            <StravaConnectButton
+              onClick={() => {
+                if (!user || !user.id) {
+                  toast.error(
+                    'User information not available. Please try logging in again.'
+                  )
+                  return
+                }
+
+                // Redirect to Strava OAuth
+                const apiBase = (
+                  process.env.NEXT_PUBLIC_API_URL ||
+                  'http://localhost:4000/graphql'
+                ).replace(/\/?graphql$/, '')
+                const connectUrl = `${apiBase}/api/strava/connect?state=${user.id}`
+                window.open(
+                  connectUrl,
+                  'strava-connect',
+                  'width=500,height=600,scrollbars=yes,resizable=yes'
+                )
+              }}
+            />
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Edit Profile Dialog */}
       <EditProfileDialog

@@ -24,10 +24,12 @@ const CTA = () => {
     }
 
     return () => {
-      if (ctaRef.current) {
-        observer.unobserve(ctaRef.current)
+      const currentRef = ctaRef.current
+      if (currentRef) {
+        observer.unobserve(currentRef)
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -7,6 +7,7 @@ import { StravaAccount } from '../../entities/strava-account.entity'
 import { StravaActivityDto } from './dto/strava-activity.dto'
 import { StreamSetDto } from './dto/stream-set.dto'
 import { DataRetentionService } from '../data-retention/data-retention.service'
+import { InsightsService } from './insights.service'
 import {
   DetailedActivity,
   DetailedAthlete,
@@ -16,6 +17,7 @@ import {
   ActivityZone,
   Comment as StravaComment,
   StreamSet,
+  HeartRateZoneRanges,
 } from '@lominic/strava-api-types'
 
 @Injectable()
@@ -31,7 +33,8 @@ export class StravaService {
     @InjectRepository(StravaAccount)
     private accounts: Repository<StravaAccount>,
     private configService: ConfigService,
-    private dataRetentionService: DataRetentionService
+    private dataRetentionService: DataRetentionService,
+    private insightsService: InsightsService
   ) {}
 
   /**
@@ -39,15 +42,21 @@ export class StravaService {
    * @param userId - The ID of the user to associate with the Strava account.
    * @returns The authorization URL.
    */
-  getAuthorizationUrl(userId: string): string {
+  getAuthorizationUrl(userId: string, forceReauthorize = false): string {
     const clientId = this.STRAVA_CLIENT_ID
     const redirectUri = 'http://localhost:4000/api/strava/oauth/callback'
-    const scope = 'read,activity:read_all'
+    const scope = 'read,activity:read_all,profile:read_all'
     const state = userId // Use userId as state for security and to link the account
-    this.logger.log(`Generating Strava authorization URL for user: ${userId}`)
+    const approvalPrompt = forceReauthorize ? 'force' : 'auto'
+
+    this.logger.log(
+      `Generating Strava authorization URL for user: ${userId}${
+        forceReauthorize ? ' (forcing re-authorization)' : ''
+      }`
+    )
     return `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
       redirectUri
-    )}&response_type=code&scope=${scope}&state=${state}`
+    )}&response_type=code&scope=${scope}&approval_prompt=${approvalPrompt}&state=${state}`
   }
 
   /**
@@ -771,7 +780,7 @@ export class StravaService {
       })),
       device_name: activity.device_name,
       embed_token: activity.embed_token,
-      photos: activity.photos,
+      photos: activity.photos as any,
 
       sport_type: activity.sport_type,
       utc_offset: (activity as any).utc_offset,
@@ -1059,5 +1068,21 @@ export class StravaService {
         }`
       )
     }
+  }
+  async getActivityInsights(
+    userId: string,
+    activityId: number
+  ): Promise<string[]> {
+    const activity = await this.getActivityById(userId, activityId)
+    const streams = await this.getActivityStreams(userId, activityId)
+    const zones = await this.getAthleteZones(userId)
+    const historicalActivities = await this.getRecentActivities(userId, 50)
+
+    return this.insightsService.generateInsights(
+      activity as unknown as DetailedActivity,
+      streams as unknown as StreamSet,
+      zones as unknown as HeartRateZoneRanges,
+      historicalActivities as unknown as DetailedActivity[]
+    )
   }
 }

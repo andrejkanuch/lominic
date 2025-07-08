@@ -35,7 +35,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     // Return user without password
-    const { password: _unused, ...result } = user
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = user
     console.log('✅ JwtStrategy - User validated:', result)
     return result
   }

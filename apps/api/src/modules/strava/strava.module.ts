@@ -5,10 +5,11 @@ import { StravaService } from './strava.service'
 import { StravaController } from './strava.controller'
 import { StravaResolver } from './strava.resolver'
 import { DataRetentionModule } from '../data-retention/data-retention.module'
+import { InsightsService } from './insights.service'
 
 @Module({
   imports: [TypeOrmModule.forFeature([StravaAccount]), DataRetentionModule],
-  providers: [StravaService, StravaResolver],
+  providers: [StravaService, StravaResolver, InsightsService],
   controllers: [StravaController],
   exports: [StravaService],
 })

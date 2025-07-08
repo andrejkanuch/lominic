@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 
 const ImageShowcaseSection = () => {
   const t = useTranslations('ImageShowcaseSection')
@@ -17,10 +18,12 @@ const ImageShowcaseSection = () => {
 
         <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-elegant mx-auto max-w-4xl animate-on-scroll">
           <div className="w-full">
-            <img
+            <Image
               src="/PersonImage2.png"
               alt={t('lominicAppInterfaceAlt')}
-              className="w-full h-auto object-cover"
+              layout="responsive"
+              width={1200}
+              height={800}
             />
           </div>
           <div className="bg-card p-4 sm:p-8">

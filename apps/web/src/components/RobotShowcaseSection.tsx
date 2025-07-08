@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react'
+import Image from 'next/image'
 
 const RobotShowcaseSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -57,9 +58,12 @@ const RobotShowcaseSection = () => {
           </div>
 
           <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl shadow-2xl">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e"
               alt="Advanced humanoid robot with white exterior"
+              layout="responsive"
+              width={1200}
+              height={800}
               className="w-full object-cover"
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-8">

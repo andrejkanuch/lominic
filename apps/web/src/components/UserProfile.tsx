@@ -15,6 +15,7 @@ import {
 } from '@/generated/graphql'
 import { useApolloClient } from '@apollo/client'
 import { RoleBasedComponent } from '@/components/RoleBasedComponent'
+import { StravaConnectButton } from '@/components/ui/strava-connect-button'
 
 export function UserProfile() {
   const { user, hasPermission } = useRBAC()
@@ -69,7 +70,12 @@ export function UserProfile() {
   }
 
   const handleStravaConnect = () => {
-    if (!user) return
+    if (!user || !user.id) {
+      toast.error(
+        'User information not available. Please try logging in again.'
+      )
+      return
+    }
 
     const apiBase = (
       process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/graphql'
@@ -126,9 +132,7 @@ export function UserProfile() {
                   Connect your account to Strava to see recent activities.
                 </p>
                 <div className="flex gap-2">
-                  <Button onClick={handleStravaConnect} variant="outline">
-                    Connect with Strava
-                  </Button>
+                  <StravaConnectButton onClick={handleStravaConnect} />
                 </div>
               </div>
             )}

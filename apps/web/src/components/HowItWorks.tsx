@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface StepCardProps {
   number: string;
@@ -50,25 +51,25 @@ const HowItWorks = () => {
       number: "01",
       title: "Upload Your Data",
       description: "Connect your Garmin, Apple Health, Strava, or upload .FIT/.GPX files from any fitness device.",
-      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80"
+      image: "/generic-image.png"
     },
     {
       number: "02",
       title: "AI Analysis",
       description: "Our AI instantly analyzes your workout data, heart rate zones, training load, and performance metrics.",
-      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80"
+      image: "/generic-image.png"
     },
     {
       number: "03",
       title: "Get Insights",
       description: "Receive plain-language summaries and coaching insights that help you understand your training.",
-      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80"
+      image: "/generic-image.png"
     },
     {
       number: "04",
       title: "Train Smarter",
       description: "Use AI-powered recommendations to optimize your training, recovery, and long-term progress.",
-      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80"
+      image: "/generic-image.png"
     }
   ];
 
@@ -147,10 +148,11 @@ const HowItWorks = () => {
                   activeStep === index ? "opacity-100" : "opacity-0 pointer-events-none"
                 )}
               >
-                <img
+                <Image
                   src={step.image}
                   alt={step.title}
-                  className="w-full h-full object-cover"
+                  layout="fill"
+                  objectFit="cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent">
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">

@@ -20,6 +20,7 @@ import {
   Map as MapIcon,
   X,
   Zap,
+  BrainCircuit,
 } from 'lucide-react'
 import { ActivityMetrics } from './ActivityMetrics'
 import { ActivityMap } from './ActivityMap'
@@ -28,15 +29,19 @@ import { ActivityStreamsChart } from './ActivityStreamsChart'
 import { SportType, useGetActivityByIdQuery } from '@/generated/graphql'
 
 interface ActivityDetailModalProps {
-  activityId: number
+  activityId: string
   isOpen: boolean
   onClose: () => void
+  insights?: string[]
+  loadingInsights?: boolean
 }
 
 export const ActivityDetailModal = ({
   activityId,
   isOpen,
   onClose,
+  insights,
+  loadingInsights,
 }: ActivityDetailModalProps) => {
   const { data, loading, error } = useGetActivityByIdQuery({
     variables: { activityId: activityId.toString() },
@@ -332,6 +337,32 @@ export const ActivityDetailModal = ({
                     </div>
                   )}
                 </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Insights */}
+          {insights && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <BrainCircuit className="w-5 h-5 text-purple-500" />
+                  <span>Insights</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {loadingInsights ? (
+                  <div>Loading...</div>
+                ) : (
+                  <ul className="space-y-2">
+                    {insights.map((insight, index) => (
+                      <li key={index} className="flex items-start">
+                        <div className="w-4 h-4 mt-1 mr-2 bg-purple-500 rounded-full flex-shrink-0" />
+                        <span>{insight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </CardContent>
             </Card>
           )}

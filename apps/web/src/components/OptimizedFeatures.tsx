@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { Smartphone, Brain, Shield, TrendingUp, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 
 const OptimizedFeatures = () => {
   const t = useTranslations('OptimizedFeatures')
@@ -54,9 +55,12 @@ const OptimizedFeatures = () => {
               <div className="w-full lg:w-1/2">
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl transform rotate-3"></div>
-                  <img
+                  <Image
                     src={feature.visual}
                     alt={feature.title}
+                    layout="responsive"
+                    width={700}
+                    height={400}
                     className="relative rounded-2xl shadow-lg w-full h-64 object-cover"
                   />
                 </div>

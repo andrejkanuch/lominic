@@ -242,8 +242,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
   login: AuthResponse;
+  performDataRetentionCleanup: Scalars['String']['output'];
   register: AuthResponse;
   removeUser: User;
+  restoreStravaAccountFromDeletion: Scalars['String']['output'];
+  restoreUserFromDeletion: Scalars['String']['output'];
   signUp: User;
   updateOwnProfile: User;
   updateUser: User;
@@ -267,6 +270,16 @@ export type MutationRegisterArgs = {
 
 export type MutationRemoveUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationRestoreStravaAccountFromDeletionArgs = {
+  accountId: Scalars['String']['input'];
+};
+
+
+export type MutationRestoreUserFromDeletionArgs = {
+  userId: Scalars['String']['input'];
 };
 
 
@@ -316,12 +329,14 @@ export type Query = {
   __typename?: 'Query';
   getActivityById: StravaActivityDto;
   getActivityComments: Array<CommentDto>;
+  getActivityInsights: Array<Scalars['String']['output']>;
   getActivityKudoers: Array<KudoerDto>;
   getActivityStreams: StreamSetDto;
   getActivityZones: Array<ActivityZoneDto>;
   getAthlete: DetailedAthlete;
   getAthleteStats: ActivityStats;
   getAthleteZones: Zones;
+  getRetentionStats: Scalars['String']['output'];
   getStravaActivities: Array<StravaActivityDto>;
   me: User;
   user: User;
@@ -335,6 +350,11 @@ export type QueryGetActivityByIdArgs = {
 
 
 export type QueryGetActivityCommentsArgs = {
+  activityId: Scalars['String']['input'];
+};
+
+
+export type QueryGetActivityInsightsArgs = {
   activityId: Scalars['String']['input'];
 };
 
@@ -580,11 +600,15 @@ export type UpdateUserInput = {
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime']['output'];
+  dataRetentionExpiresAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   isEmailVerified: Scalars['Boolean']['output'];
+  isMarkedForDeletion: Scalars['Boolean']['output'];
+  lastLoginAt: Scalars['DateTime']['output'];
   lastName: Scalars['String']['output'];
+  markedForDeletionAt: Scalars['DateTime']['output'];
   role: Role;
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -605,7 +629,7 @@ export type Zones = {
 export type GetAthleteQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAthleteQuery = { __typename?: 'Query', getAthlete: { __typename?: 'DetailedAthlete', id: number, username: string | null, resource_state: number, firstname: string, lastname: string, city: string, state: string, country: string, sex: string, premium: boolean, created_at: string, updated_at: string, badge_type_id: number, profile_medium: string, profile: string, follower_count: number, friend_count: number, mutual_friend_count: number, athlete_type: number, date_preference: string, measurement_preference: string, clubs: Array<string> | null, ftp: number | null, weight: number, bikes: Array<{ __typename?: 'SummaryGearDto', id: string, primary: boolean, name: string, resource_state: number, distance: number }>, shoes: Array<{ __typename?: 'SummaryGearDto', id: string, primary: boolean, name: string, resource_state: number, distance: number }> } };
+export type GetAthleteQuery = { __typename?: 'Query', getAthlete: { __typename?: 'DetailedAthlete', id: number, username: string | null, resource_state: number, firstname: string, lastname: string, premium: boolean, created_at: string, updated_at: string, badge_type_id: number, profile_medium: string, profile: string, follower_count: number, friend_count: number, mutual_friend_count: number, athlete_type: number, date_preference: string, measurement_preference: string, clubs: Array<string> | null, ftp: number | null, weight: number, bikes: Array<{ __typename?: 'SummaryGearDto', id: string, primary: boolean, name: string, resource_state: number, distance: number }>, shoes: Array<{ __typename?: 'SummaryGearDto', id: string, primary: boolean, name: string, resource_state: number, distance: number }> } };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -629,6 +653,13 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: Role, isEmailVerified: boolean, createdAt: string, updatedAt: string } };
+
+export type GetActivityInsightsQueryVariables = Exact<{
+  activityId: Scalars['String']['input'];
+}>;
+
+
+export type GetActivityInsightsQuery = { __typename?: 'Query', getActivityInsights: Array<string> };
 
 export type GetStravaActivitiesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -723,10 +754,6 @@ export const GetAthleteDocument = gql`
     resource_state
     firstname
     lastname
-    city
-    state
-    country
-    sex
     premium
     created_at
     updated_at
@@ -929,6 +956,44 @@ export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQ
 export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
 export type GetCurrentUserSuspenseQueryHookResult = ReturnType<typeof useGetCurrentUserSuspenseQuery>;
 export type GetCurrentUserQueryResult = ApolloReactCommon.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
+export const GetActivityInsightsDocument = gql`
+    query getActivityInsights($activityId: String!) {
+  getActivityInsights(activityId: $activityId)
+}
+    `;
+
+/**
+ * __useGetActivityInsightsQuery__
+ *
+ * To run a query within a React component, call `useGetActivityInsightsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetActivityInsightsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetActivityInsightsQuery({
+ *   variables: {
+ *      activityId: // value for 'activityId'
+ *   },
+ * });
+ */
+export function useGetActivityInsightsQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetActivityInsightsQuery, GetActivityInsightsQueryVariables> & ({ variables: GetActivityInsightsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetActivityInsightsQuery, GetActivityInsightsQueryVariables>(GetActivityInsightsDocument, options);
+      }
+export function useGetActivityInsightsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetActivityInsightsQuery, GetActivityInsightsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetActivityInsightsQuery, GetActivityInsightsQueryVariables>(GetActivityInsightsDocument, options);
+        }
+export function useGetActivityInsightsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetActivityInsightsQuery, GetActivityInsightsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetActivityInsightsQuery, GetActivityInsightsQueryVariables>(GetActivityInsightsDocument, options);
+        }
+export type GetActivityInsightsQueryHookResult = ReturnType<typeof useGetActivityInsightsQuery>;
+export type GetActivityInsightsLazyQueryHookResult = ReturnType<typeof useGetActivityInsightsLazyQuery>;
+export type GetActivityInsightsSuspenseQueryHookResult = ReturnType<typeof useGetActivityInsightsSuspenseQuery>;
+export type GetActivityInsightsQueryResult = ApolloReactCommon.QueryResult<GetActivityInsightsQuery, GetActivityInsightsQueryVariables>;
 export const GetStravaActivitiesDocument = gql`
     query getStravaActivities($limit: Int) {
   getStravaActivities(limit: $limit) {

@@ -2,6 +2,7 @@ import React from 'react'
 import { DashboardStats } from '@/components/dashboard/DashboardStats'
 import { RecentActivities } from '@/components/dashboard/RecentActivities'
 import { WeeklyProgress } from '@/components/dashboard/WeeklyProgress'
+import { useGetStravaActivitiesQuery } from '@/generated/graphql'
 
 const DashboardContent: React.FC = () => {
   // Mock data - in a real app, this would come from API
@@ -16,58 +17,11 @@ const DashboardContent: React.FC = () => {
     averageHeartRate: 152,
   }
 
-  const recentActivities = [
-    {
-      id: 1,
-      name: 'Morning Mountain Ride',
-      sport_type: 'MountainBikeRide',
-      date: '2024-01-15',
-      distance: 32.5,
-      moving_time: 4320,
-      average_speed: 27.1,
-      total_elevation_gain: 650,
+  const { data: recentActivities } = useGetStravaActivitiesQuery({
+    variables: {
+      limit: 10,
     },
-    {
-      id: 2,
-      name: 'Evening Run',
-      sport_type: 'Run',
-      date: '2024-01-14',
-      distance: 8.2,
-      moving_time: 2280,
-      average_speed: 12.9,
-      total_elevation_gain: 120,
-    },
-    {
-      id: 3,
-      name: 'Weekend Adventure',
-      sport_type: 'Ride',
-      date: '2024-01-13',
-      distance: 67.8,
-      moving_time: 8940,
-      average_speed: 27.3,
-      total_elevation_gain: 890,
-    },
-    {
-      id: 4,
-      name: 'Quick City Ride',
-      sport_type: 'Ride',
-      date: '2024-01-12',
-      distance: 15.3,
-      moving_time: 1980,
-      average_speed: 27.8,
-      total_elevation_gain: 85,
-    },
-    {
-      id: 5,
-      name: 'Trail Run',
-      sport_type: 'Run',
-      date: '2024-01-11',
-      distance: 12.1,
-      moving_time: 3600,
-      average_speed: 12.1,
-      total_elevation_gain: 245,
-    },
-  ]
+  })
 
   const weeklyData = [
     { day: 'Mon', distance: 15.3, activities: 1, time: 1980 },
@@ -95,7 +49,9 @@ const DashboardContent: React.FC = () => {
       {/* Recent Activities and Weekly Progress */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          <RecentActivities activities={recentActivities} />
+          <RecentActivities
+            activities={recentActivities?.getStravaActivities || []}
+          />
         </div>
         <div className="lg:col-span-1">
           <WeeklyProgress weeklyData={weeklyData} />

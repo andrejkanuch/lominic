@@ -241,8 +241,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
   login: AuthResponse;
+  performDataRetentionCleanup: Scalars['String']['output'];
   register: AuthResponse;
   removeUser: User;
+  restoreStravaAccountFromDeletion: Scalars['String']['output'];
+  restoreUserFromDeletion: Scalars['String']['output'];
   signUp: User;
   updateOwnProfile: User;
   updateUser: User;
@@ -266,6 +269,16 @@ export type MutationRegisterArgs = {
 
 export type MutationRemoveUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationRestoreStravaAccountFromDeletionArgs = {
+  accountId: Scalars['String']['input'];
+};
+
+
+export type MutationRestoreUserFromDeletionArgs = {
+  userId: Scalars['String']['input'];
 };
 
 
@@ -315,12 +328,14 @@ export type Query = {
   __typename?: 'Query';
   getActivityById: StravaActivityDto;
   getActivityComments: Array<CommentDto>;
+  getActivityInsights: Array<Scalars['String']['output']>;
   getActivityKudoers: Array<KudoerDto>;
   getActivityStreams: StreamSetDto;
   getActivityZones: Array<ActivityZoneDto>;
   getAthlete: DetailedAthlete;
   getAthleteStats: ActivityStats;
   getAthleteZones: Zones;
+  getRetentionStats: Scalars['String']['output'];
   getStravaActivities: Array<StravaActivityDto>;
   me: User;
   user: User;
@@ -334,6 +349,11 @@ export type QueryGetActivityByIdArgs = {
 
 
 export type QueryGetActivityCommentsArgs = {
+  activityId: Scalars['String']['input'];
+};
+
+
+export type QueryGetActivityInsightsArgs = {
   activityId: Scalars['String']['input'];
 };
 
@@ -579,11 +599,15 @@ export type UpdateUserInput = {
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime']['output'];
+  dataRetentionExpiresAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   isEmailVerified: Scalars['Boolean']['output'];
+  isMarkedForDeletion: Scalars['Boolean']['output'];
+  lastLoginAt: Scalars['DateTime']['output'];
   lastName: Scalars['String']['output'];
+  markedForDeletionAt: Scalars['DateTime']['output'];
   role: Role;
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -985,8 +1009,11 @@ export type MovingStreamDtoResolvers<ContextType = GraphQLContext, ParentType ex
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'createUserInput'>>;
   login?: Resolver<ResolversTypes['AuthResponse'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'loginInput'>>;
+  performDataRetentionCleanup?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   register?: Resolver<ResolversTypes['AuthResponse'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'registerInput'>>;
   removeUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRemoveUserArgs, 'id'>>;
+  restoreStravaAccountFromDeletion?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationRestoreStravaAccountFromDeletionArgs, 'accountId'>>;
+  restoreUserFromDeletion?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationRestoreUserFromDeletionArgs, 'userId'>>;
   signUp?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'createUserInput'>>;
   updateOwnProfile?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateOwnProfileArgs, 'updateUserInput'>>;
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'updateUserInput'>>;
@@ -1022,12 +1049,14 @@ export type PowerZoneResolvers<ContextType = GraphQLContext, ParentType extends 
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   getActivityById?: Resolver<ResolversTypes['StravaActivityDto'], ParentType, ContextType, RequireFields<QueryGetActivityByIdArgs, 'activityId'>>;
   getActivityComments?: Resolver<Array<ResolversTypes['CommentDto']>, ParentType, ContextType, RequireFields<QueryGetActivityCommentsArgs, 'activityId'>>;
+  getActivityInsights?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType, RequireFields<QueryGetActivityInsightsArgs, 'activityId'>>;
   getActivityKudoers?: Resolver<Array<ResolversTypes['KudoerDto']>, ParentType, ContextType, RequireFields<QueryGetActivityKudoersArgs, 'activityId'>>;
   getActivityStreams?: Resolver<ResolversTypes['StreamSetDto'], ParentType, ContextType, RequireFields<QueryGetActivityStreamsArgs, 'activityId'>>;
   getActivityZones?: Resolver<Array<ResolversTypes['ActivityZoneDto']>, ParentType, ContextType, RequireFields<QueryGetActivityZonesArgs, 'activityId'>>;
   getAthlete?: Resolver<ResolversTypes['DetailedAthlete'], ParentType, ContextType>;
   getAthleteStats?: Resolver<ResolversTypes['ActivityStats'], ParentType, ContextType>;
   getAthleteZones?: Resolver<ResolversTypes['Zones'], ParentType, ContextType>;
+  getRetentionStats?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   getStravaActivities?: Resolver<Array<ResolversTypes['StravaActivityDto']>, ParentType, ContextType, RequireFields<QueryGetStravaActivitiesArgs, 'limit'>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
@@ -1176,11 +1205,15 @@ export type TimeStreamDtoResolvers<ContextType = GraphQLContext, ParentType exte
 
 export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  dataRetentionExpiresAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isEmailVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isMarkedForDeletion?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  lastLoginAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  markedForDeletionAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   role?: Resolver<ResolversTypes['Role'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

@@ -143,7 +143,8 @@ export class UsersService {
     } as User)
 
     // Remove role from update input for own profile updates
-    const { role: _unused, ...safeUpdateInput } = updateUserInput
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { role, ...safeUpdateInput } = updateUserInput
 
     Object.assign(user, safeUpdateInput)
     return this.usersRepository.save(user)

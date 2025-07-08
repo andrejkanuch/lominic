@@ -10,6 +10,7 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import { Providers } from '@/components/providers'
 import LayoutWrapper from '@/components/LayoutWrapper'
 import { Analytics } from '@vercel/analytics/next'
+import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -131,25 +132,22 @@ export default async function LocaleLayout({
         {/* Google Analytics */}
 
         {process.env.NODE_ENV === 'production' && (
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-V996SESB0H"
-          />
-        )}
-
-        {process.env.NODE_ENV === 'production' && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag() {
-                dataLayer.push(arguments);
-              }
-              gtag("js", new Date());
-              gtag("config", "G-V996SESB0H");
-            `,
-            }}
-          />
+          <>
+            <Script
+              strategy="lazyOnload"
+              src="https://www.googletagmanager.com/gtag/js?id=G-V996SESB0H"
+            />
+            <Script id="google-analytics" strategy="lazyOnload">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag() {
+                  dataLayer.push(arguments);
+                }
+                gtag("js", new Date());
+                gtag("config", "G-V996SESB0H");
+              `}
+            </Script>
+          </>
         )}
 
         {/* Structured Data */}

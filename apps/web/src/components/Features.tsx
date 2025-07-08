@@ -30,10 +30,12 @@ const FeatureCard = ({ icon, title, description, index }: FeatureCardProps) => {
     }
 
     return () => {
-      if (cardRef.current) {
-        observer.unobserve(cardRef.current)
+      const currentCardRef = cardRef.current
+      if (currentCardRef) {
+        observer.unobserve(currentCardRef)
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -84,10 +86,12 @@ const Features = () => {
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
+      const currentSectionRef = sectionRef.current
+      if (currentSectionRef) {
+        observer.unobserve(currentSectionRef)
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

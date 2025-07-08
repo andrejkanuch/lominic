@@ -12,6 +12,7 @@ import {
   ThumbsUp,
 } from 'lucide-react'
 import { GetStravaActivitiesQuery } from '@/generated/graphql'
+import { ViewOnStravaLink } from '@/components/ui/view-on-strava-link'
 
 interface ActivityCardProps {
   activity: GetStravaActivitiesQuery['getStravaActivities'][number]
@@ -145,6 +146,11 @@ export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
                 {activity.kudos_count}
               </span>
             </div>
+
+            <ViewOnStravaLink
+              activityId={Number(activity.id)}
+              variant="orange"
+            />
           </div>
         </div>
       </CardContent>
