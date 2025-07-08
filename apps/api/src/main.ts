@@ -15,7 +15,9 @@ async function bootstrap() {
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:3001',
+      'http://localhost:4000',
       process.env.FRONTEND_URL,
+      process.env.NEXT_PUBLIC_FRONTEND_URL,
     ].filter(Boolean)
 
     app.enableCors({
@@ -37,10 +39,12 @@ async function bootstrap() {
     )
     console.log('✅ Validation pipe configured')
 
-    // Global prefix
+    // Global prefix (but exclude GraphQL)
     console.log('🔗 Setting API prefix...')
-    app.setGlobalPrefix('api')
-    console.log('✅ API prefix set to /api')
+    app.setGlobalPrefix('api', {
+      exclude: ['/graphql(.*)'],
+    })
+    console.log('✅ API prefix set to /api (excluding GraphQL)')
 
     const port = process.env.PORT || 4000
     const isProduction = process.env.NODE_ENV === 'production'
