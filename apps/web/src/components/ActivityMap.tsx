@@ -32,8 +32,8 @@ export const ActivityMap = ({ activity }: ActivityMapProps) => {
               </span>
             </div>
             <p className="text-sm text-gray-600">
-              {activity.start_latlng?.[0]?.toFixed(4)},{' '}
-              {activity.start_latlng?.[1]?.toFixed(4)}
+              {activity.start_latlng?.lat?.toFixed(4)},{' '}
+              {activity.start_latlng?.lng?.toFixed(4)}
             </p>
           </div>
 
@@ -45,8 +45,8 @@ export const ActivityMap = ({ activity }: ActivityMapProps) => {
               </span>
             </div>
             <p className="text-sm text-gray-600">
-              {activity.end_latlng?.[0]?.toFixed(4)},{' '}
-              {activity.end_latlng?.[1]?.toFixed(4)}
+              {activity.end_latlng?.lat?.toFixed(4)},{' '}
+              {activity.end_latlng?.lng?.toFixed(4)}
             </p>
           </div>
         </div>
