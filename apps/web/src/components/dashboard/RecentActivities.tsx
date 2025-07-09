@@ -106,7 +106,7 @@ export const RecentActivities = ({ activities }: RecentActivitiesProps) => {
                 <div className="flex items-center space-x-6 text-sm text-gray-600">
                   <div className="flex items-center space-x-1">
                     <MapPin className="w-4 h-4" />
-                    <span>{activity.distance.toFixed(1)} km</span>
+                    <span>{(activity.distance / 1000).toFixed(1)} km</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Clock className="w-4 h-4" />

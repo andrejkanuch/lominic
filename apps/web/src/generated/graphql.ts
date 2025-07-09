@@ -89,6 +89,13 @@ export type CommentDto = {
   text: Scalars['String']['output'];
 };
 
+export type CorrelationAnalysis = {
+  __typename?: 'CorrelationAnalysis';
+  gradeHrCorrelation: Scalars['Float']['output'];
+  hrPowerCorrelation: Scalars['Float']['output'];
+  powerSpeedCorrelation: Scalars['Float']['output'];
+};
+
 export type CreateUserInput = {
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
@@ -127,6 +134,15 @@ export type DetailedAthlete = {
   weight: Scalars['Int']['output'];
 };
 
+export type DetailedInsightsResponse = {
+  __typename?: 'DetailedInsightsResponse';
+  correlations: CorrelationAnalysis;
+  heartRateZones: Array<HeartRateZoneDetail>;
+  insights: Array<Scalars['String']['output']>;
+  performanceMetrics: PerformanceMetrics;
+  trainingLoad: TrainingLoadAnalysis;
+};
+
 export type DetailedSegmentEffortDto = {
   __typename?: 'DetailedSegmentEffortDto';
   athlete: MetaAthleteDto;
@@ -163,6 +179,17 @@ export type HeartRateZone = {
   max: Scalars['Int']['output'];
   min: Scalars['Int']['output'];
   zones: Maybe<Array<ZoneBucket>>;
+};
+
+export type HeartRateZoneDetail = {
+  __typename?: 'HeartRateZoneDetail';
+  color: Scalars['String']['output'];
+  description: Scalars['String']['output'];
+  maxHeartRate: Scalars['Int']['output'];
+  minHeartRate: Scalars['Int']['output'];
+  percentage: Scalars['Float']['output'];
+  timeInZone: Scalars['Int']['output'];
+  zone: Scalars['Int']['output'];
 };
 
 export type HeartrateStreamDto = {
@@ -298,12 +325,35 @@ export type MutationUpdateUserArgs = {
   updateUserInput: UpdateUserInput;
 };
 
+export type PerformanceMetrics = {
+  __typename?: 'PerformanceMetrics';
+  aerobicDecoupling: Scalars['Float']['output'];
+  averageHeartRate: Scalars['Float']['output'];
+  averagePace: Scalars['Float']['output'];
+  averageSpeed: Scalars['Float']['output'];
+  efficiencyFactor: Scalars['Float']['output'];
+  maxHeartRate: Scalars['Float']['output'];
+  powerAnalysis: Maybe<PowerAnalysis>;
+  speedVariability: Scalars['Float']['output'];
+  trimpScore: Scalars['Float']['output'];
+};
+
 export type PolylineMapDto = {
   __typename?: 'PolylineMapDto';
   id: Scalars['String']['output'];
   polyline: Maybe<Scalars['String']['output']>;
   resource_state: Scalars['Int']['output'];
   summary_polyline: Maybe<Scalars['String']['output']>;
+};
+
+export type PowerAnalysis = {
+  __typename?: 'PowerAnalysis';
+  averagePower: Maybe<Scalars['Float']['output']>;
+  intensityFactor: Maybe<Scalars['Float']['output']>;
+  maxPower: Maybe<Scalars['Float']['output']>;
+  normalizedPower: Maybe<Scalars['Float']['output']>;
+  trainingStressScore: Maybe<Scalars['Float']['output']>;
+  variabilityIndex: Maybe<Scalars['Float']['output']>;
 };
 
 export type PowerStreamDto = {
@@ -330,6 +380,7 @@ export type Query = {
   getActivityById: StravaActivityDto;
   getActivityComments: Array<CommentDto>;
   getActivityInsights: Array<Scalars['String']['output']>;
+  getActivityInsightsDetailed: DetailedInsightsResponse;
   getActivityKudoers: Array<KudoerDto>;
   getActivityStreams: StreamSetDto;
   getActivityZones: Array<ActivityZoneDto>;
@@ -355,6 +406,11 @@ export type QueryGetActivityCommentsArgs = {
 
 
 export type QueryGetActivityInsightsArgs = {
+  activityId: Scalars['String']['input'];
+};
+
+
+export type QueryGetActivityInsightsDetailedArgs = {
   activityId: Scalars['String']['input'];
 };
 
@@ -589,6 +645,17 @@ export type TimeStreamDto = {
   type: Maybe<Scalars['String']['output']>;
 };
 
+export type TrainingLoadAnalysis = {
+  __typename?: 'TrainingLoadAnalysis';
+  acuteLoad: Scalars['Float']['output'];
+  acwr: Scalars['Float']['output'];
+  chronicLoad: Scalars['Float']['output'];
+  fatigueScore: Scalars['Float']['output'];
+  fitnessScore: Scalars['Float']['output'];
+  performanceReadiness: Scalars['Float']['output'];
+  riskLevel: Scalars['String']['output'];
+};
+
 export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
@@ -660,6 +727,13 @@ export type GetActivityInsightsQueryVariables = Exact<{
 
 
 export type GetActivityInsightsQuery = { __typename?: 'Query', getActivityInsights: Array<string> };
+
+export type GetActivityInsightsDetailedQueryVariables = Exact<{
+  activityId: Scalars['String']['input'];
+}>;
+
+
+export type GetActivityInsightsDetailedQuery = { __typename?: 'Query', getActivityInsightsDetailed: { __typename?: 'DetailedInsightsResponse', insights: Array<string>, heartRateZones: Array<{ __typename?: 'HeartRateZoneDetail', zone: number, minHeartRate: number, maxHeartRate: number, timeInZone: number, percentage: number, description: string, color: string }>, performanceMetrics: { __typename?: 'PerformanceMetrics', averageSpeed: number, averagePace: number, speedVariability: number, averageHeartRate: number, maxHeartRate: number, trimpScore: number, efficiencyFactor: number, aerobicDecoupling: number, powerAnalysis: { __typename?: 'PowerAnalysis', averagePower: number | null, maxPower: number | null, normalizedPower: number | null, intensityFactor: number | null, trainingStressScore: number | null, variabilityIndex: number | null } | null }, correlations: { __typename?: 'CorrelationAnalysis', powerSpeedCorrelation: number, hrPowerCorrelation: number, gradeHrCorrelation: number }, trainingLoad: { __typename?: 'TrainingLoadAnalysis', acuteLoad: number, chronicLoad: number, acwr: number, riskLevel: string, fitnessScore: number, fatigueScore: number, performanceReadiness: number } } };
 
 export type GetStravaActivitiesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -994,6 +1068,87 @@ export type GetActivityInsightsQueryHookResult = ReturnType<typeof useGetActivit
 export type GetActivityInsightsLazyQueryHookResult = ReturnType<typeof useGetActivityInsightsLazyQuery>;
 export type GetActivityInsightsSuspenseQueryHookResult = ReturnType<typeof useGetActivityInsightsSuspenseQuery>;
 export type GetActivityInsightsQueryResult = ApolloReactCommon.QueryResult<GetActivityInsightsQuery, GetActivityInsightsQueryVariables>;
+export const GetActivityInsightsDetailedDocument = gql`
+    query getActivityInsightsDetailed($activityId: String!) {
+  getActivityInsightsDetailed(activityId: $activityId) {
+    insights
+    heartRateZones {
+      zone
+      minHeartRate
+      maxHeartRate
+      timeInZone
+      percentage
+      description
+      color
+    }
+    performanceMetrics {
+      averageSpeed
+      averagePace
+      speedVariability
+      averageHeartRate
+      maxHeartRate
+      trimpScore
+      efficiencyFactor
+      aerobicDecoupling
+      powerAnalysis {
+        averagePower
+        maxPower
+        normalizedPower
+        intensityFactor
+        trainingStressScore
+        variabilityIndex
+      }
+    }
+    correlations {
+      powerSpeedCorrelation
+      hrPowerCorrelation
+      gradeHrCorrelation
+    }
+    trainingLoad {
+      acuteLoad
+      chronicLoad
+      acwr
+      riskLevel
+      fitnessScore
+      fatigueScore
+      performanceReadiness
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetActivityInsightsDetailedQuery__
+ *
+ * To run a query within a React component, call `useGetActivityInsightsDetailedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetActivityInsightsDetailedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetActivityInsightsDetailedQuery({
+ *   variables: {
+ *      activityId: // value for 'activityId'
+ *   },
+ * });
+ */
+export function useGetActivityInsightsDetailedQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetActivityInsightsDetailedQuery, GetActivityInsightsDetailedQueryVariables> & ({ variables: GetActivityInsightsDetailedQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetActivityInsightsDetailedQuery, GetActivityInsightsDetailedQueryVariables>(GetActivityInsightsDetailedDocument, options);
+      }
+export function useGetActivityInsightsDetailedLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetActivityInsightsDetailedQuery, GetActivityInsightsDetailedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetActivityInsightsDetailedQuery, GetActivityInsightsDetailedQueryVariables>(GetActivityInsightsDetailedDocument, options);
+        }
+export function useGetActivityInsightsDetailedSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetActivityInsightsDetailedQuery, GetActivityInsightsDetailedQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetActivityInsightsDetailedQuery, GetActivityInsightsDetailedQueryVariables>(GetActivityInsightsDetailedDocument, options);
+        }
+export type GetActivityInsightsDetailedQueryHookResult = ReturnType<typeof useGetActivityInsightsDetailedQuery>;
+export type GetActivityInsightsDetailedLazyQueryHookResult = ReturnType<typeof useGetActivityInsightsDetailedLazyQuery>;
+export type GetActivityInsightsDetailedSuspenseQueryHookResult = ReturnType<typeof useGetActivityInsightsDetailedSuspenseQuery>;
+export type GetActivityInsightsDetailedQueryResult = ApolloReactCommon.QueryResult<GetActivityInsightsDetailedQuery, GetActivityInsightsDetailedQueryVariables>;
 export const GetStravaActivitiesDocument = gql`
     query getStravaActivities($limit: Int) {
   getStravaActivities(limit: $limit) {

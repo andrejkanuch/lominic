@@ -1,3 +1,50 @@
 query getActivityInsights($activityId: String!) {
   getActivityInsights(activityId: $activityId)
 }
+
+query getActivityInsightsDetailed($activityId: String!) {
+  getActivityInsightsDetailed(activityId: $activityId) {
+    insights
+    heartRateZones {
+      zone
+      minHeartRate
+      maxHeartRate
+      timeInZone
+      percentage
+      description
+      color
+    }
+    performanceMetrics {
+      averageSpeed
+      averagePace
+      speedVariability
+      averageHeartRate
+      maxHeartRate
+      trimpScore
+      efficiencyFactor
+      aerobicDecoupling
+      powerAnalysis {
+        averagePower
+        maxPower
+        normalizedPower
+        intensityFactor
+        trainingStressScore
+        variabilityIndex
+      }
+    }
+    correlations {
+      powerSpeedCorrelation
+      hrPowerCorrelation
+      gradeHrCorrelation
+    }
+    trainingLoad {
+      acuteLoad
+      chronicLoad
+      acwr
+      riskLevel
+      fitnessScore
+      fatigueScore
+      performanceReadiness
+    }
+  }
+}

@@ -1085,4 +1085,18 @@ export class StravaService {
       historicalActivities as unknown as DetailedActivity[]
     )
   }
+
+  async getActivityInsightsDetailed(userId: string, activityId: number) {
+    const activity = await this.getActivityById(userId, activityId)
+    const streams = await this.getActivityStreams(userId, activityId)
+    const zones = await this.getAthleteZones(userId)
+    const historicalActivities = await this.getRecentActivities(userId, 50)
+
+    return this.insightsService.generateDetailedInsights(
+      activity as unknown as DetailedActivity,
+      streams as unknown as StreamSet,
+      zones as unknown as HeartRateZoneRanges,
+      historicalActivities as unknown as DetailedActivity[]
+    )
+  }
 }

@@ -11,7 +11,8 @@ lominic/
 │   └── web/          # Next.js web application
 ├── packages/
 │   ├── shared/       # Shared utilities, types, and constants
-│   └── ui/           # Shared React components and hooks
+│   ├── ui/           # Shared React components and hooks
+│   └── strava-api-types/  # Strava API type definitions
 └── turbo.json        # Turbo configuration
 ```
 
@@ -397,3 +398,349 @@ activities in Lominic.
 ---
 
 This roadmap provides the base tasks to implement Strava connectivity in the API. Once these are complete, we will have an MVP capable of importing activities from Strava and exposing them through GraphQL.
+
+## 📊 Activity API Implementation
+
+The Lominic API provides comprehensive Strava activity integration through GraphQL, offering detailed activity data, real-time streams, and analytics.
+
+### 🏃‍♂️ Activity Data Structure
+
+#### Core Activity Information (`StravaActivityDto`)
+
+The main activity type includes comprehensive data from Strava:
+
+**Basic Activity Data:**
+
+- `id`: Unique activity identifier
+- `name`: Activity title/name
+- `type`: Activity type (e.g., "Run", "Ride")
+- `sport_type`: Detailed sport classification (enum with 50+ sports)
+- `start_date` & `start_date_local`: Activity start timestamps
+- `timezone`: Activity timezone
+
+**Performance Metrics:**
+
+- `distance`: Total distance in meters
+- `moving_time` & `elapsed_time`: Duration in seconds
+- `total_elevation_gain`: Elevation gained in meters
+- `elev_high` & `elev_low`: Highest and lowest elevation points
+- `average_speed` & `max_speed`: Speed metrics in m/s
+- `average_cadence`: Pedaling/running cadence (if available)
+- `average_watts` & `max_watts`: Power output (cycling activities)
+- `kilojoules`: Total work done (cycling activities)
+
+**Heart Rate Data:**
+
+- `has_heartrate`: Whether heart rate data is available
+- `average_heartrate` & `max_heartrate`: Heart rate metrics
+- `calories`: Estimated calories burned
+- `suffer_score`: Strava's relative effort score
+
+**Location & Mapping:**
+
+- `start_latlng` & `end_latlng`: GPS coordinates
+- `map`: Polyline map data for route visualization
+- `location_city`, `location_state`, `location_country`: Location metadata
+
+**Social & Engagement:**
+
+- `kudos_count`: Number of kudos received
+- `comment_count`: Number of comments
+- `achievement_count`: Personal records achieved
+- `pr_count`: Personal records count
+- `has_kudoed`: Whether the current user has kudoed
+
+**Activity Metadata:**
+
+- `trainer`: Indoor/outdoor activity
+- `commute`: Whether marked as commute
+- `manual`: Manually entered activity
+- `private`: Privacy setting
+- `flagged`: Content moderation flag
+
+**Detailed Activity Data (when available):**
+
+- `description`: Activity description
+- `gear`: Equipment used (bike, shoes, etc.)
+- `segment_efforts`: Strava segment performances
+- `splits_metric` & `splits_standard`: Split times
+- `laps`: Individual lap data
+- `best_efforts`: Personal best performances
+- `photos`: Activity photos
+
+### 🏷️ Type System
+
+#### External Types (from `@lominic/strava-api-types`)
+
+The API uses comprehensive type definitions from the `strava-api-types` package:
+
+**Core Strava Types:**
+
+- `DetailedActivity`: Complete activity data from Strava API
+- `SummaryActivity`: Basic activity summary
+- `SportType`: Enum of 50+ supported sports
+- `MetaAthlete`: Athlete reference data
+- `PolylineMap`: Route mapping data
+- `SummaryGear`: Equipment information
+
+**Stream Types:**
+
+- `StreamSet`: Complete stream data collection
+- `BaseStream`: Base stream interface
+- `AltitudeStream`, `CadenceStream`, `DistanceStream`, etc.: Specific stream types
+- `LatLngStream`: GPS coordinate streams
+- `MovingStream`: Movement detection data
+
+**Supporting Types:**
+
+- `DetailedSegmentEffort`: Segment performance data
+- `Lap`: Individual lap information
+- `Split`: Split time data
+- `ActivityZone`: Training zone information
+- `Comment`: Activity comments
+- `Kudoer`: User who gave kudos
+
+#### Custom Types (Created in API)
+
+**GraphQL DTOs:**
+
+- `StravaActivityDto`: Main activity GraphQL type
+- `StreamSetDto`: Stream data GraphQL type
+- `ActivityZoneDto`: Training zones GraphQL type
+- `ActivityStats`: Activity statistics GraphQL type
+- `DetailedSegmentEffortDto`: Segment effort GraphQL type
+- `LapDto`: Lap data GraphQL type
+- `SplitDto`: Split data GraphQL type
+
+**Supporting DTOs:**
+
+- `MetaAthleteDto`: Athlete reference GraphQL type
+- `PolylineMapDto`: Map data GraphQL type
+- `SummaryGearDto`: Equipment GraphQL type
+- `LatLngDto`: GPS coordinates GraphQL type
+- `CommentDto`: Comment GraphQL type
+- `KudoerDto`: Kudoer GraphQL type
+
+### 📡 Activity Streams
+
+The API provides real-time activity stream data through the `getActivityStreams` endpoint, offering granular performance data throughout the activity.
+
+#### Available Stream Types
+
+**Time-based Streams:**
+
+- `time`: Timestamp data for each data point
+- `distance`: Distance covered at each point
+- `moving`: Boolean indicating if athlete was moving
+
+**Performance Streams:**
+
+- `heartrate`: Heart rate data throughout activity
+- `cadence`: Pedaling/running cadence data
+- `power`: Power output data (cycling activities)
+- `velocity_smooth`: Smoothed velocity data
+- `grade_smooth`: Elevation grade data
+
+**Location Streams:**
+
+- `latlng`: GPS coordinates throughout activity
+- `altitude`: Elevation data
+
+**Environmental Streams:**
+
+- `temp`: Temperature data (if available)
+
+#### Stream Data Structure
+
+Each stream contains:
+
+- `type`: Stream type identifier
+- `data`: Array of numerical/boolean/GPS values
+- `series_type`: Data series type ("time" or "distance")
+- `original_size`: Original data point count
+- `resolution`: Data resolution ("low", "medium", "high")
+
+**Special Handling:**
+
+- `LatLngStream`: Contains `LatLngDto` objects instead of numbers
+- `MovingStream`: Contains boolean values for movement detection
+- Null filtering: Streams automatically filter out null values for data quality
+
+### 🔍 API Endpoints
+
+#### Activity Queries
+
+**Get Recent Activities:**
+
+```graphql
+query GetStravaActivities($limit: Int!) {
+  getStravaActivities(limit: $limit) {
+    id
+    name
+    distance
+    moving_time
+    start_date
+    sport_type
+    # ... other fields
+  }
+}
+```
+
+**Get Specific Activity:**
+
+```graphql
+query GetActivityById($activityId: String!) {
+  getActivityById(activityId: $activityId) {
+    id
+    name
+    description
+    # ... complete activity data
+  }
+}
+```
+
+**Get Activity Streams:**
+
+```graphql
+query GetActivityStreams($activityId: String!) {
+  getActivityStreams(activityId: $activityId) {
+    time {
+      data
+    }
+    distance {
+      data
+    }
+    heartrate {
+      data
+    }
+    latlng {
+      data {
+        lat
+        lng
+      }
+    }
+    # ... other streams
+  }
+}
+```
+
+**Get Activity Zones:**
+
+```graphql
+query GetActivityZones($activityId: String!) {
+  getActivityZones(activityId: $activityId) {
+    type
+    score
+    points
+    max
+    # ... zone data
+  }
+}
+```
+
+#### Supporting Queries
+
+**Activity Comments:**
+
+```graphql
+query GetActivityComments($activityId: String!) {
+  getActivityComments(activityId: $activityId) {
+    id
+    text
+    created_at
+  }
+}
+```
+
+**Activity Kudoers:**
+
+```graphql
+query GetActivityKudoers($activityId: String!) {
+  getActivityKudoers(activityId: $activityId) {
+    firstname
+    lastname
+  }
+}
+```
+
+**Athlete Statistics:**
+
+```graphql
+query GetAthleteStats {
+  getAthleteStats {
+    all_run_totals {
+      count
+      distance
+      moving_time
+    }
+    all_ride_totals {
+      count
+      distance
+      moving_time
+    }
+    # ... other stats
+  }
+}
+```
+
+### 🎯 Data Display Features
+
+#### Activity List View
+
+- **Basic Info**: Name, date, sport type, duration
+- **Performance**: Distance, moving time, average speed
+- **Achievements**: PRs, achievements, kudos count
+- **Location**: City, state, country (if available)
+
+#### Activity Detail View
+
+- **Complete Metrics**: All performance data with units
+- **Route Visualization**: Polyline map data for mapping
+- **Segment Efforts**: Strava segment performances
+- **Lap Analysis**: Individual lap breakdowns
+- **Best Efforts**: Personal record attempts
+- **Equipment**: Gear used (bike, shoes, etc.)
+
+#### Stream Visualization
+
+- **Time Series Charts**: Heart rate, power, cadence over time
+- **Route Maps**: GPS track visualization
+- **Performance Analysis**: Speed, elevation, grade profiles
+- **Zone Analysis**: Training zone breakdowns
+
+#### Analytics Features
+
+- **Activity Totals**: Running, cycling, swimming statistics
+- **Trend Analysis**: Recent vs. all-time totals
+- **Achievement Tracking**: Personal records and milestones
+- **Training Load**: Suffer score and relative effort
+
+### 🔧 Implementation Details
+
+#### Service Layer (`StravaService`)
+
+- **Token Management**: Automatic OAuth token refresh
+- **Error Handling**: Comprehensive error handling for API failures
+- **Data Mapping**: Conversion from Strava API to GraphQL DTOs
+- **Stream Processing**: Null filtering and data validation
+
+#### Resolver Layer (`StravaResolver`)
+
+- **Authentication**: JWT-based user authentication
+- **Authorization**: User-specific data access
+- **Input Validation**: GraphQL argument validation
+- **Error Propagation**: User-friendly error messages
+
+#### Type Safety
+
+- **Generated Types**: GraphQL Code Generator for type safety
+- **Runtime Validation**: Input/output validation
+- **TypeScript Strict**: Full type safety throughout the stack
+
+### 🚀 Future Enhancements
+
+- **Real-time Updates**: WebSocket support for live activity updates
+- **Advanced Analytics**: Machine learning insights and predictions
+- **Social Features**: Activity sharing and community features
+- **Training Plans**: Integration with training plan management
+- **Equipment Tracking**: Detailed gear usage analytics
