@@ -23,13 +23,13 @@ interface PerformanceMetrics {
   efficiencyFactor: number
   aerobicDecoupling: number
   powerAnalysis?: {
-    averagePower: number
-    maxPower: number
-    normalizedPower: number
-    intensityFactor: number
-    trainingStressScore: number
-    variabilityIndex: number
-  }
+    averagePower: number | null
+    maxPower: number | null
+    normalizedPower: number | null
+    intensityFactor: number | null
+    trainingStressScore: number | null
+    variabilityIndex: number | null
+  } | null
 }
 
 interface CorrelationAnalysis {
@@ -175,19 +175,19 @@ export const ActivityInsightsDashboard: React.FC<
               <div>
                 <div className="text-sm font-medium">Average Power</div>
                 <div className="text-2xl font-bold">
-                  {performanceMetrics.powerAnalysis.averagePower}W
+                  {performanceMetrics.powerAnalysis?.averagePower || 'N/A'}W
                 </div>
               </div>
               <div>
                 <div className="text-sm font-medium">Max Power</div>
                 <div className="text-2xl font-bold">
-                  {performanceMetrics.powerAnalysis.maxPower}W
+                  {performanceMetrics.powerAnalysis?.maxPower || 'N/A'}W
                 </div>
               </div>
               <div>
                 <div className="text-sm font-medium">Normalized Power</div>
                 <div className="text-2xl font-bold">
-                  {performanceMetrics.powerAnalysis.normalizedPower}W
+                  {performanceMetrics.powerAnalysis?.normalizedPower || 'N/A'}W
                 </div>
               </div>
               <div>
