@@ -16,7 +16,7 @@ import { ViewOnStravaLink } from '@/components/ui/view-on-strava-link'
 
 interface ActivityCardProps {
   activity: GetStravaActivitiesQuery['getStravaActivities'][number]
-  onClick: (activityId: number) => void
+  onClick: (activityId: string) => void
 }
 
 export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
@@ -63,7 +63,7 @@ export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
   return (
     <Card
       className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px]"
-      onClick={() => onClick(Number(activity.id))}
+      onClick={() => onClick(activity.id)}
     >
       <CardContent className="p-6">
         <div className="space-y-4">

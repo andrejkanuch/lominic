@@ -23,7 +23,7 @@ import { useStravaError } from '@/hooks/use-strava-error'
 import { StravaConnectButton } from '@/components/ui/strava-connect-button'
 
 const ActivitiesContent: React.FC = () => {
-  const [selectedActivityId, setSelectedActivityId] = useState<number | null>(
+  const [selectedActivityId, setSelectedActivityId] = useState<string | null>(
     null
   )
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
@@ -48,7 +48,7 @@ const ActivitiesContent: React.FC = () => {
     return matchesSearch && matchesSport
   })
 
-  const handleActivityClick = (activityId: number) => {
+  const handleActivityClick = (activityId: string) => {
     setSelectedActivityId(activityId)
     setIsDetailModalOpen(true)
   }

@@ -12,6 +12,7 @@ import { DatabaseConfig } from './config/database.config'
 import { AuthModule } from './modules/auth/auth.module'
 import { UsersModule } from './modules/users/users.module'
 import { StravaModule } from './modules/strava/strava.module'
+import { InsightsModule } from './modules/insights/insights.module'
 import { DataRetentionModule } from './modules/data-retention/data-retention.module'
 
 export interface GraphQLContext {
@@ -53,6 +54,7 @@ export interface GraphQLContext {
     AuthModule,
     UsersModule,
     StravaModule,
+    InsightsModule,
     DataRetentionModule,
   ],
   controllers: [AppController],

@@ -9,7 +9,6 @@ import { DetailedAthlete } from './dto/detailed-athlete.dto'
 import { ActivityStats } from './dto/activity-stats.dto'
 import { CommentDto } from './dto/comment.dto'
 import { KudoerDto } from './dto/kudoer.dto'
-import { DetailedInsightsResponse } from './dto/insights.dto'
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard'
 import { CurrentUser } from '../../common/decorators/current-user.decorator'
 import { User } from '../../entities/user.entity'
@@ -158,42 +157,6 @@ export class StravaResolver {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error occurred'
       throw new Error(`Failed to fetch activity streams: ${errorMessage}`)
-    }
-  }
-
-  @Query(() => [String])
-  async getActivityInsights(
-    @CurrentUser() user: User,
-    @Args('activityId', { type: () => String }) activityId: string
-  ): Promise<string[]> {
-    try {
-      return await this.stravaService.getActivityInsights(
-        user.id,
-        parseInt(activityId)
-      )
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error occurred'
-      throw new Error(`Failed to fetch activity insights: ${errorMessage}`)
-    }
-  }
-
-  @Query(() => DetailedInsightsResponse)
-  async getActivityInsightsDetailed(
-    @CurrentUser() user: User,
-    @Args('activityId', { type: () => String }) activityId: string
-  ): Promise<DetailedInsightsResponse> {
-    try {
-      return await this.stravaService.getActivityInsightsDetailed(
-        user.id,
-        parseInt(activityId)
-      )
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error occurred'
-      throw new Error(
-        `Failed to fetch detailed activity insights: ${errorMessage}`
-      )
     }
   }
 }

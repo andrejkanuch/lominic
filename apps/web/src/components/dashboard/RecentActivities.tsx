@@ -1,39 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import {
-  Calendar,
-  Clock,
-  MapPin,
-  Zap,
-  Mountain,
-  Timer,
-  BrainCircuit,
-} from 'lucide-react'
-import { ActivityDetailModal } from '../ActivityDetailModal'
-import {
-  GetStravaActivitiesQuery,
-  useGetActivityInsightsLazyQuery,
-} from '@/generated/graphql'
+import { Calendar, Clock, MapPin, Zap, Mountain, Timer } from 'lucide-react'
+import { GetStravaActivitiesQuery } from '@/generated/graphql'
 
 interface RecentActivitiesProps {
   activities: GetStravaActivitiesQuery['getStravaActivities']
 }
 
 export const RecentActivities = ({ activities }: RecentActivitiesProps) => {
-  const [selectedActivity, setSelectedActivity] = useState<
-    GetStravaActivitiesQuery['getStravaActivities'][number] | null
-  >(null)
-  const [getInsights, { loading, data }] = useGetActivityInsightsLazyQuery()
-
-  const handleViewInsights = (
-    activity: GetStravaActivitiesQuery['getStravaActivities'][number]
-  ) => {
-    setSelectedActivity(activity)
-    getInsights({ variables: { activityId: activity.id.toString() } })
-  }
-
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
@@ -116,28 +91,11 @@ export const RecentActivities = ({ activities }: RecentActivitiesProps) => {
                     <Zap className="w-4 h-4" />
                     <span>{activity.average_speed.toFixed(1)} km/h</span>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleViewInsights(activity)}
-                  >
-                    <BrainCircuit className="w-4 h-4 mr-2" />
-                    View Insights
-                  </Button>
                 </div>
               </div>
             )
           })}
         </div>
-        {selectedActivity && (
-          <ActivityDetailModal
-            isOpen={!!selectedActivity}
-            onClose={() => setSelectedActivity(null)}
-            activityId={selectedActivity.id}
-            insights={data?.getActivityInsights}
-            loadingInsights={loading}
-          />
-        )}
       </CardContent>
     </Card>
   )

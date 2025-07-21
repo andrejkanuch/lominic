@@ -7,7 +7,6 @@ import { StravaAccount } from '../../entities/strava-account.entity'
 import { StravaActivityDto } from './dto/strava-activity.dto'
 import { StreamSetDto } from './dto/stream-set.dto'
 import { DataRetentionService } from '../data-retention/data-retention.service'
-import { InsightsService } from './insights.service'
 import {
   DetailedActivity,
   DetailedAthlete,
@@ -33,8 +32,7 @@ export class StravaService {
     @InjectRepository(StravaAccount)
     private accounts: Repository<StravaAccount>,
     private configService: ConfigService,
-    private dataRetentionService: DataRetentionService,
-    private insightsService: InsightsService
+    private dataRetentionService: DataRetentionService
   ) {}
 
   /**
@@ -1068,35 +1066,5 @@ export class StravaService {
         }`
       )
     }
-  }
-  async getActivityInsights(
-    userId: string,
-    activityId: number
-  ): Promise<string[]> {
-    const activity = await this.getActivityById(userId, activityId)
-    const streams = await this.getActivityStreams(userId, activityId)
-    const zones = await this.getAthleteZones(userId)
-    const historicalActivities = await this.getRecentActivities(userId, 50)
-
-    return this.insightsService.generateInsights(
-      activity as unknown as DetailedActivity,
-      streams as unknown as StreamSet,
-      zones as unknown as HeartRateZoneRanges,
-      historicalActivities as unknown as DetailedActivity[]
-    )
-  }
-
-  async getActivityInsightsDetailed(userId: string, activityId: number) {
-    const activity = await this.getActivityById(userId, activityId)
-    const streams = await this.getActivityStreams(userId, activityId)
-    const zones = await this.getAthleteZones(userId)
-    const historicalActivities = await this.getRecentActivities(userId, 50)
-
-    return this.insightsService.generateDetailedInsights(
-      activity as unknown as DetailedActivity,
-      streams as unknown as StreamSet,
-      zones as unknown as HeartRateZoneRanges,
-      historicalActivities as unknown as DetailedActivity[]
-    )
   }
 }
