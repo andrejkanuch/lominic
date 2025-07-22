@@ -104,6 +104,12 @@ export type CreateUserInput = {
   role?: InputMaybe<Role>;
 };
 
+export type CriticalPower = {
+  __typename?: 'CriticalPower';
+  cp: Scalars['Float']['output'];
+  wPrime: Scalars['Float']['output'];
+};
+
 export type DetailedAthlete = {
   __typename?: 'DetailedAthlete';
   athlete_type: Scalars['Int']['output'];
@@ -171,6 +177,12 @@ export type DistanceStreamDto = {
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
   type: Maybe<Scalars['String']['output']>;
+};
+
+export type HrZone = {
+  __typename?: 'HRZone';
+  timeInZone: Scalars['Float']['output'];
+  zone: Scalars['String']['output'];
 };
 
 export type HeartRateZone = {
@@ -338,6 +350,19 @@ export type PerformanceMetrics = {
   trimpScore: Scalars['Float']['output'];
 };
 
+export type PhysicalStatus = {
+  __typename?: 'PhysicalStatus';
+  acwr: Scalars['Float']['output'];
+  criticalPower: CriticalPower;
+  ftp: Scalars['Float']['output'];
+  hrRecovery: Scalars['Float']['output'];
+  recommendations: Array<Scalars['String']['output']>;
+  runningEconomy: Scalars['Float']['output'];
+  sufferScore: Scalars['Float']['output'];
+  visualizations: VisualizationData;
+  vo2Max: Scalars['Float']['output'];
+};
+
 export type PolylineMapDto = {
   __typename?: 'PolylineMapDto';
   id: Scalars['String']['output'];
@@ -387,6 +412,7 @@ export type Query = {
   getAthlete: DetailedAthlete;
   getAthleteStats: ActivityStats;
   getAthleteZones: Zones;
+  getPhysicalStatus: PhysicalStatus;
   getRetentionStats: Scalars['String']['output'];
   getStravaActivities: Array<StravaActivityDto>;
   me: User;
@@ -430,6 +456,11 @@ export type QueryGetActivityZonesArgs = {
 };
 
 
+export type QueryGetPhysicalStatusArgs = {
+  userGoals?: InputMaybe<UserGoalsInput>;
+};
+
+
 export type QueryGetStravaActivitiesArgs = {
   limit: Scalars['Int']['input'];
 };
@@ -451,6 +482,14 @@ export type Role =
   | 'ADMIN'
   | 'SUPER_ADMIN'
   | 'USER';
+
+export type SegmentProgress = {
+  __typename?: 'SegmentProgress';
+  name: Scalars['String']['output'];
+  pr: Scalars['Boolean']['output'];
+  segmentId: Scalars['Float']['output'];
+  time: Scalars['Float']['output'];
+};
 
 export type SmoothGradeStreamDto = {
   __typename?: 'SmoothGradeStreamDto';
@@ -678,6 +717,26 @@ export type User = {
   markedForDeletionAt: Scalars['DateTime']['output'];
   role: Role;
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type UserGoalsInput = {
+  targetDate?: InputMaybe<Scalars['String']['input']>;
+  targetDistance?: InputMaybe<Scalars['Float']['input']>;
+  targetFTP?: InputMaybe<Scalars['Float']['input']>;
+  type: Scalars['String']['input'];
+};
+
+export type VisualizationData = {
+  __typename?: 'VisualizationData';
+  hrZones: Array<HrZone>;
+  segmentProgress: Array<SegmentProgress>;
+  weeklyDistance: Array<WeeklyDistance>;
+};
+
+export type WeeklyDistance = {
+  __typename?: 'WeeklyDistance';
+  distance: Scalars['Float']['output'];
+  week: Scalars['String']['output'];
 };
 
 export type ZoneBucket = {

@@ -1,3 +1,113 @@
+# Enhanced Insights GraphQL Schema
+
+type UserGoals {
+  type: String!
+  targetDistance: Float
+  targetFTP: Float
+  targetDate: String
+}
+
+type WeeklyDistance {
+  week: String!
+  distance: Float!
+}
+
+type HRZone {
+  zone: String!
+  timeInZone: Int!
+}
+
+type SegmentProgress {
+  segmentId: Int!
+  name: String!
+  time: Int!
+  pr: Boolean!
+}
+
+type VisualizationData {
+  weeklyDistance: [WeeklyDistance!]!
+  hrZones: [HRZone!]!
+  segmentProgress: [SegmentProgress!]!
+}
+
+type CriticalPower {
+  cp: Float!
+  wPrime: Float!
+}
+
+type PhysicalStatus {
+  ftp: Float!
+  vo2Max: Float!
+  runningEconomy: Float!
+  criticalPower: CriticalPower!
+  hrRecovery: Float!
+  acwr: Float!
+  sufferScore: Float!
+  recommendations: [String!]!
+  visualizations: VisualizationData!
+}
+
+type HeartRateZoneDetail {
+  zone: Int!
+  minHeartRate: Int!
+  maxHeartRate: Int!
+  timeInZone: Int!
+  percentage: Float!
+  description: String!
+  color: String!
+}
+
+type PowerAnalysis {
+  averagePower: Float
+  maxPower: Float
+  normalizedPower: Float
+  intensityFactor: Float
+  trainingStressScore: Float
+  variabilityIndex: Float
+}
+
+type PerformanceMetrics {
+  averageSpeed: Float!
+  averagePace: Float!
+  speedVariability: Float!
+  averageHeartRate: Float!
+  maxHeartRate: Float!
+  trimpScore: Float!
+  efficiencyFactor: Float!
+  aerobicDecoupling: Float!
+  powerAnalysis: PowerAnalysis
+}
+
+type CorrelationAnalysis {
+  powerSpeedCorrelation: Float!
+  hrPowerCorrelation: Float!
+  gradeHrCorrelation: Float!
+}
+
+type TrainingLoadAnalysis {
+  acuteLoad: Float!
+  chronicLoad: Float!
+  acwr: Float!
+  riskLevel: String!
+  fitnessScore: Float!
+  fatigueScore: Float!
+  performanceReadiness: Float!
+}
+
+type DetailedInsightsResponse {
+  insights: [String!]!
+  heartRateZones: [HeartRateZoneDetail!]!
+  performanceMetrics: PerformanceMetrics!
+  correlations: CorrelationAnalysis!
+  trainingLoad: TrainingLoadAnalysis!
+}
+
+type Query {
+  getPhysicalStatus(userGoals: UserGoals): PhysicalStatus!
+  getActivityInsights(activityId: String!): [String!]!
+  getActivityInsightsDetailed(activityId: String!): DetailedInsightsResponse!
+}
+
 query getActivityInsights($activityId: String!) {
   getActivityInsights(activityId: $activityId)
 }

@@ -7,6 +7,37 @@ import {
 } from '@lominic/strava-api-types'
 import { StravaService } from '../strava/strava.service'
 
+// New interfaces for enhanced insights
+interface UserGoals {
+  type: 'marathon' | 'ftp_improvement' | 'general_fitness'
+  targetDistance?: number // e.g., 42.2 for marathon
+  targetFTP?: number
+  targetDate?: string // ISO 8601
+}
+
+interface VisualizationData {
+  weeklyDistance: { week: string; distance: number }[]
+  hrZones: { zone: string; timeInZone: number }[]
+  segmentProgress: {
+    segmentId: number
+    name: string
+    time: number
+    pr: boolean
+  }[]
+}
+
+interface PhysicalStatus {
+  ftp: number
+  vo2Max: number
+  runningEconomy: number
+  criticalPower: { cp: number; wPrime: number }
+  hrRecovery: number
+  acwr: number
+  sufferScore: number
+  recommendations: string[]
+  visualizations: VisualizationData
+}
+
 // Fallback data for missing fields - these would come from user profile or settings
 const FALLBACK_USER_DATA = {
   age: 30,
@@ -261,7 +292,108 @@ export class InsightsService {
     }
   }
 
-  // Generate detailed insights with structured data for charts
+  // Main resolver function for comprehensive physical status
+  async resolvePhysicalStatus(
+    userId: string,
+    userGoals?: UserGoals
+  ): Promise<PhysicalStatus> {
+    try {
+      const athleteData = await this.getAthleteData(userId)
+      const activities = await this.stravaService.getRecentActivities(
+        userId,
+        100
+      )
+      const zones = await this.stravaService.getAthleteZones(userId)
+
+      // Get streams for recent activities for detailed analysis
+      const recentActivities = activities.slice(0, 10)
+      const activityStreams = await Promise.all(
+        recentActivities.map(activity =>
+          this.stravaService.getActivityStreams(userId, parseInt(activity.id))
+        )
+      )
+
+      // Calculate advanced metrics with type casting
+      const ftpData = this.estimateFTP(activities as any[])
+      const criticalPower = await this.calculateCriticalPower(
+        activities as any[]
+      )
+
+      const runningEconomy =
+        activityStreams.reduce(
+          (sum, streams, i) =>
+            sum +
+            this.calculateRunningEconomy(
+              recentActivities[i] as any,
+              streams as any,
+              athleteData.weight
+            ),
+          0
+        ) / activityStreams.length
+
+      const vo2Max = activities
+        .filter(a => a.sport_type === 'Run')
+        .reduce((max, a) => Math.max(max, this.estimateVO2MaxRun(a as any)), 0)
+
+      const hrRecovery =
+        activityStreams.reduce(
+          (sum, streams) => sum + this.calculateHRRecovery(streams as any),
+          0
+        ) / activityStreams.length
+
+      const acwr = this.calculateACWR(activities as any[])
+
+      const sufferScore =
+        activityStreams.reduce(
+          (sum, streams, i) =>
+            sum +
+            this.calculateSufferScore(
+              recentActivities[i] as any,
+              streams as any,
+              zones as any
+            ),
+          0
+        ) / activityStreams.length
+
+      const status: PhysicalStatus = {
+        ftp: ftpData.ftp,
+        vo2Max,
+        runningEconomy,
+        criticalPower,
+        hrRecovery,
+        acwr,
+        sufferScore,
+        recommendations: [],
+        visualizations: {
+          weeklyDistance: [],
+          hrZones: [],
+          segmentProgress: [],
+        },
+      }
+
+      status.recommendations = this.generateRecommendations(
+        status,
+        activities as any[],
+        userGoals
+      )
+      status.visualizations = this.generateVisualizationData(
+        activities as any[]
+      )
+
+      return status
+    } catch (error) {
+      this.logger.error('Error resolving physical status:', error)
+
+      // Check if it's a rate limit error
+      if (error instanceof Error && error.message.includes('Rate Limit')) {
+        throw new Error('Strava rate limit exceeded. Please try again later.')
+      }
+
+      throw new Error('Failed to fetch or process data')
+    }
+  }
+
+  // Enhanced generateDetailedInsights method
   async generateDetailedInsights(
     activity: DetailedActivity,
     streams: StreamSet,
@@ -296,12 +428,43 @@ export class InsightsService {
         historicalActivities
       )
 
+      // Try to get physical status, but don't fail if rate limited
+      let physicalStatus = null
+      try {
+        physicalStatus = await this.resolvePhysicalStatus(userId)
+      } catch (error) {
+        this.logger.warn(
+          `Could not fetch physical status due to rate limit or other error, using fallback data:`,
+          error
+        )
+        // Provide fallback physical status data
+        physicalStatus = {
+          ftp: FALLBACK_USER_DATA.criticalPower,
+          vo2Max: 50,
+          runningEconomy: 0.8,
+          criticalPower: {
+            cp: FALLBACK_USER_DATA.criticalPower,
+            wPrime: FALLBACK_USER_DATA.wPrime,
+          },
+          hrRecovery: 25,
+          acwr: 1.0,
+          sufferScore: 50,
+          recommendations: ['Continue with current training plan'],
+          visualizations: {
+            weeklyDistance: [],
+            hrZones: [],
+            segmentProgress: [],
+          },
+        }
+      }
+
       return {
         insights,
         heartRateZones: hrZones,
         performanceMetrics,
         correlations,
         trainingLoad,
+        physicalStatus,
       }
     } catch (error) {
       this.logger.error(
@@ -339,7 +502,10 @@ export class InsightsService {
 
       const summary = this.calculateActivitySummary(activities)
       const trainingLoad = this.calculateComprehensiveTrainingLoad(activities)
-      const recommendations = this.generateRecommendations(activities)
+      const recommendations = [
+        'Focus on consistent training',
+        'Monitor recovery',
+      ]
       const riskAssessment =
         this.calculateComprehensiveRiskAssessment(activities)
 
@@ -416,7 +582,8 @@ export class InsightsService {
     const insights = []
 
     // Average Speed
-    const avgSpeed = activity.distance / activity.moving_time // m/s
+    const avgSpeed =
+      activity.moving_time > 0 ? activity.distance / activity.moving_time : 0 // m/s
     const avgSpeedKmh = avgSpeed * 3.6 // km/h
     insights.push(
       `Average Speed: ${avgSpeedKmh.toFixed(2)} km/h (${avgSpeed.toFixed(
@@ -523,7 +690,8 @@ export class InsightsService {
 
     const powerData = streams.power.data
     const avgPower = activity.average_watts || 0
-    const maxPower = activity.max_watts || Math.max(...powerData)
+    const maxPower =
+      activity.max_watts || (powerData.length > 0 ? Math.max(...powerData) : 0)
     const ftp = athleteData.criticalPower
 
     // Normalized Power calculation
@@ -583,7 +751,7 @@ export class InsightsService {
     const avgHr = activity.average_heartrate
 
     // Efficiency Factor
-    if (activity.sport_type === 'Ride' && activity.average_watts) {
+    if (activity.sport_type === 'Ride' && activity.average_watts && avgHr > 0) {
       const efficiencyFactor = activity.average_watts / avgHr
       insights.push(`Efficiency Factor: ${efficiencyFactor.toFixed(2)} W/bpm`)
     }
@@ -880,7 +1048,7 @@ export class InsightsService {
       (sum, a) => sum + (a.calories || 0),
       0
     )
-    const avgSpeed = totalDistance / totalTime
+    const avgSpeed = totalTime > 0 ? totalDistance / totalTime : 0
 
     const sportTypeDistribution = activities.reduce(
       (acc, activity) => {
@@ -938,7 +1106,10 @@ export class InsightsService {
     const averagePower =
       powerActivities.reduce((sum, a) => sum + (a.average_watts || 0), 0) /
       powerActivities.length
-    const maxPower = Math.max(...powerActivities.map(a => a.max_watts || 0))
+    const maxPower =
+      powerActivities.length > 0
+        ? Math.max(...powerActivities.map(a => a.max_watts || 0))
+        : 0
     const powerToWeightRatio = averagePower / data.weight
 
     let category = 'Recreational'
@@ -972,7 +1143,10 @@ export class InsightsService {
     const averageHR =
       activities.reduce((sum, a) => sum + (a.average_heartrate || 0), 0) /
       activities.length
-    const maxHR = Math.max(...activities.map(a => a.max_heartrate || 0))
+    const maxHR =
+      activities.length > 0
+        ? Math.max(...activities.map(a => a.max_heartrate || 0))
+        : 0
 
     return {
       averageHR,
@@ -1006,10 +1180,6 @@ export class InsightsService {
       gradeHrCorrelation: 0,
       interpretations: {},
     }
-  }
-
-  private generateRecommendations(activities: DetailedActivity[]): string[] {
-    return ['Focus on consistent training', 'Monitor recovery']
   }
 
   private calculateComprehensiveRiskAssessment(
@@ -1182,7 +1352,10 @@ export class InsightsService {
     hrRest: number,
     hrMax: number
   ): number {
-    const hrRatio = (hrAvg - hrRest) / (hrMax - hrRest)
+    const hrReserve = hrMax - hrRest
+    if (hrReserve <= 0) return 0
+
+    const hrRatio = (hrAvg - hrRest) / hrReserve
     const genderCoefficient = 0.64 * Math.exp(1.92 * hrRatio) // For men
     return durationMin * hrRatio * genderCoefficient
   }
@@ -1193,6 +1366,7 @@ export class InsightsService {
     intensityFactor: number,
     ftp: number
   ): number {
+    if (ftp <= 0) return 0
     return (
       ((durationSeconds * normalizedPower * intensityFactor) / (ftp * 3600)) *
       100
@@ -1221,20 +1395,29 @@ export class InsightsService {
     activity: DetailedActivity,
     streams: StreamSet
   ) {
-    const avgSpeed = activity.distance / activity.moving_time // m/s
+    const avgSpeed =
+      activity.moving_time > 0 ? activity.distance / activity.moving_time : 0 // m/s
     const avgSpeedKmh = avgSpeed * 3.6 // km/h
-    const avgPace = activity.moving_time / 60 / (activity.distance / 1000) // min/km
+    // Calculate pace safely to avoid division by zero
+    const distanceKm = activity.distance / 1000
+    const avgPace = distanceKm > 0 ? activity.moving_time / 60 / distanceKm : 0 // min/km
 
     let speedVariability = 0
-    if (streams.smooth_velocity) {
+    if (streams.smooth_velocity && streams.smooth_velocity.data.length > 0) {
       const velocityData = streams.smooth_velocity.data
       const avgVelocity =
         velocityData.reduce((sum, v) => sum + v, 0) / velocityData.length
-      const variance =
-        velocityData.reduce((sum, v) => sum + Math.pow(v - avgVelocity, 2), 0) /
-        velocityData.length
-      const stdDev = Math.sqrt(variance)
-      speedVariability = (stdDev / avgVelocity) * 100
+
+      // Only calculate variability if average velocity is not zero
+      if (avgVelocity > 0) {
+        const variance =
+          velocityData.reduce(
+            (sum, v) => sum + Math.pow(v - avgVelocity, 2),
+            0
+          ) / velocityData.length
+        const stdDev = Math.sqrt(variance)
+        speedVariability = (stdDev / avgVelocity) * 100
+      }
     }
 
     const avgHr = activity.average_heartrate || 0
@@ -1247,9 +1430,13 @@ export class InsightsService {
     )
 
     let efficiencyFactor = 0
-    if (activity.sport_type === 'Ride' && activity.average_watts) {
+    if (activity.sport_type === 'Ride' && activity.average_watts && avgHr > 0) {
       efficiencyFactor = activity.average_watts / avgHr
-    } else if (activity.sport_type === 'Run' && streams.smooth_velocity) {
+    } else if (
+      activity.sport_type === 'Run' &&
+      streams.smooth_velocity &&
+      avgHr > 0
+    ) {
       const avgVelocity =
         streams.smooth_velocity.data.reduce((sum, v) => sum + v, 0) /
         streams.smooth_velocity.data.length
@@ -1271,16 +1458,21 @@ export class InsightsService {
     if (activity.sport_type === 'Ride' && streams.power) {
       const powerData = streams.power.data
       const avgPower = activity.average_watts || 0
-      const maxPower = activity.max_watts || Math.max(...powerData)
+      const maxPower =
+        activity.max_watts ||
+        (powerData.length > 0 ? Math.max(...powerData) : 0)
       const normalizedPower = this.calculateNormalizedPower(powerData)
-      const intensityFactor = normalizedPower / FALLBACK_USER_DATA.criticalPower
+      const intensityFactor =
+        FALLBACK_USER_DATA.criticalPower > 0
+          ? normalizedPower / FALLBACK_USER_DATA.criticalPower
+          : 0
       const tss = this.calculateTSS(
         activity.moving_time,
         normalizedPower,
         intensityFactor,
         FALLBACK_USER_DATA.criticalPower
       )
-      const variabilityIndex = normalizedPower / avgPower
+      const variabilityIndex = avgPower > 0 ? normalizedPower / avgPower : 0
 
       powerAnalysis = {
         averagePower: avgPower,
@@ -1365,5 +1557,350 @@ export class InsightsService {
       fatigueScore: Math.round(fatigueScore * 10) / 10,
       performanceReadiness: Math.round(performanceReadiness * 10) / 10,
     }
+  }
+
+  // Estimate FTP using multiple efforts
+  private estimateFTP(activities: DetailedActivity[]): {
+    ftp: number
+    confidence: number
+  } {
+    const twentyMinEfforts = activities
+      .filter(
+        a =>
+          a.moving_time >= 15 * 60 &&
+          a.moving_time <= 25 * 60 &&
+          a.average_watts
+      )
+      .map(a => a.average_watts || 0)
+    const fiveMinEfforts = activities
+      .filter(
+        a => a.moving_time >= 4 * 60 && a.moving_time <= 6 * 60 && a.max_watts
+      )
+      .map(a => a.max_watts || 0)
+
+    const best20Min =
+      twentyMinEfforts.length > 0 ? Math.max(...twentyMinEfforts) : 0
+    const best5Min = fiveMinEfforts.length > 0 ? Math.max(...fiveMinEfforts) : 0
+    const ftp = best20Min ? best20Min * 0.95 : best5Min ? best5Min * 0.9 : 200 // Fallback
+    const confidence =
+      twentyMinEfforts.length >= 3
+        ? 0.9
+        : twentyMinEfforts.length >= 1
+        ? 0.7
+        : 0.5
+    return { ftp, confidence }
+  }
+
+  // Calculate critical power and W' using Monod-Scherrer model
+  private async calculateCriticalPower(
+    activities: DetailedActivity[]
+  ): Promise<{ cp: number; wPrime: number }> {
+    try {
+      const durations = [180, 300, 1200] // 3min, 5min, 20min
+      const powerActivities = activities.filter(
+        a => a.average_watts && a.moving_time >= 180
+      )
+
+      if (powerActivities.length < 3) {
+        return {
+          cp: FALLBACK_USER_DATA.criticalPower,
+          wPrime: FALLBACK_USER_DATA.wPrime,
+        }
+      }
+
+      const points = powerActivities.slice(0, 10).map(activity => ({
+        duration: activity.moving_time / 60, // Convert to minutes
+        power: activity.average_watts || 0,
+      }))
+
+      // Simple linear regression for critical power model
+      const regression = this.calculateLinearRegression(points)
+      return {
+        cp: Math.max(regression.slope, 100), // Minimum 100W
+        wPrime: Math.max(regression.intercept, 5000), // Minimum 5000J
+      }
+    } catch (error) {
+      this.logger.warn(
+        'Failed to calculate critical power, using fallback values:',
+        error
+      )
+      return {
+        cp: FALLBACK_USER_DATA.criticalPower,
+        wPrime: FALLBACK_USER_DATA.wPrime,
+      }
+    }
+  }
+
+  // Calculate running economy
+  private calculateRunningEconomy(
+    activity: DetailedActivity,
+    streams: StreamSet,
+    athleteWeight: number
+  ): number {
+    if (
+      !streams.smooth_velocity ||
+      !streams.heartrate ||
+      !activity.average_heartrate ||
+      activity.sport_type !== 'Run'
+    ) {
+      return 0
+    }
+
+    const avgSpeed = activity.distance / activity.moving_time // m/s
+    const avgHr = activity.average_heartrate
+    const gradeAdjustedSpeed = this.adjustSpeedForGrade(
+      streams.smooth_velocity.data,
+      streams.smooth_grade?.data
+    )
+
+    const avgGradeAdjustedSpeed =
+      gradeAdjustedSpeed.reduce((sum, speed) => sum + speed, 0) /
+      gradeAdjustedSpeed.length
+    return (avgHr / avgGradeAdjustedSpeed) * athleteWeight // kcal/km/kg
+  }
+
+  // Adjust speed for grade
+  private adjustSpeedForGrade(
+    velocities: number[],
+    grades?: number[]
+  ): number[] {
+    if (!grades) return velocities
+    return velocities.map((v, i) => v / (1 + (grades[i] || 0) / 100))
+  }
+
+  // Estimate VO2 max for running
+  private estimateVO2MaxRun(activity: DetailedActivity): number {
+    if (activity.sport_type !== 'Run') return 0
+
+    // Calculate speed safely to avoid division by zero
+    const distanceKm = activity.distance / 1000
+    const timeMin = activity.moving_time / 60
+    const speedMPerMin =
+      distanceKm > 0 && timeMin > 0 ? (1000 / (timeMin / distanceKm)) * 60 : 0
+
+    // Daniels and Gilbert formula
+    const vo2Max =
+      (-4.6 + 0.182258 * speedMPerMin + 0.000104 * speedMPerMin ** 2) /
+      (0.8 +
+        0.1894393 * Math.exp(-0.012778 * timeMin) +
+        0.2989558 * Math.exp(-0.1932605 * timeMin))
+
+    return Math.max(vo2Max, 30) // Minimum 30 ml/kg/min
+  }
+
+  // Calculate heart rate recovery
+  private calculateHRRecovery(streams: StreamSet): number {
+    if (!streams.heartrate || !streams.power) return 0
+
+    const intenseSegments = this.identifyIntenseSegments(streams.power.data)
+    const recoveryDrops = intenseSegments.map(segment => {
+      const postSegmentHR = streams.heartrate.data.slice(
+        segment.end + 60,
+        segment.end + 120
+      )
+      return segment.peakHR - Math.min(...postSegmentHR)
+    })
+
+    return recoveryDrops.length > 0
+      ? recoveryDrops.reduce((sum, d) => sum + d, 0) / recoveryDrops.length
+      : 0
+  }
+
+  private identifyIntenseSegments(
+    powerData: number[]
+  ): { peakHR: number; end: number }[] {
+    const segments: { peakHR: number; end: number }[] = []
+    const threshold = powerData.length > 0 ? Math.max(...powerData) * 0.8 : 0 // 80% of max power
+
+    const currentSegment = { start: 0, peakHR: 0, end: 0 }
+    let inSegment = false
+
+    for (let i = 0; i < powerData.length; i++) {
+      if (powerData[i] > threshold) {
+        if (!inSegment) {
+          currentSegment.start = i
+          inSegment = true
+        }
+        // Track peak HR during segment (would need HR data here)
+      } else if (inSegment) {
+        currentSegment.end = i
+        segments.push({
+          peakHR: currentSegment.peakHR,
+          end: currentSegment.end,
+        })
+        inSegment = false
+      }
+    }
+
+    return segments
+  }
+
+  // Calculate Acute-to-Chronic Workload Ratio (ACWR) - enhanced version
+  private calculateACWR(activities: DetailedActivity[]): number {
+    const now = Date.now()
+    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000
+    const twentyEightDaysAgo = now - 28 * 24 * 60 * 60 * 1000
+
+    const acuteActivities = activities.filter(
+      a => new Date(a.start_date).getTime() >= sevenDaysAgo
+    )
+    const chronicActivities = activities.filter(
+      a => new Date(a.start_date).getTime() >= twentyEightDaysAgo
+    )
+
+    const acuteLoad = acuteActivities.reduce(
+      (sum, a) => sum + (a.suffer_score || 0),
+      0
+    )
+    const chronicLoad =
+      chronicActivities.reduce((sum, a) => sum + (a.suffer_score || 0), 0) / 4
+
+    return chronicLoad > 0 ? acuteLoad / chronicLoad : 0
+  }
+
+  // Calculate suffer score (custom metric)
+  private calculateSufferScore(
+    activity: DetailedActivity,
+    streams: StreamSet,
+    zones: HeartRateZoneRanges
+  ): number {
+    if (!streams.heartrate || !zones.zones) return 0
+
+    const timeInZones = this.calculateTimeInHRZones(
+      streams.heartrate.data,
+      zones.zones
+    )
+    return (
+      timeInZones.reduce((score, time, i) => score + time * (i + 1), 0) /
+      (activity.moving_time || 1)
+    )
+  }
+
+  private calculateTimeInHRZones(hrData: number[], hrZones: any[]): number[] {
+    const timeInZones = Array(hrZones.length).fill(0)
+
+    for (const hr of hrData) {
+      for (let i = hrZones.length - 1; i >= 0; i--) {
+        if (hr >= hrZones[i].min) {
+          timeInZones[i]++
+          break
+        }
+      }
+    }
+
+    return timeInZones
+  }
+
+  // Generate personalized recommendations
+  private generateRecommendations(
+    status: PhysicalStatus,
+    activities: DetailedActivity[],
+    userGoals?: UserGoals
+  ): string[] {
+    const recommendations: string[] = []
+    const { ftp, vo2Max, runningEconomy, hrRecovery, acwr } = status
+
+    if (acwr > 1.5) {
+      recommendations.push(
+        'High ACWR detected (>1.5). Consider reducing training intensity or volume to prevent overtraining.'
+      )
+    }
+    if (hrRecovery < 20) {
+      recommendations.push(
+        'Low HR recovery (<20 bpm). Focus on recovery strategies like sleep and nutrition.'
+      )
+    }
+    if (userGoals?.type === 'marathon' && runningEconomy > 0.8) {
+      recommendations.push(
+        'Running economy is high (>0.8 kcal/km/kg). Include drills and strength training to improve efficiency.'
+      )
+    }
+    if (
+      userGoals?.type === 'ftp_improvement' &&
+      userGoals.targetFTP &&
+      ftp < userGoals.targetFTP
+    ) {
+      recommendations.push(
+        `FTP (${ftp}W) is below target (${userGoals.targetFTP}W). Incorporate interval training to boost power output.`
+      )
+    }
+
+    return recommendations
+  }
+
+  // Generate visualization data
+  private generateVisualizationData(
+    activities: DetailedActivity[]
+  ): VisualizationData {
+    const weeklyDistance = this.calculateWeeklyDistance(activities)
+    const hrZones = this.calculateHRZoneDistribution(activities)
+    const segmentProgress = this.calculateSegmentProgress(activities)
+
+    return { weeklyDistance, hrZones, segmentProgress }
+  }
+
+  private calculateWeeklyDistance(
+    activities: DetailedActivity[]
+  ): { week: string; distance: number }[] {
+    const weeklyMap = new Map<string, number>()
+
+    for (const activity of activities) {
+      const week = new Date(activity.start_date).toISOString().slice(0, 10)
+      weeklyMap.set(week, (weeklyMap.get(week) || 0) + activity.distance / 1000) // Convert to km
+    }
+
+    return Array.from(weeklyMap, ([week, distance]) => ({ week, distance }))
+  }
+
+  private calculateHRZoneDistribution(
+    activities: DetailedActivity[]
+  ): { zone: string; timeInZone: number }[] {
+    const zoneMap = new Map<string, number>()
+
+    activities.forEach(activity => {
+      if (activity.average_heartrate) {
+        const zone = this.getHRZone(activity.average_heartrate)
+        zoneMap.set(zone, (zoneMap.get(zone) || 0) + activity.moving_time)
+      }
+    })
+
+    return Array.from(zoneMap, ([zone, time]) => ({ zone, timeInZone: time }))
+  }
+
+  private getHRZone(hr: number): string {
+    if (hr < 120) return 'Z1'
+    if (hr < 140) return 'Z2'
+    if (hr < 160) return 'Z3'
+    if (hr < 180) return 'Z4'
+    return 'Z5'
+  }
+
+  private calculateSegmentProgress(
+    activities: DetailedActivity[]
+  ): { segmentId: number; name: string; time: number; pr: boolean }[] {
+    // This would require segment effort data from Strava API
+    // For now, return empty array as segment data isn't available in current structure
+    return []
+  }
+
+  // Helper method for linear regression
+  private calculateLinearRegression(
+    points: { duration: number; power: number }[]
+  ): { slope: number; intercept: number } {
+    const n = points.length
+    if (n < 2) return { slope: 0, intercept: 0 }
+
+    const sumX = points.reduce((sum, p) => sum + p.duration, 0)
+    const sumY = points.reduce((sum, p) => sum + p.power, 0)
+    const sumXY = points.reduce((sum, p) => sum + p.duration * p.power, 0)
+    const sumXX = points.reduce((sum, p) => sum + p.duration * p.duration, 0)
+
+    const denominator = n * sumXX - sumX * sumX
+    if (denominator === 0) return { slope: 0, intercept: 0 }
+
+    const slope = (n * sumXY - sumX * sumY) / denominator
+    const intercept = (sumY - slope * sumX) / n
+
+    return { slope, intercept }
   }
 }

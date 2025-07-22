@@ -103,6 +103,12 @@ export type CreateUserInput = {
   role?: InputMaybe<Role>;
 };
 
+export type CriticalPower = {
+  __typename?: 'CriticalPower';
+  cp: Scalars['Float']['output'];
+  wPrime: Scalars['Float']['output'];
+};
+
 export type DetailedAthlete = {
   __typename?: 'DetailedAthlete';
   athlete_type: Scalars['Int']['output'];
@@ -170,6 +176,12 @@ export type DistanceStreamDto = {
   resolution: Scalars['String']['output'];
   series_type: Scalars['String']['output'];
   type: Maybe<Scalars['String']['output']>;
+};
+
+export type HrZone = {
+  __typename?: 'HRZone';
+  timeInZone: Scalars['Float']['output'];
+  zone: Scalars['String']['output'];
 };
 
 export type HeartRateZone = {
@@ -337,6 +349,19 @@ export type PerformanceMetrics = {
   trimpScore: Scalars['Float']['output'];
 };
 
+export type PhysicalStatus = {
+  __typename?: 'PhysicalStatus';
+  acwr: Scalars['Float']['output'];
+  criticalPower: CriticalPower;
+  ftp: Scalars['Float']['output'];
+  hrRecovery: Scalars['Float']['output'];
+  recommendations: Array<Scalars['String']['output']>;
+  runningEconomy: Scalars['Float']['output'];
+  sufferScore: Scalars['Float']['output'];
+  visualizations: VisualizationData;
+  vo2Max: Scalars['Float']['output'];
+};
+
 export type PolylineMapDto = {
   __typename?: 'PolylineMapDto';
   id: Scalars['String']['output'];
@@ -386,6 +411,7 @@ export type Query = {
   getAthlete: DetailedAthlete;
   getAthleteStats: ActivityStats;
   getAthleteZones: Zones;
+  getPhysicalStatus: PhysicalStatus;
   getRetentionStats: Scalars['String']['output'];
   getStravaActivities: Array<StravaActivityDto>;
   me: User;
@@ -429,6 +455,11 @@ export type QueryGetActivityZonesArgs = {
 };
 
 
+export type QueryGetPhysicalStatusArgs = {
+  userGoals?: InputMaybe<UserGoalsInput>;
+};
+
+
 export type QueryGetStravaActivitiesArgs = {
   limit: Scalars['Int']['input'];
 };
@@ -450,6 +481,14 @@ export type Role =
   | 'ADMIN'
   | 'SUPER_ADMIN'
   | 'USER';
+
+export type SegmentProgress = {
+  __typename?: 'SegmentProgress';
+  name: Scalars['String']['output'];
+  pr: Scalars['Boolean']['output'];
+  segmentId: Scalars['Float']['output'];
+  time: Scalars['Float']['output'];
+};
 
 export type SmoothGradeStreamDto = {
   __typename?: 'SmoothGradeStreamDto';
@@ -679,6 +718,26 @@ export type User = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type UserGoalsInput = {
+  targetDate?: InputMaybe<Scalars['String']['input']>;
+  targetDistance?: InputMaybe<Scalars['Float']['input']>;
+  targetFTP?: InputMaybe<Scalars['Float']['input']>;
+  type: Scalars['String']['input'];
+};
+
+export type VisualizationData = {
+  __typename?: 'VisualizationData';
+  hrZones: Array<HrZone>;
+  segmentProgress: Array<SegmentProgress>;
+  weeklyDistance: Array<WeeklyDistance>;
+};
+
+export type WeeklyDistance = {
+  __typename?: 'WeeklyDistance';
+  distance: Scalars['Float']['output'];
+  week: Scalars['String']['output'];
+};
+
 export type ZoneBucket = {
   __typename?: 'ZoneBucket';
   max: Scalars['Int']['output'];
@@ -774,12 +833,14 @@ export type ResolversTypes = ResolversObject<{
   CommentDto: ResolverTypeWrapper<CommentDto>;
   CorrelationAnalysis: ResolverTypeWrapper<CorrelationAnalysis>;
   CreateUserInput: CreateUserInput;
+  CriticalPower: ResolverTypeWrapper<CriticalPower>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   DetailedAthlete: ResolverTypeWrapper<DetailedAthlete>;
   DetailedInsightsResponse: ResolverTypeWrapper<DetailedInsightsResponse>;
   DetailedSegmentEffortDto: ResolverTypeWrapper<DetailedSegmentEffortDto>;
   DistanceStreamDto: ResolverTypeWrapper<DistanceStreamDto>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  HRZone: ResolverTypeWrapper<HrZone>;
   HeartRateZone: ResolverTypeWrapper<HeartRateZone>;
   HeartRateZoneDetail: ResolverTypeWrapper<HeartRateZoneDetail>;
   HeartrateStreamDto: ResolverTypeWrapper<HeartrateStreamDto>;
@@ -795,6 +856,7 @@ export type ResolversTypes = ResolversObject<{
   MovingStreamDto: ResolverTypeWrapper<MovingStreamDto>;
   Mutation: ResolverTypeWrapper<{}>;
   PerformanceMetrics: ResolverTypeWrapper<PerformanceMetrics>;
+  PhysicalStatus: ResolverTypeWrapper<PhysicalStatus>;
   PolylineMapDto: ResolverTypeWrapper<PolylineMapDto>;
   PowerAnalysis: ResolverTypeWrapper<PowerAnalysis>;
   PowerStreamDto: ResolverTypeWrapper<PowerStreamDto>;
@@ -802,6 +864,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   RegisterInput: RegisterInput;
   Role: Role;
+  SegmentProgress: ResolverTypeWrapper<SegmentProgress>;
   SmoothGradeStreamDto: ResolverTypeWrapper<SmoothGradeStreamDto>;
   SmoothVelocityStreamDto: ResolverTypeWrapper<SmoothVelocityStreamDto>;
   SplitDto: ResolverTypeWrapper<SplitDto>;
@@ -815,6 +878,9 @@ export type ResolversTypes = ResolversObject<{
   TrainingLoadAnalysis: ResolverTypeWrapper<TrainingLoadAnalysis>;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
+  UserGoalsInput: UserGoalsInput;
+  VisualizationData: ResolverTypeWrapper<VisualizationData>;
+  WeeklyDistance: ResolverTypeWrapper<WeeklyDistance>;
   ZoneBucket: ResolverTypeWrapper<ZoneBucket>;
   Zones: ResolverTypeWrapper<Zones>;
 }>;
@@ -831,12 +897,14 @@ export type ResolversParentTypes = ResolversObject<{
   CommentDto: CommentDto;
   CorrelationAnalysis: CorrelationAnalysis;
   CreateUserInput: CreateUserInput;
+  CriticalPower: CriticalPower;
   DateTime: Scalars['DateTime']['output'];
   DetailedAthlete: DetailedAthlete;
   DetailedInsightsResponse: DetailedInsightsResponse;
   DetailedSegmentEffortDto: DetailedSegmentEffortDto;
   DistanceStreamDto: DistanceStreamDto;
   Float: Scalars['Float']['output'];
+  HRZone: HrZone;
   HeartRateZone: HeartRateZone;
   HeartRateZoneDetail: HeartRateZoneDetail;
   HeartrateStreamDto: HeartrateStreamDto;
@@ -852,12 +920,14 @@ export type ResolversParentTypes = ResolversObject<{
   MovingStreamDto: MovingStreamDto;
   Mutation: {};
   PerformanceMetrics: PerformanceMetrics;
+  PhysicalStatus: PhysicalStatus;
   PolylineMapDto: PolylineMapDto;
   PowerAnalysis: PowerAnalysis;
   PowerStreamDto: PowerStreamDto;
   PowerZone: PowerZone;
   Query: {};
   RegisterInput: RegisterInput;
+  SegmentProgress: SegmentProgress;
   SmoothGradeStreamDto: SmoothGradeStreamDto;
   SmoothVelocityStreamDto: SmoothVelocityStreamDto;
   SplitDto: SplitDto;
@@ -870,6 +940,9 @@ export type ResolversParentTypes = ResolversObject<{
   TrainingLoadAnalysis: TrainingLoadAnalysis;
   UpdateUserInput: UpdateUserInput;
   User: User;
+  UserGoalsInput: UserGoalsInput;
+  VisualizationData: VisualizationData;
+  WeeklyDistance: WeeklyDistance;
   ZoneBucket: ZoneBucket;
   Zones: Zones;
 }>;
@@ -948,6 +1021,12 @@ export type CorrelationAnalysisResolvers<ContextType = GraphQLContext, ParentTyp
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type CriticalPowerResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['CriticalPower'] = ResolversParentTypes['CriticalPower']> = ResolversObject<{
+  cp?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  wPrime?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
@@ -1018,6 +1097,12 @@ export type DistanceStreamDtoResolvers<ContextType = GraphQLContext, ParentType 
   resolution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   series_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type HrZoneResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['HRZone'] = ResolversParentTypes['HRZone']> = ResolversObject<{
+  timeInZone?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  zone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1138,6 +1223,19 @@ export type PerformanceMetricsResolvers<ContextType = GraphQLContext, ParentType
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type PhysicalStatusResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['PhysicalStatus'] = ResolversParentTypes['PhysicalStatus']> = ResolversObject<{
+  acwr?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  criticalPower?: Resolver<ResolversTypes['CriticalPower'], ParentType, ContextType>;
+  ftp?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  hrRecovery?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  recommendations?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  runningEconomy?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  sufferScore?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  visualizations?: Resolver<ResolversTypes['VisualizationData'], ParentType, ContextType>;
+  vo2Max?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type PolylineMapDtoResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['PolylineMapDto'] = ResolversParentTypes['PolylineMapDto']> = ResolversObject<{
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   polyline?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1186,11 +1284,20 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
   getAthlete?: Resolver<ResolversTypes['DetailedAthlete'], ParentType, ContextType>;
   getAthleteStats?: Resolver<ResolversTypes['ActivityStats'], ParentType, ContextType>;
   getAthleteZones?: Resolver<ResolversTypes['Zones'], ParentType, ContextType>;
+  getPhysicalStatus?: Resolver<ResolversTypes['PhysicalStatus'], ParentType, ContextType, Partial<QueryGetPhysicalStatusArgs>>;
   getRetentionStats?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   getStravaActivities?: Resolver<Array<ResolversTypes['StravaActivityDto']>, ParentType, ContextType, RequireFields<QueryGetStravaActivitiesArgs, 'limit'>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+}>;
+
+export type SegmentProgressResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['SegmentProgress'] = ResolversParentTypes['SegmentProgress']> = ResolversObject<{
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  pr?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  segmentId?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  time?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type SmoothGradeStreamDtoResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['SmoothGradeStreamDto'] = ResolversParentTypes['SmoothGradeStreamDto']> = ResolversObject<{
@@ -1360,6 +1467,19 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type VisualizationDataResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['VisualizationData'] = ResolversParentTypes['VisualizationData']> = ResolversObject<{
+  hrZones?: Resolver<Array<ResolversTypes['HRZone']>, ParentType, ContextType>;
+  segmentProgress?: Resolver<Array<ResolversTypes['SegmentProgress']>, ParentType, ContextType>;
+  weeklyDistance?: Resolver<Array<ResolversTypes['WeeklyDistance']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type WeeklyDistanceResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['WeeklyDistance'] = ResolversParentTypes['WeeklyDistance']> = ResolversObject<{
+  distance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  week?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type ZoneBucketResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['ZoneBucket'] = ResolversParentTypes['ZoneBucket']> = ResolversObject<{
   max?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   min?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -1382,11 +1502,13 @@ export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   CadenceStreamDto?: CadenceStreamDtoResolvers<ContextType>;
   CommentDto?: CommentDtoResolvers<ContextType>;
   CorrelationAnalysis?: CorrelationAnalysisResolvers<ContextType>;
+  CriticalPower?: CriticalPowerResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   DetailedAthlete?: DetailedAthleteResolvers<ContextType>;
   DetailedInsightsResponse?: DetailedInsightsResponseResolvers<ContextType>;
   DetailedSegmentEffortDto?: DetailedSegmentEffortDtoResolvers<ContextType>;
   DistanceStreamDto?: DistanceStreamDtoResolvers<ContextType>;
+  HRZone?: HrZoneResolvers<ContextType>;
   HeartRateZone?: HeartRateZoneResolvers<ContextType>;
   HeartRateZoneDetail?: HeartRateZoneDetailResolvers<ContextType>;
   HeartrateStreamDto?: HeartrateStreamDtoResolvers<ContextType>;
@@ -1399,11 +1521,13 @@ export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   MovingStreamDto?: MovingStreamDtoResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   PerformanceMetrics?: PerformanceMetricsResolvers<ContextType>;
+  PhysicalStatus?: PhysicalStatusResolvers<ContextType>;
   PolylineMapDto?: PolylineMapDtoResolvers<ContextType>;
   PowerAnalysis?: PowerAnalysisResolvers<ContextType>;
   PowerStreamDto?: PowerStreamDtoResolvers<ContextType>;
   PowerZone?: PowerZoneResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SegmentProgress?: SegmentProgressResolvers<ContextType>;
   SmoothGradeStreamDto?: SmoothGradeStreamDtoResolvers<ContextType>;
   SmoothVelocityStreamDto?: SmoothVelocityStreamDtoResolvers<ContextType>;
   SplitDto?: SplitDtoResolvers<ContextType>;
@@ -1414,6 +1538,8 @@ export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   TimeStreamDto?: TimeStreamDtoResolvers<ContextType>;
   TrainingLoadAnalysis?: TrainingLoadAnalysisResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  VisualizationData?: VisualizationDataResolvers<ContextType>;
+  WeeklyDistance?: WeeklyDistanceResolvers<ContextType>;
   ZoneBucket?: ZoneBucketResolvers<ContextType>;
   Zones?: ZonesResolvers<ContextType>;
 }>;

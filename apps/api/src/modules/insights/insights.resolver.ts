@@ -1,11 +1,14 @@
 import { Resolver, Query, Args } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
+
 import { InsightsService } from './insights.service'
 import { StravaService } from '../strava/strava.service'
 import { DetailedInsightsResponse } from '../strava/dto/insights.dto'
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard'
 import { CurrentUser } from '../../common/decorators/current-user.decorator'
 import { User } from '../../entities/user.entity'
+import { UserGoalsInput, PhysicalStatus } from './dto/insights.dto'
+import { handleInsightsError } from './utils/error-handler'
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
@@ -43,9 +46,7 @@ export class InsightsResolver {
         user.id
       )
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error occurred'
-      throw new Error(`Failed to fetch activity insights: ${errorMessage}`)
+      handleInsightsError(error, 'fetch activity insights')
     }
   }
 
@@ -77,11 +78,23 @@ export class InsightsResolver {
         user.id
       )
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error occurred'
-      throw new Error(
-        `Failed to fetch detailed activity insights: ${errorMessage}`
+      handleInsightsError(error, 'fetch detailed activity insights')
+    }
+  }
+
+  @Query(() => PhysicalStatus)
+  async getPhysicalStatus(
+    @CurrentUser() user: User,
+    @Args('userGoals', { type: () => UserGoalsInput, nullable: true })
+    userGoals?: any
+  ): Promise<any> {
+    try {
+      return await this.insightsService.resolvePhysicalStatus(
+        user.id,
+        userGoals
       )
+    } catch (error) {
+      handleInsightsError(error, 'fetch physical status')
     }
   }
 }

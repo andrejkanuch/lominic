@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Calendar,
   Clock,
@@ -10,9 +11,11 @@ import {
   Mountain,
   Timer,
   ThumbsUp,
+  Brain,
 } from 'lucide-react'
 import { GetStravaActivitiesQuery } from '@/generated/graphql'
 import { ViewOnStravaLink } from '@/components/ui/view-on-strava-link'
+import { useRouter } from 'next/navigation'
 
 interface ActivityCardProps {
   activity: GetStravaActivitiesQuery['getStravaActivities'][number]
@@ -20,6 +23,8 @@ interface ActivityCardProps {
 }
 
 export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
+  const router = useRouter()
+
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
@@ -56,6 +61,11 @@ export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
       default:
         return 'bg-pulse-100 text-pulse-700'
     }
+  }
+
+  const handleInsightsClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    router.push(`/activities/${activity.id}/insights`)
   }
 
   const SportIcon = getSportIcon(activity.sport_type)
@@ -147,10 +157,22 @@ export const ActivityCard = ({ activity, onClick }: ActivityCardProps) => {
               </span>
             </div>
 
-            <ViewOnStravaLink
-              activityId={Number(activity.id)}
-              variant="orange"
-            />
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleInsightsClick}
+                className="flex items-center space-x-1"
+              >
+                <Brain className="w-3 h-3" />
+                <span>Insights</span>
+              </Button>
+
+              <ViewOnStravaLink
+                activityId={Number(activity.id)}
+                variant="orange"
+              />
+            </div>
           </div>
         </div>
       </CardContent>

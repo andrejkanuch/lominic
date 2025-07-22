@@ -5,14 +5,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ActivityInsightsDashboard } from './insights/ActivityInsightsDashboard'
-import {
-  useGetActivityInsightsDetailedQuery,
-  useGetActivityByIdQuery,
-} from '@/generated/graphql'
+import { useGetActivityByIdQuery } from '@/generated/graphql'
 import { SportType } from '@/generated/graphql'
 import {
   Activity,
@@ -23,7 +18,6 @@ import {
   Zap,
   TrendingUp,
   Heart,
-  X,
 } from 'lucide-react'
 
 interface ActivityDetailModalProps {
@@ -41,15 +35,6 @@ export const ActivityDetailModal = ({
   insights: basicInsights,
   loadingInsights: loadingBasicInsights,
 }: ActivityDetailModalProps) => {
-  const {
-    data: detailedData,
-    loading: loadingDetailed,
-    error,
-  } = useGetActivityInsightsDetailedQuery({
-    variables: { activityId },
-    skip: !isOpen,
-  })
-
   const { data: activityData, loading: loadingActivity } =
     useGetActivityByIdQuery({
       variables: { activityId },
@@ -57,10 +42,8 @@ export const ActivityDetailModal = ({
     })
 
   const activity = activityData?.getActivityById
-  const detailedInsights = detailedData?.getActivityInsightsDetailed
 
   if (loadingActivity) return <div>Loading...</div>
-  if (error) return <div>Error: {error.message}</div>
   if (!activity) return null
 
   const formatDate = (dateString: string) => {
@@ -116,17 +99,12 @@ export const ActivityDetailModal = ({
                 {activity.sport_type}
               </Badge>
             </DialogTitle>
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="h-4 w-4" />
-            </Button>
           </div>
         </DialogHeader>
 
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="insights">Detailed Insights</TabsTrigger>
-            <TabsTrigger value="basic">Basic Insights</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4">
@@ -174,31 +152,6 @@ export const ActivityDetailModal = ({
                 <p>Description: {activity.description}</p>
               )}
             </div>
-          </TabsContent>
-
-          <TabsContent value="insights">
-            {loadingDetailed ? (
-              <div className="flex items-center justify-center py-8">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-                  <p className="mt-2 text-sm text-gray-600">
-                    Loading detailed insights...
-                  </p>
-                </div>
-              </div>
-            ) : detailedInsights ? (
-              <ActivityInsightsDashboard
-                insights={detailedInsights.insights}
-                heartRateZones={detailedInsights.heartRateZones}
-                performanceMetrics={detailedInsights.performanceMetrics}
-                correlations={detailedInsights.correlations}
-                trainingLoad={detailedInsights.trainingLoad}
-              />
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-600">No detailed insights available</p>
-              </div>
-            )}
           </TabsContent>
 
           <TabsContent value="basic">
