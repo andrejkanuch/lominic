@@ -197,6 +197,34 @@ export type GarminAccount = {
   userId: Scalars['ID']['output'];
 };
 
+export type GarminActivity = {
+  __typename?: 'GarminActivity';
+  activityId: Scalars['String']['output'];
+  activityName: Scalars['String']['output'];
+  activityType: Scalars['String']['output'];
+  averageHeartRate: Scalars['Float']['output'];
+  averagePace: Scalars['Float']['output'];
+  averageSpeed: Scalars['Float']['output'];
+  calories: Scalars['Float']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  distance: Scalars['Float']['output'];
+  duration: Scalars['Float']['output'];
+  endLatitude: Scalars['Float']['output'];
+  endLongitude: Scalars['Float']['output'];
+  endTime: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  maxHeartRate: Scalars['Float']['output'];
+  maxPace: Scalars['Float']['output'];
+  maxSpeed: Scalars['Float']['output'];
+  startLatitude: Scalars['Float']['output'];
+  startLongitude: Scalars['Float']['output'];
+  startTime: Scalars['DateTime']['output'];
+  timeZone: Scalars['String']['output'];
+  totalAscent: Scalars['Float']['output'];
+  totalDescent: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type HrZone = {
   __typename?: 'HRZone';
   timeInZone: Scalars['Float']['output'];
@@ -441,6 +469,7 @@ export type Query = {
   getAthleteStats: ActivityStats;
   getAthleteZones: Zones;
   getGarminAccount: Maybe<GarminAccount>;
+  getGarminActivities: Array<GarminActivity>;
   getGarminAuthUrl: Scalars['String']['output'];
   getGarminUserPermissions: Array<Scalars['String']['output']>;
   getPhysicalStatus: PhysicalStatus;
@@ -484,6 +513,13 @@ export type QueryGetActivityStreamsArgs = {
 
 export type QueryGetActivityZonesArgs = {
   activityId: Scalars['String']['input'];
+};
+
+
+export type QueryGetGarminActivitiesArgs = {
+  endTime?: InputMaybe<Scalars['Float']['input']>;
+  limit: Scalars['Float']['input'];
+  startTime?: InputMaybe<Scalars['Float']['input']>;
 };
 
 
@@ -873,6 +909,7 @@ export type ResolversTypes = ResolversObject<{
   DistanceStreamDto: ResolverTypeWrapper<DistanceStreamDto>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   GarminAccount: ResolverTypeWrapper<GarminAccount>;
+  GarminActivity: ResolverTypeWrapper<GarminActivity>;
   HRZone: ResolverTypeWrapper<HrZone>;
   HeartRateZone: ResolverTypeWrapper<HeartRateZone>;
   HeartRateZoneDetail: ResolverTypeWrapper<HeartRateZoneDetail>;
@@ -938,6 +975,7 @@ export type ResolversParentTypes = ResolversObject<{
   DistanceStreamDto: DistanceStreamDto;
   Float: Scalars['Float']['output'];
   GarminAccount: GarminAccount;
+  GarminActivity: GarminActivity;
   HRZone: HrZone;
   HeartRateZone: HeartRateZone;
   HeartRateZoneDetail: HeartRateZoneDetail;
@@ -1153,6 +1191,34 @@ export type GarminAccountResolvers<ContextType = GraphQLContext, ParentType exte
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type GarminActivityResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['GarminActivity'] = ResolversParentTypes['GarminActivity']> = ResolversObject<{
+  activityId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  activityName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  activityType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  averageHeartRate?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  averagePace?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  averageSpeed?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  calories?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  distance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  duration?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  endLatitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  endLongitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  endTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  maxHeartRate?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  maxPace?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  maxSpeed?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  startLatitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  startLongitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  startTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  timeZone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  totalAscent?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  totalDescent?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type HrZoneResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['HRZone'] = ResolversParentTypes['HRZone']> = ResolversObject<{
   timeInZone?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   zone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1342,6 +1408,7 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
   getAthleteStats?: Resolver<ResolversTypes['ActivityStats'], ParentType, ContextType>;
   getAthleteZones?: Resolver<ResolversTypes['Zones'], ParentType, ContextType>;
   getGarminAccount?: Resolver<Maybe<ResolversTypes['GarminAccount']>, ParentType, ContextType>;
+  getGarminActivities?: Resolver<Array<ResolversTypes['GarminActivity']>, ParentType, ContextType, RequireFields<QueryGetGarminActivitiesArgs, 'limit'>>;
   getGarminAuthUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   getGarminUserPermissions?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   getPhysicalStatus?: Resolver<ResolversTypes['PhysicalStatus'], ParentType, ContextType, Partial<QueryGetPhysicalStatusArgs>>;
@@ -1569,6 +1636,7 @@ export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   DetailedSegmentEffortDto?: DetailedSegmentEffortDtoResolvers<ContextType>;
   DistanceStreamDto?: DistanceStreamDtoResolvers<ContextType>;
   GarminAccount?: GarminAccountResolvers<ContextType>;
+  GarminActivity?: GarminActivityResolvers<ContextType>;
   HRZone?: HrZoneResolvers<ContextType>;
   HeartRateZone?: HeartRateZoneResolvers<ContextType>;
   HeartRateZoneDetail?: HeartRateZoneDetailResolvers<ContextType>;

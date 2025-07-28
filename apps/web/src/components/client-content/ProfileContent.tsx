@@ -19,77 +19,27 @@ import {
   Heart,
   Target,
   Edit,
-  Bike,
-  Footprints,
-  Trophy,
-  Users,
-  Crown,
   Watch,
 } from 'lucide-react'
 import { EditProfileDialog } from '@/components/profile/EditProfileDialog'
-import { useQuery } from '@apollo/client'
-import { GetAthleteDocument, GetAthleteQuery } from '@/generated/graphql'
+// import { useQuery } from '@apollo/client'
+// import { GetAthleteDocument, GetAthleteQuery } from '@/generated/graphql'
 // import { StravaConnectButton } from '@/components/ui/strava-connect-button'
-import { GarminConnectButton } from '@/components/ui/garmin-connect-button'
+import { GarminConnectionStatus } from '@/components/ui/garmin-connection-status'
 import { useRBAC } from '@/hooks/use-rbac'
 import { toast } from 'sonner'
 
 const ProfileContent = () => {
   const { user } = useRBAC()
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [garminConnected, setGarminConnected] = useState(false)
-  const [garminLoading, setGarminLoading] = useState(false)
-
-  // Check if user already has Garmin connected
-  useEffect(() => {
-    const checkGarminConnection = async () => {
-      if (!user?.id) return
-
-      try {
-        const apiBase = (
-          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/graphql'
-        ).replace(/\/?graphql$/, '')
-
-        const response = await fetch(
-          `${apiBase}/api/garmin/check-connection?userId=${user.id}`
-        )
-        if (response.ok) {
-          const data = await response.json()
-          if (data.connected) {
-            setGarminConnected(true)
-          }
-        }
-      } catch (error) {
-        console.error('Failed to check Garmin connection:', error)
-      }
-    }
-
-    checkGarminConnection()
-  }, [user?.id])
-
-  // Listen for OAuth completion messages
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      console.log('event 123', event)
-      if (event.origin !== window.location.origin) return
-
-      if (event.data.type === 'GARMIN_OAUTH_SUCCESS') {
-        setGarminConnected(true)
-        toast.success('Garmin account connected successfully!')
-      } else if (event.data.type === 'GARMIN_OAUTH_ERROR') {
-        toast.error('Failed to connect Garmin account. Please try again.', {
-          description: event.data.message,
-        })
-      }
-    }
-
-    window.addEventListener('message', handleMessage)
-    return () => window.removeEventListener('message', handleMessage)
-  }, [])
 
   // Fetch Strava athlete data
-  const { data: stravaData, error: stravaError } =
-    useQuery<GetAthleteQuery>(GetAthleteDocument)
+  // const { data: stravaData, error: stravaError } =
+  //   useQuery<GetAthleteQuery>(GetAthleteDocument)
+
+  // Mock data for now since Strava queries are commented out
+  // const stravaData = null
+  // const stravaError = null
 
   // Mock user data - in a real app, this would come from API/context
   const [userData, setUserData] = useState({
@@ -121,30 +71,30 @@ const ProfileContent = () => {
     }))
   }
 
-  // Format Strava data
-  const formatStravaDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-    })
-  }
+  // // Format Strava data
+  // const formatStravaDate = (dateString: string) => {
+  //   return new Date(dateString).toLocaleDateString('en-US', {
+  //     year: 'numeric',
+  //     month: 'long',
+  //   })
+  // }
 
-  const getAthleteTypeLabel = (type: number) => {
-    switch (type) {
-      case 0:
-        return 'Cyclist'
-      case 1:
-        return 'Runner'
-      case 2:
-        return 'Triathlete'
-      default:
-        return 'Athlete'
-    }
-  }
+  // const getAthleteTypeLabel = (type: number) => {
+  //   switch (type) {
+  //     case 0:
+  //       return 'Cyclist'
+  //     case 1:
+  //       return 'Runner'
+  //     case 2:
+  //       return 'Triathlete'
+  //     default:
+  //       return 'Athlete'
+  //   }
+  // }
 
-  const getMeasurementLabel = (preference: string) => {
-    return preference === 'feet' ? 'Imperial' : 'Metric'
-  }
+  // const getMeasurementLabel = (preference: string) => {
+  //   return preference === 'feet' ? 'Imperial' : 'Metric'
+  // }
 
   return (
     <div className="space-y-6">
@@ -172,52 +122,44 @@ const ProfileContent = () => {
             <CardTitle className="flex items-center space-x-2">
               <User className="w-5 h-5 text-primary" />
               <span>Personal Information</span>
-              {stravaData?.getAthlete && (
+              {/* {stravaData?.getAthlete && (
                 <Badge className="bg-orange-100 text-orange-700">
                   <Crown className="w-3 h-3 mr-1" />
                   Strava Connected
                 </Badge>
-              )}
+              )} */}
             </CardTitle>
             <CardDescription>
-              {stravaData?.getAthlete
+              {/* {stravaData?.getAthlete
                 ? 'Your Strava profile information'
-                : 'Your basic profile details'}
+                : 'Your basic profile details'} */}
+              Your basic profile details
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex items-center space-x-4">
               <Avatar className="w-20 h-20">
-                <AvatarImage
-                  src={stravaData?.getAthlete?.profile || userData.avatar}
-                  alt="Profile"
-                />
+                <AvatarImage src={userData.avatar} alt="Profile" />
                 <AvatarFallback className="bg-primary/10 text-primary text-xl font-semibold">
-                  {stravaData?.getAthlete
-                    ? `${stravaData.getAthlete.firstname[0]}${stravaData.getAthlete.lastname[0]}`
-                    : `${userData.firstName[0]}${userData.lastName[0]}`}
+                  {`${userData.firstName[0]}${userData.lastName[0]}`}
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-2">
                 <h3 className="text-xl font-semibold text-foreground">
-                  {stravaData?.getAthlete
-                    ? `${stravaData.getAthlete.firstname} ${stravaData.getAthlete.lastname}`
-                    : `${userData.firstName} ${userData.lastName}`}
+                  {`${userData.firstName} ${userData.lastName}`}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   <Badge
                     variant="secondary"
                     className="bg-primary/10 text-primary"
                   >
-                    {stravaData?.getAthlete?.premium
-                      ? 'Strava Premium'
-                      : 'Premium Member'}
+                    Premium Member
                   </Badge>
-                  {stravaData?.getAthlete && (
+                  {/* {stravaData?.getAthlete && (
                     <Badge variant="outline">
                       {getAthleteTypeLabel(stravaData.getAthlete.athlete_type)}
                     </Badge>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
@@ -256,14 +198,10 @@ const ProfileContent = () => {
                   <Calendar className="w-4 h-4" />
                   <span className="text-sm font-medium">Member Since</span>
                 </div>
-                <p className="text-foreground">
-                  {stravaData?.getAthlete
-                    ? formatStravaDate(stravaData.getAthlete.created_at)
-                    : userData.memberSince}
-                </p>
+                <p className="text-foreground">{userData.memberSince}</p>
               </div>
 
-              {stravaData?.getAthlete && (
+              {/* {stravaData?.getAthlete && (
                 <>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2 text-muted-foreground">
@@ -285,11 +223,11 @@ const ProfileContent = () => {
                     </p>
                   </div>
                 </>
-              )}
+              )} */}
             </div>
 
             {/* Strava Gear Section */}
-            {stravaData?.getAthlete &&
+            {/* {stravaData?.getAthlete &&
               (stravaData.getAthlete.bikes?.length > 0 ||
                 stravaData.getAthlete.shoes?.length > 0) && (
                 <div className="space-y-4 pt-4 border-t border-border">
@@ -349,7 +287,7 @@ const ProfileContent = () => {
                     </div>
                   )}
                 </div>
-              )}
+              )} */}
           </CardContent>
         </Card>
 
@@ -393,7 +331,7 @@ const ProfileContent = () => {
                 </span>
               </div>
 
-              {stravaData?.getAthlete && (
+              {/* {stravaData?.getAthlete && (
                 <>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
@@ -419,7 +357,7 @@ const ProfileContent = () => {
                     </span>
                   </div>
                 </>
-              )}
+              )} */}
             </div>
 
             <div className="pt-4 border-t border-border">
@@ -471,13 +409,7 @@ const ProfileContent = () => {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm">Units</span>
-                <span className="text-sm font-medium">
-                  {stravaData?.getAthlete
-                    ? getMeasurementLabel(
-                        stravaData.getAthlete.measurement_preference
-                      )
-                    : 'Metric'}
-                </span>
+                <span className="text-sm font-medium">Metric</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Notifications</span>
@@ -485,14 +417,8 @@ const ProfileContent = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Data Sync</span>
-                <Badge
-                  className={
-                    stravaData?.getAthlete
-                      ? 'bg-success/10 text-success'
-                      : 'bg-gray-100 text-gray-600'
-                  }
-                >
-                  {stravaData?.getAthlete ? 'Connected' : 'Not Connected'}
+                <Badge className="bg-gray-100 text-gray-600">
+                  Not Connected
                 </Badge>
               </div>
             </div>
@@ -501,7 +427,7 @@ const ProfileContent = () => {
       </div>
 
       {/* Strava Connection Status */}
-      {stravaError && (
+      {/* {stravaError && (
         <Card className="border-destructive/50">
           <CardContent className="pt-6">
             <div className="text-center space-y-2">
@@ -514,7 +440,7 @@ const ProfileContent = () => {
             </div>
           </CardContent>
         </Card>
-      )}
+      )} */}
 
       {/* Strava Connection Prompt */}
       {/* <Card>
@@ -566,111 +492,7 @@ const ProfileContent = () => {
           </div>
         </CardHeader>
         <CardContent>
-          {garminConnected ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <Watch className="w-4 h-4 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-green-800">Connected</p>
-                    <p className="text-sm text-green-600">
-                      Your Garmin account is linked
-                    </p>
-                  </div>
-                </div>
-                <Badge
-                  variant="secondary"
-                  className="bg-green-100 text-green-700"
-                >
-                  Active
-                </Badge>
-              </div>
-              <div className="flex space-x-2">
-                <Button variant="outline" size="sm" className="flex-1">
-                  Sync Activities
-                </Button>
-                <Button variant="outline" size="sm" className="flex-1">
-                  View Data
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="text-center space-y-3">
-                <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
-                  <Watch className="w-8 h-8 text-orange-500 mx-auto mb-2" />
-                  <p className="text-sm text-orange-700 font-medium">
-                    Connect your Garmin device
-                  </p>
-                  <p className="text-xs text-orange-600 mt-1">
-                    Get detailed insights from your fitness activities
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-center space-x-2 text-xs text-muted-foreground">
-                    <div className="w-1 h-1 bg-orange-400 rounded-full"></div>
-                    <span>Activity tracking</span>
-                    <div className="w-1 h-1 bg-orange-400 rounded-full"></div>
-                    <span>Health metrics</span>
-                    <div className="w-1 h-1 bg-orange-400 rounded-full"></div>
-                    <span>Performance insights</span>
-                  </div>
-                </div>
-              </div>
-              <GarminConnectButton
-                onClick={async () => {
-                  if (!user?.id) {
-                    toast.error('Please log in to connect your Garmin account')
-                    return
-                  }
-
-                  setGarminLoading(true)
-                  try {
-                    const apiBase =
-                      process.env.NEXT_PUBLIC_API_URL ||
-                      'http://localhost:4000/graphql'
-                    const baseUrl = apiBase.replace(/\/graphql$/, '')
-
-                    console.log(
-                      'Getting Garmin auth URL from:',
-                      `${baseUrl}/api/garmin/auth?state=${user.id}`
-                    )
-
-                    const response = await fetch(
-                      `${baseUrl}/api/garmin/auth?state=${user.id}`
-                    )
-                    if (!response.ok) {
-                      throw new Error(
-                        `Failed to get auth URL: ${response.status}`
-                      )
-                    }
-
-                    const authUrl = await response.text()
-                    console.log('Opening Garmin auth URL:', authUrl)
-
-                    window.open(
-                      authUrl,
-                      'garmin-connect',
-                      'width=500,height=600,scrollbars=yes,resizable=yes'
-                    )
-                  } catch (error) {
-                    console.error('Failed to get Garmin auth URL:', error)
-                    toast.error(
-                      'Failed to connect to Garmin. Please try again.'
-                    )
-                  } finally {
-                    setGarminLoading(false)
-                  }
-                }}
-                loading={garminLoading}
-                className="w-full"
-              >
-                Connect with Garmin
-              </GarminConnectButton>
-            </div>
-          )}
+          <GarminConnectionStatus />
         </CardContent>
       </Card>
 

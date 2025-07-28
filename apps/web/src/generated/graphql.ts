@@ -198,6 +198,34 @@ export type GarminAccount = {
   userId: Scalars['ID']['output'];
 };
 
+export type GarminActivity = {
+  __typename?: 'GarminActivity';
+  activityId: Scalars['String']['output'];
+  activityName: Scalars['String']['output'];
+  activityType: Scalars['String']['output'];
+  averageHeartRate: Scalars['Float']['output'];
+  averagePace: Scalars['Float']['output'];
+  averageSpeed: Scalars['Float']['output'];
+  calories: Scalars['Float']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  distance: Scalars['Float']['output'];
+  duration: Scalars['Float']['output'];
+  endLatitude: Scalars['Float']['output'];
+  endLongitude: Scalars['Float']['output'];
+  endTime: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  maxHeartRate: Scalars['Float']['output'];
+  maxPace: Scalars['Float']['output'];
+  maxSpeed: Scalars['Float']['output'];
+  startLatitude: Scalars['Float']['output'];
+  startLongitude: Scalars['Float']['output'];
+  startTime: Scalars['DateTime']['output'];
+  timeZone: Scalars['String']['output'];
+  totalAscent: Scalars['Float']['output'];
+  totalDescent: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type HrZone = {
   __typename?: 'HRZone';
   timeInZone: Scalars['Float']['output'];
@@ -442,11 +470,13 @@ export type Query = {
   getAthleteStats: ActivityStats;
   getAthleteZones: Zones;
   getGarminAccount: Maybe<GarminAccount>;
-  getGarminAuthUrl: Scalars['String']['output'];
+  getGarminActivities: Array<GarminActivity>;
+  getGarminAuthUrl: Maybe<Scalars['String']['output']>;
   getGarminUserPermissions: Array<Scalars['String']['output']>;
   getPhysicalStatus: PhysicalStatus;
   getRetentionStats: Scalars['String']['output'];
   getStravaActivities: Array<StravaActivityDto>;
+  isGarminConnected: Scalars['Boolean']['output'];
   me: User;
   user: User;
   users: Array<User>;
@@ -485,6 +515,13 @@ export type QueryGetActivityStreamsArgs = {
 
 export type QueryGetActivityZonesArgs = {
   activityId: Scalars['String']['input'];
+};
+
+
+export type QueryGetGarminActivitiesArgs = {
+  endTime?: InputMaybe<Scalars['Float']['input']>;
+  limit: Scalars['Float']['input'];
+  startTime?: InputMaybe<Scalars['Float']['input']>;
 };
 
 
@@ -784,11 +821,6 @@ export type Zones = {
   power: Maybe<PowerZone>;
 };
 
-export type GetAthleteQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAthleteQuery = { __typename?: 'Query', getAthlete: { __typename?: 'DetailedAthlete', id: number, username: string | null, resource_state: number, firstname: string, lastname: string, premium: boolean, created_at: string, updated_at: string, badge_type_id: number, profile_medium: string, profile: string, follower_count: number, friend_count: number, mutual_friend_count: number, athlete_type: number, date_preference: string, measurement_preference: string, clubs: Array<string> | null, ftp: number | null, weight: number, bikes: Array<{ __typename?: 'SummaryGearDto', id: string, primary: boolean, name: string, resource_state: number, distance: number }>, shoes: Array<{ __typename?: 'SummaryGearDto', id: string, primary: boolean, name: string, resource_state: number, distance: number }> } };
-
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -812,6 +844,25 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCurrentUserQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: Role, isEmailVerified: boolean, createdAt: string, updatedAt: string } };
 
+export type GetGarminActivitiesQueryVariables = Exact<{
+  limit: Scalars['Float']['input'];
+  startTime?: InputMaybe<Scalars['Float']['input']>;
+  endTime?: InputMaybe<Scalars['Float']['input']>;
+}>;
+
+
+export type GetGarminActivitiesQuery = { __typename?: 'Query', getGarminActivities: Array<{ __typename?: 'GarminActivity', id: string, activityId: string, activityName: string, activityType: string, startTime: string, endTime: string, duration: number, distance: number, calories: number, averageHeartRate: number, maxHeartRate: number, averageSpeed: number, maxSpeed: number, averagePace: number, maxPace: number, totalAscent: number, totalDescent: number, startLatitude: number, startLongitude: number, endLatitude: number, endLongitude: number, timeZone: string, createdAt: string, updatedAt: string }> };
+
+export type GetGarminAuthUrlQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGarminAuthUrlQuery = { __typename?: 'Query', getGarminAuthUrl: string | null };
+
+export type IsGarminConnectedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IsGarminConnectedQuery = { __typename?: 'Query', isGarminConnected: boolean };
+
 export type GetActivityInsightsQueryVariables = Exact<{
   activityId: Scalars['String']['input'];
 }>;
@@ -825,44 +876,6 @@ export type GetActivityInsightsDetailedQueryVariables = Exact<{
 
 
 export type GetActivityInsightsDetailedQuery = { __typename?: 'Query', getActivityInsightsDetailed: { __typename?: 'DetailedInsightsResponse', insights: Array<string>, heartRateZones: Array<{ __typename?: 'HeartRateZoneDetail', zone: number, minHeartRate: number, maxHeartRate: number, timeInZone: number, percentage: number, description: string, color: string }>, performanceMetrics: { __typename?: 'PerformanceMetrics', averageSpeed: number, averagePace: number, speedVariability: number, averageHeartRate: number, maxHeartRate: number, trimpScore: number, efficiencyFactor: number, aerobicDecoupling: number, powerAnalysis: { __typename?: 'PowerAnalysis', averagePower: number | null, maxPower: number | null, normalizedPower: number | null, intensityFactor: number | null, trainingStressScore: number | null, variabilityIndex: number | null } | null }, correlations: { __typename?: 'CorrelationAnalysis', powerSpeedCorrelation: number, hrPowerCorrelation: number, gradeHrCorrelation: number }, trainingLoad: { __typename?: 'TrainingLoadAnalysis', acuteLoad: number, chronicLoad: number, acwr: number, riskLevel: string, fitnessScore: number, fatigueScore: number, performanceReadiness: number } } };
-
-export type GetStravaActivitiesQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-
-export type GetStravaActivitiesQuery = { __typename?: 'Query', getStravaActivities: Array<{ __typename?: 'StravaActivityDto', id: string, resource_state: number, external_id: string | null, upload_id: string | null, name: string, distance: number, moving_time: number, elapsed_time: number, total_elevation_gain: number, elev_high: number | null, elev_low: number | null, type: string, start_date: string, start_date_local: string, timezone: string, achievement_count: number, pr_count: number, kudos_count: number, comment_count: number, athlete_count: number, photo_count: number, total_photo_count: number, trainer: boolean, commute: boolean, manual: boolean, private: boolean, flagged: boolean, workout_type: number | null, gear_id: string | null, average_speed: number, max_speed: number, average_cadence: number | null, average_temp: number | null, average_watts: number | null, max_watts: number | null, weighted_average_watts: number | null, kilojoules: number | null, device_watts: boolean | null, has_heartrate: boolean, average_heartrate: number | null, max_heartrate: number | null, calories: number | null, suffer_score: number | null, has_kudoed: boolean, location_city: string | null, location_state: string | null, location_country: string | null, description: string | null, device_name: string | null, embed_token: string | null, photos: Record<string, any> | null, sport_type: SportType, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number }, start_latlng: { __typename?: 'LatLngDto', lat: number | null, lng: number | null } | null, end_latlng: { __typename?: 'LatLngDto', lat: number | null, lng: number | null } | null, map: { __typename?: 'PolylineMapDto', id: string, polyline: string | null, resource_state: number, summary_polyline: string | null }, gear: { __typename?: 'SummaryGearDto', id: string, primary: boolean, name: string, resource_state: number, distance: number } | null, segment_efforts: Array<{ __typename?: 'DetailedSegmentEffortDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, kom_rank: number | null, pr_rank: number | null, hidden: boolean | null, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null, splits_metric: Array<{ __typename?: 'SplitDto', distance: number, elapsed_time: number, elevation_difference: number, moving_time: number, split: number, average_speed: number, pace_zone: number }> | null, splits_standard: Array<{ __typename?: 'SplitDto', distance: number, elapsed_time: number, elevation_difference: number, moving_time: number, split: number, average_speed: number, pace_zone: number }> | null, laps: Array<{ __typename?: 'LapDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, total_elevation_gain: number, average_speed: number, max_speed: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, lap_index: number, split: number, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null, best_efforts: Array<{ __typename?: 'DetailedSegmentEffortDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, kom_rank: number | null, pr_rank: number | null, hidden: boolean | null, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null }> };
-
-export type GetAthleteZonesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAthleteZonesQuery = { __typename?: 'Query', getAthleteZones: { __typename?: 'Zones', heart_rate: { __typename?: 'HeartRateZone', custom_zones: boolean | null, zones: Array<{ __typename?: 'ZoneBucket', min: number, max: number }> | null } | null, power: { __typename?: 'PowerZone', zones: Array<{ __typename?: 'ZoneBucket', min: number, max: number }> | null } | null } };
-
-export type GetAthleteStatsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAthleteStatsQuery = { __typename?: 'Query', getAthleteStats: { __typename?: 'ActivityStats', biggest_ride_distance: number, biggest_climb_elevation_gain: number, recent_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, recent_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, recent_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, ytd_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_ride_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_run_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null }, all_swim_totals: { __typename?: 'ActivityTotal', count: number, distance: number, moving_time: number, elapsed_time: number, elevation_gain: number, achievement_count: number | null } } };
-
-export type GetActivityByIdQueryVariables = Exact<{
-  activityId: Scalars['String']['input'];
-}>;
-
-
-export type GetActivityByIdQuery = { __typename?: 'Query', getActivityById: { __typename?: 'StravaActivityDto', id: string, resource_state: number, external_id: string | null, upload_id: string | null, name: string, distance: number, moving_time: number, elapsed_time: number, total_elevation_gain: number, elev_high: number | null, elev_low: number | null, type: string, start_date: string, start_date_local: string, timezone: string, achievement_count: number, pr_count: number, kudos_count: number, comment_count: number, athlete_count: number, photo_count: number, total_photo_count: number, trainer: boolean, commute: boolean, manual: boolean, private: boolean, flagged: boolean, workout_type: number | null, gear_id: string | null, average_speed: number, max_speed: number, average_cadence: number | null, average_temp: number | null, average_watts: number | null, max_watts: number | null, weighted_average_watts: number | null, kilojoules: number | null, device_watts: boolean | null, has_heartrate: boolean, average_heartrate: number | null, max_heartrate: number | null, calories: number | null, suffer_score: number | null, has_kudoed: boolean, location_city: string | null, location_state: string | null, location_country: string | null, description: string | null, device_name: string | null, embed_token: string | null, photos: Record<string, any> | null, sport_type: SportType, polyline: string | null, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number }, start_latlng: { __typename?: 'LatLngDto', lat: number | null, lng: number | null } | null, end_latlng: { __typename?: 'LatLngDto', lat: number | null, lng: number | null } | null, map: { __typename?: 'PolylineMapDto', id: string, polyline: string | null, resource_state: number, summary_polyline: string | null }, gear: { __typename?: 'SummaryGearDto', id: string, primary: boolean, name: string, resource_state: number, distance: number } | null, segment_efforts: Array<{ __typename?: 'DetailedSegmentEffortDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, kom_rank: number | null, pr_rank: number | null, hidden: boolean | null, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null, splits_metric: Array<{ __typename?: 'SplitDto', distance: number, elapsed_time: number, elevation_difference: number, moving_time: number, split: number, average_speed: number, pace_zone: number }> | null, splits_standard: Array<{ __typename?: 'SplitDto', distance: number, elapsed_time: number, elevation_difference: number, moving_time: number, split: number, average_speed: number, pace_zone: number }> | null, laps: Array<{ __typename?: 'LapDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, total_elevation_gain: number, average_speed: number, max_speed: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, lap_index: number, split: number, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null, best_efforts: Array<{ __typename?: 'DetailedSegmentEffortDto', id: string, resource_state: number, name: string, elapsed_time: number, moving_time: number, start_date: string, start_date_local: string, distance: number, start_index: number, end_index: number, average_cadence: number | null, device_watts: boolean | null, average_watts: number | null, kom_rank: number | null, pr_rank: number | null, hidden: boolean | null, athlete: { __typename?: 'MetaAthleteDto', id: number, resource_state: number } }> | null } };
-
-export type GetActivityZonesQueryVariables = Exact<{
-  activityId: Scalars['String']['input'];
-}>;
-
-
-export type GetActivityZonesQuery = { __typename?: 'Query', getActivityZones: Array<{ __typename?: 'ActivityZoneDto', score: number, type: string, sensor_based: boolean, points: number, custom_zones: boolean, max: number, distribution_buckets: Array<{ __typename?: 'ZoneBucket', min: number, max: number, time: number }> | null }> };
-
-export type GetActivityStreamsQueryVariables = Exact<{
-  activityId: Scalars['String']['input'];
-}>;
-
-
-export type GetActivityStreamsQuery = { __typename?: 'Query', getActivityStreams: { __typename?: 'StreamSetDto', altitude: { __typename?: 'AltitudeStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, cadence: { __typename?: 'CadenceStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, distance: { __typename?: 'DistanceStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, heartrate: { __typename?: 'HeartrateStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, moving: { __typename?: 'MovingStreamDto', type: string | null, data: Array<boolean>, series_type: string, original_size: number, resolution: string } | null, power: { __typename?: 'PowerStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, smooth_grade: { __typename?: 'SmoothGradeStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, smooth_velocity: { __typename?: 'SmoothVelocityStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, temperature: { __typename?: 'TemperatureStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null, time: { __typename?: 'TimeStreamDto', type: string | null, data: Array<number>, series_type: string, original_size: number, resolution: string } | null } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -911,78 +924,6 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: Role, isEmailVerified: boolean, createdAt: string, updatedAt: string } };
 
 
-export const GetAthleteDocument = gql`
-    query GetAthlete {
-  getAthlete {
-    id
-    username
-    resource_state
-    firstname
-    lastname
-    premium
-    created_at
-    updated_at
-    badge_type_id
-    profile_medium
-    profile
-    follower_count
-    friend_count
-    mutual_friend_count
-    athlete_type
-    date_preference
-    measurement_preference
-    clubs
-    ftp
-    weight
-    bikes {
-      id
-      primary
-      name
-      resource_state
-      distance
-    }
-    shoes {
-      id
-      primary
-      name
-      resource_state
-      distance
-    }
-  }
-}
-    `;
-
-/**
- * __useGetAthleteQuery__
- *
- * To run a query within a React component, call `useGetAthleteQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAthleteQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAthleteQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAthleteQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetAthleteQuery, GetAthleteQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetAthleteQuery, GetAthleteQueryVariables>(GetAthleteDocument, options);
-      }
-export function useGetAthleteLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetAthleteQuery, GetAthleteQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetAthleteQuery, GetAthleteQueryVariables>(GetAthleteDocument, options);
-        }
-export function useGetAthleteSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetAthleteQuery, GetAthleteQueryVariables>) {
-          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetAthleteQuery, GetAthleteQueryVariables>(GetAthleteDocument, options);
-        }
-export type GetAthleteQueryHookResult = ReturnType<typeof useGetAthleteQuery>;
-export type GetAthleteLazyQueryHookResult = ReturnType<typeof useGetAthleteLazyQuery>;
-export type GetAthleteSuspenseQueryHookResult = ReturnType<typeof useGetAthleteSuspenseQuery>;
-export type GetAthleteQueryResult = ApolloReactCommon.QueryResult<GetAthleteQuery, GetAthleteQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(loginInput: {email: $email, password: $password}) {
@@ -1121,6 +1062,145 @@ export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQ
 export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
 export type GetCurrentUserSuspenseQueryHookResult = ReturnType<typeof useGetCurrentUserSuspenseQuery>;
 export type GetCurrentUserQueryResult = ApolloReactCommon.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
+export const GetGarminActivitiesDocument = gql`
+    query GetGarminActivities($limit: Float!, $startTime: Float, $endTime: Float) {
+  getGarminActivities(limit: $limit, startTime: $startTime, endTime: $endTime) {
+    id
+    activityId
+    activityName
+    activityType
+    startTime
+    endTime
+    duration
+    distance
+    calories
+    averageHeartRate
+    maxHeartRate
+    averageSpeed
+    maxSpeed
+    averagePace
+    maxPace
+    totalAscent
+    totalDescent
+    startLatitude
+    startLongitude
+    endLatitude
+    endLongitude
+    timeZone
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetGarminActivitiesQuery__
+ *
+ * To run a query within a React component, call `useGetGarminActivitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGarminActivitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGarminActivitiesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      startTime: // value for 'startTime'
+ *      endTime: // value for 'endTime'
+ *   },
+ * });
+ */
+export function useGetGarminActivitiesQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetGarminActivitiesQuery, GetGarminActivitiesQueryVariables> & ({ variables: GetGarminActivitiesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetGarminActivitiesQuery, GetGarminActivitiesQueryVariables>(GetGarminActivitiesDocument, options);
+      }
+export function useGetGarminActivitiesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetGarminActivitiesQuery, GetGarminActivitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetGarminActivitiesQuery, GetGarminActivitiesQueryVariables>(GetGarminActivitiesDocument, options);
+        }
+export function useGetGarminActivitiesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetGarminActivitiesQuery, GetGarminActivitiesQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetGarminActivitiesQuery, GetGarminActivitiesQueryVariables>(GetGarminActivitiesDocument, options);
+        }
+export type GetGarminActivitiesQueryHookResult = ReturnType<typeof useGetGarminActivitiesQuery>;
+export type GetGarminActivitiesLazyQueryHookResult = ReturnType<typeof useGetGarminActivitiesLazyQuery>;
+export type GetGarminActivitiesSuspenseQueryHookResult = ReturnType<typeof useGetGarminActivitiesSuspenseQuery>;
+export type GetGarminActivitiesQueryResult = ApolloReactCommon.QueryResult<GetGarminActivitiesQuery, GetGarminActivitiesQueryVariables>;
+export const GetGarminAuthUrlDocument = gql`
+    query GetGarminAuthUrl {
+  getGarminAuthUrl
+}
+    `;
+
+/**
+ * __useGetGarminAuthUrlQuery__
+ *
+ * To run a query within a React component, call `useGetGarminAuthUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGarminAuthUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGarminAuthUrlQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetGarminAuthUrlQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetGarminAuthUrlQuery, GetGarminAuthUrlQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetGarminAuthUrlQuery, GetGarminAuthUrlQueryVariables>(GetGarminAuthUrlDocument, options);
+      }
+export function useGetGarminAuthUrlLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetGarminAuthUrlQuery, GetGarminAuthUrlQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetGarminAuthUrlQuery, GetGarminAuthUrlQueryVariables>(GetGarminAuthUrlDocument, options);
+        }
+export function useGetGarminAuthUrlSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetGarminAuthUrlQuery, GetGarminAuthUrlQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetGarminAuthUrlQuery, GetGarminAuthUrlQueryVariables>(GetGarminAuthUrlDocument, options);
+        }
+export type GetGarminAuthUrlQueryHookResult = ReturnType<typeof useGetGarminAuthUrlQuery>;
+export type GetGarminAuthUrlLazyQueryHookResult = ReturnType<typeof useGetGarminAuthUrlLazyQuery>;
+export type GetGarminAuthUrlSuspenseQueryHookResult = ReturnType<typeof useGetGarminAuthUrlSuspenseQuery>;
+export type GetGarminAuthUrlQueryResult = ApolloReactCommon.QueryResult<GetGarminAuthUrlQuery, GetGarminAuthUrlQueryVariables>;
+export const IsGarminConnectedDocument = gql`
+    query IsGarminConnected {
+  isGarminConnected
+}
+    `;
+
+/**
+ * __useIsGarminConnectedQuery__
+ *
+ * To run a query within a React component, call `useIsGarminConnectedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsGarminConnectedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsGarminConnectedQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useIsGarminConnectedQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<IsGarminConnectedQuery, IsGarminConnectedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<IsGarminConnectedQuery, IsGarminConnectedQueryVariables>(IsGarminConnectedDocument, options);
+      }
+export function useIsGarminConnectedLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<IsGarminConnectedQuery, IsGarminConnectedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<IsGarminConnectedQuery, IsGarminConnectedQueryVariables>(IsGarminConnectedDocument, options);
+        }
+export function useIsGarminConnectedSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<IsGarminConnectedQuery, IsGarminConnectedQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<IsGarminConnectedQuery, IsGarminConnectedQueryVariables>(IsGarminConnectedDocument, options);
+        }
+export type IsGarminConnectedQueryHookResult = ReturnType<typeof useIsGarminConnectedQuery>;
+export type IsGarminConnectedLazyQueryHookResult = ReturnType<typeof useIsGarminConnectedLazyQuery>;
+export type IsGarminConnectedSuspenseQueryHookResult = ReturnType<typeof useIsGarminConnectedSuspenseQuery>;
+export type IsGarminConnectedQueryResult = ApolloReactCommon.QueryResult<IsGarminConnectedQuery, IsGarminConnectedQueryVariables>;
 export const GetActivityInsightsDocument = gql`
     query getActivityInsights($activityId: String!) {
   getActivityInsights(activityId: $activityId)
@@ -1240,733 +1320,6 @@ export type GetActivityInsightsDetailedQueryHookResult = ReturnType<typeof useGe
 export type GetActivityInsightsDetailedLazyQueryHookResult = ReturnType<typeof useGetActivityInsightsDetailedLazyQuery>;
 export type GetActivityInsightsDetailedSuspenseQueryHookResult = ReturnType<typeof useGetActivityInsightsDetailedSuspenseQuery>;
 export type GetActivityInsightsDetailedQueryResult = ApolloReactCommon.QueryResult<GetActivityInsightsDetailedQuery, GetActivityInsightsDetailedQueryVariables>;
-export const GetStravaActivitiesDocument = gql`
-    query getStravaActivities($limit: Int) {
-  getStravaActivities(limit: $limit) {
-    id
-    resource_state
-    external_id
-    upload_id
-    athlete {
-      id
-      resource_state
-    }
-    name
-    distance
-    moving_time
-    elapsed_time
-    total_elevation_gain
-    elev_high
-    elev_low
-    type
-    start_date
-    start_date_local
-    timezone
-    start_latlng {
-      lat
-      lng
-    }
-    end_latlng {
-      lat
-      lng
-    }
-    achievement_count
-    pr_count
-    kudos_count
-    comment_count
-    athlete_count
-    photo_count
-    total_photo_count
-    map {
-      id
-      polyline
-      resource_state
-      summary_polyline
-    }
-    trainer
-    commute
-    manual
-    private
-    flagged
-    workout_type
-    gear_id
-    average_speed
-    max_speed
-    average_cadence
-    average_temp
-    average_watts
-    max_watts
-    weighted_average_watts
-    kilojoules
-    device_watts
-    has_heartrate
-    average_heartrate
-    max_heartrate
-    calories
-    suffer_score
-    has_kudoed
-    location_city
-    location_state
-    location_country
-    description
-    gear {
-      id
-      primary
-      name
-      resource_state
-      distance
-    }
-    segment_efforts {
-      id
-      resource_state
-      name
-      athlete {
-        id
-        resource_state
-      }
-      elapsed_time
-      moving_time
-      start_date
-      start_date_local
-      distance
-      start_index
-      end_index
-      average_cadence
-      device_watts
-      average_watts
-      kom_rank
-      pr_rank
-      hidden
-    }
-    splits_metric {
-      distance
-      elapsed_time
-      elevation_difference
-      moving_time
-      split
-      average_speed
-      pace_zone
-    }
-    splits_standard {
-      distance
-      elapsed_time
-      elevation_difference
-      moving_time
-      split
-      average_speed
-      pace_zone
-    }
-    laps {
-      id
-      resource_state
-      name
-      athlete {
-        id
-        resource_state
-      }
-      elapsed_time
-      moving_time
-      start_date
-      start_date_local
-      distance
-      start_index
-      end_index
-      total_elevation_gain
-      average_speed
-      max_speed
-      average_cadence
-      device_watts
-      average_watts
-      lap_index
-      split
-    }
-    best_efforts {
-      id
-      resource_state
-      name
-      athlete {
-        id
-        resource_state
-      }
-      elapsed_time
-      moving_time
-      start_date
-      start_date_local
-      distance
-      start_index
-      end_index
-      average_cadence
-      device_watts
-      average_watts
-      kom_rank
-      pr_rank
-      hidden
-    }
-    device_name
-    embed_token
-    photos
-    sport_type
-  }
-}
-    `;
-
-/**
- * __useGetStravaActivitiesQuery__
- *
- * To run a query within a React component, call `useGetStravaActivitiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetStravaActivitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetStravaActivitiesQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *   },
- * });
- */
-export function useGetStravaActivitiesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>(GetStravaActivitiesDocument, options);
-      }
-export function useGetStravaActivitiesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>(GetStravaActivitiesDocument, options);
-        }
-export function useGetStravaActivitiesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>) {
-          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>(GetStravaActivitiesDocument, options);
-        }
-export type GetStravaActivitiesQueryHookResult = ReturnType<typeof useGetStravaActivitiesQuery>;
-export type GetStravaActivitiesLazyQueryHookResult = ReturnType<typeof useGetStravaActivitiesLazyQuery>;
-export type GetStravaActivitiesSuspenseQueryHookResult = ReturnType<typeof useGetStravaActivitiesSuspenseQuery>;
-export type GetStravaActivitiesQueryResult = ApolloReactCommon.QueryResult<GetStravaActivitiesQuery, GetStravaActivitiesQueryVariables>;
-export const GetAthleteZonesDocument = gql`
-    query GetAthleteZones {
-  getAthleteZones {
-    heart_rate {
-      custom_zones
-      zones {
-        min
-        max
-      }
-    }
-    power {
-      zones {
-        min
-        max
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetAthleteZonesQuery__
- *
- * To run a query within a React component, call `useGetAthleteZonesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAthleteZonesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAthleteZonesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAthleteZonesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetAthleteZonesQuery, GetAthleteZonesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetAthleteZonesQuery, GetAthleteZonesQueryVariables>(GetAthleteZonesDocument, options);
-      }
-export function useGetAthleteZonesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetAthleteZonesQuery, GetAthleteZonesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetAthleteZonesQuery, GetAthleteZonesQueryVariables>(GetAthleteZonesDocument, options);
-        }
-export function useGetAthleteZonesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetAthleteZonesQuery, GetAthleteZonesQueryVariables>) {
-          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetAthleteZonesQuery, GetAthleteZonesQueryVariables>(GetAthleteZonesDocument, options);
-        }
-export type GetAthleteZonesQueryHookResult = ReturnType<typeof useGetAthleteZonesQuery>;
-export type GetAthleteZonesLazyQueryHookResult = ReturnType<typeof useGetAthleteZonesLazyQuery>;
-export type GetAthleteZonesSuspenseQueryHookResult = ReturnType<typeof useGetAthleteZonesSuspenseQuery>;
-export type GetAthleteZonesQueryResult = ApolloReactCommon.QueryResult<GetAthleteZonesQuery, GetAthleteZonesQueryVariables>;
-export const GetAthleteStatsDocument = gql`
-    query GetAthleteStats {
-  getAthleteStats {
-    biggest_ride_distance
-    biggest_climb_elevation_gain
-    recent_ride_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    recent_run_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    recent_swim_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    ytd_ride_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    ytd_run_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    ytd_swim_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    all_ride_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    all_run_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-    all_swim_totals {
-      count
-      distance
-      moving_time
-      elapsed_time
-      elevation_gain
-      achievement_count
-    }
-  }
-}
-    `;
-
-/**
- * __useGetAthleteStatsQuery__
- *
- * To run a query within a React component, call `useGetAthleteStatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAthleteStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAthleteStatsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAthleteStatsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetAthleteStatsQuery, GetAthleteStatsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetAthleteStatsQuery, GetAthleteStatsQueryVariables>(GetAthleteStatsDocument, options);
-      }
-export function useGetAthleteStatsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetAthleteStatsQuery, GetAthleteStatsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetAthleteStatsQuery, GetAthleteStatsQueryVariables>(GetAthleteStatsDocument, options);
-        }
-export function useGetAthleteStatsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetAthleteStatsQuery, GetAthleteStatsQueryVariables>) {
-          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetAthleteStatsQuery, GetAthleteStatsQueryVariables>(GetAthleteStatsDocument, options);
-        }
-export type GetAthleteStatsQueryHookResult = ReturnType<typeof useGetAthleteStatsQuery>;
-export type GetAthleteStatsLazyQueryHookResult = ReturnType<typeof useGetAthleteStatsLazyQuery>;
-export type GetAthleteStatsSuspenseQueryHookResult = ReturnType<typeof useGetAthleteStatsSuspenseQuery>;
-export type GetAthleteStatsQueryResult = ApolloReactCommon.QueryResult<GetAthleteStatsQuery, GetAthleteStatsQueryVariables>;
-export const GetActivityByIdDocument = gql`
-    query GetActivityById($activityId: String!) {
-  getActivityById(activityId: $activityId) {
-    id
-    resource_state
-    external_id
-    upload_id
-    athlete {
-      id
-      resource_state
-    }
-    name
-    distance
-    moving_time
-    elapsed_time
-    total_elevation_gain
-    elev_high
-    elev_low
-    type
-    start_date
-    start_date_local
-    timezone
-    start_latlng {
-      lat
-      lng
-    }
-    end_latlng {
-      lat
-      lng
-    }
-    achievement_count
-    pr_count
-    kudos_count
-    comment_count
-    athlete_count
-    photo_count
-    total_photo_count
-    map {
-      id
-      polyline
-      resource_state
-      summary_polyline
-    }
-    trainer
-    commute
-    manual
-    private
-    flagged
-    workout_type
-    gear_id
-    average_speed
-    max_speed
-    average_cadence
-    average_temp
-    average_watts
-    max_watts
-    weighted_average_watts
-    kilojoules
-    device_watts
-    has_heartrate
-    average_heartrate
-    max_heartrate
-    calories
-    suffer_score
-    has_kudoed
-    location_city
-    location_state
-    location_country
-    description
-    gear {
-      id
-      primary
-      name
-      resource_state
-      distance
-    }
-    segment_efforts {
-      id
-      resource_state
-      name
-      athlete {
-        id
-        resource_state
-      }
-      elapsed_time
-      moving_time
-      start_date
-      start_date_local
-      distance
-      start_index
-      end_index
-      average_cadence
-      device_watts
-      average_watts
-      kom_rank
-      pr_rank
-      hidden
-    }
-    splits_metric {
-      distance
-      elapsed_time
-      elevation_difference
-      moving_time
-      split
-      average_speed
-      pace_zone
-    }
-    splits_standard {
-      distance
-      elapsed_time
-      elevation_difference
-      moving_time
-      split
-      average_speed
-      pace_zone
-    }
-    laps {
-      id
-      resource_state
-      name
-      athlete {
-        id
-        resource_state
-      }
-      elapsed_time
-      moving_time
-      start_date
-      start_date_local
-      distance
-      start_index
-      end_index
-      total_elevation_gain
-      average_speed
-      max_speed
-      average_cadence
-      device_watts
-      average_watts
-      lap_index
-      split
-    }
-    best_efforts {
-      id
-      resource_state
-      name
-      athlete {
-        id
-        resource_state
-      }
-      elapsed_time
-      moving_time
-      start_date
-      start_date_local
-      distance
-      start_index
-      end_index
-      average_cadence
-      device_watts
-      average_watts
-      kom_rank
-      pr_rank
-      hidden
-    }
-    device_name
-    embed_token
-    photos
-    sport_type
-    polyline
-  }
-}
-    `;
-
-/**
- * __useGetActivityByIdQuery__
- *
- * To run a query within a React component, call `useGetActivityByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetActivityByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetActivityByIdQuery({
- *   variables: {
- *      activityId: // value for 'activityId'
- *   },
- * });
- */
-export function useGetActivityByIdQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetActivityByIdQuery, GetActivityByIdQueryVariables> & ({ variables: GetActivityByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetActivityByIdQuery, GetActivityByIdQueryVariables>(GetActivityByIdDocument, options);
-      }
-export function useGetActivityByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetActivityByIdQuery, GetActivityByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetActivityByIdQuery, GetActivityByIdQueryVariables>(GetActivityByIdDocument, options);
-        }
-export function useGetActivityByIdSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetActivityByIdQuery, GetActivityByIdQueryVariables>) {
-          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetActivityByIdQuery, GetActivityByIdQueryVariables>(GetActivityByIdDocument, options);
-        }
-export type GetActivityByIdQueryHookResult = ReturnType<typeof useGetActivityByIdQuery>;
-export type GetActivityByIdLazyQueryHookResult = ReturnType<typeof useGetActivityByIdLazyQuery>;
-export type GetActivityByIdSuspenseQueryHookResult = ReturnType<typeof useGetActivityByIdSuspenseQuery>;
-export type GetActivityByIdQueryResult = ApolloReactCommon.QueryResult<GetActivityByIdQuery, GetActivityByIdQueryVariables>;
-export const GetActivityZonesDocument = gql`
-    query GetActivityZones($activityId: String!) {
-  getActivityZones(activityId: $activityId) {
-    score
-    distribution_buckets {
-      min
-      max
-      time
-    }
-    type
-    sensor_based
-    points
-    custom_zones
-    max
-  }
-}
-    `;
-
-/**
- * __useGetActivityZonesQuery__
- *
- * To run a query within a React component, call `useGetActivityZonesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetActivityZonesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetActivityZonesQuery({
- *   variables: {
- *      activityId: // value for 'activityId'
- *   },
- * });
- */
-export function useGetActivityZonesQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetActivityZonesQuery, GetActivityZonesQueryVariables> & ({ variables: GetActivityZonesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetActivityZonesQuery, GetActivityZonesQueryVariables>(GetActivityZonesDocument, options);
-      }
-export function useGetActivityZonesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetActivityZonesQuery, GetActivityZonesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetActivityZonesQuery, GetActivityZonesQueryVariables>(GetActivityZonesDocument, options);
-        }
-export function useGetActivityZonesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetActivityZonesQuery, GetActivityZonesQueryVariables>) {
-          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetActivityZonesQuery, GetActivityZonesQueryVariables>(GetActivityZonesDocument, options);
-        }
-export type GetActivityZonesQueryHookResult = ReturnType<typeof useGetActivityZonesQuery>;
-export type GetActivityZonesLazyQueryHookResult = ReturnType<typeof useGetActivityZonesLazyQuery>;
-export type GetActivityZonesSuspenseQueryHookResult = ReturnType<typeof useGetActivityZonesSuspenseQuery>;
-export type GetActivityZonesQueryResult = ApolloReactCommon.QueryResult<GetActivityZonesQuery, GetActivityZonesQueryVariables>;
-export const GetActivityStreamsDocument = gql`
-    query GetActivityStreams($activityId: String!) {
-  getActivityStreams(activityId: $activityId) {
-    altitude {
-      type
-      data
-      series_type
-      original_size
-      resolution
-    }
-    cadence {
-      type
-      data
-      series_type
-      original_size
-      resolution
-    }
-    distance {
-      type
-      data
-      series_type
-      original_size
-      resolution
-    }
-    heartrate {
-      type
-      data
-      series_type
-      original_size
-      resolution
-    }
-    moving {
-      type
-      data
-      series_type
-      original_size
-      resolution
-    }
-    power {
-      type
-      data
-      series_type
-      original_size
-      resolution
-    }
-    smooth_grade {
-      type
-      data
-      series_type
-      original_size
-      resolution
-    }
-    smooth_velocity {
-      type
-      data
-      series_type
-      original_size
-      resolution
-    }
-    temperature {
-      type
-      data
-      series_type
-      original_size
-      resolution
-    }
-    time {
-      type
-      data
-      series_type
-      original_size
-      resolution
-    }
-  }
-}
-    `;
-
-/**
- * __useGetActivityStreamsQuery__
- *
- * To run a query within a React component, call `useGetActivityStreamsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetActivityStreamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetActivityStreamsQuery({
- *   variables: {
- *      activityId: // value for 'activityId'
- *   },
- * });
- */
-export function useGetActivityStreamsQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetActivityStreamsQuery, GetActivityStreamsQueryVariables> & ({ variables: GetActivityStreamsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>(GetActivityStreamsDocument, options);
-      }
-export function useGetActivityStreamsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>(GetActivityStreamsDocument, options);
-        }
-export function useGetActivityStreamsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>) {
-          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>(GetActivityStreamsDocument, options);
-        }
-export type GetActivityStreamsQueryHookResult = ReturnType<typeof useGetActivityStreamsQuery>;
-export type GetActivityStreamsLazyQueryHookResult = ReturnType<typeof useGetActivityStreamsLazyQuery>;
-export type GetActivityStreamsSuspenseQueryHookResult = ReturnType<typeof useGetActivityStreamsSuspenseQuery>;
-export type GetActivityStreamsQueryResult = ApolloReactCommon.QueryResult<GetActivityStreamsQuery, GetActivityStreamsQueryVariables>;
 export const GetUsersDocument = gql`
     query GetUsers {
   users {

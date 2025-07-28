@@ -11,11 +11,10 @@ import { useRBAC, Permission } from '@/hooks/use-rbac'
 import {
   useUpdateOwnProfileMutation,
   GetCurrentUserDocument,
-  useGetStravaActivitiesQuery,
+  useGetGarminActivitiesQuery,
 } from '@/generated/graphql'
 import { useApolloClient } from '@apollo/client'
 import { RoleBasedComponent } from '@/components/RoleBasedComponent'
-import { StravaConnectButton } from '@/components/ui/strava-connect-button'
 
 export function UserProfile() {
   const { user, hasPermission } = useRBAC()
@@ -26,7 +25,7 @@ export function UserProfile() {
     email: user?.email || '',
   })
 
-  const { data, loading, error, refetch } = useGetStravaActivitiesQuery({
+  const { data, loading, error, refetch } = useGetGarminActivitiesQuery({
     variables: { limit: 5 as never },
     skip: !user,
   })

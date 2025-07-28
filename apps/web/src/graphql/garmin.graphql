@@ -1,26 +1,36 @@
-# Queries
-extend type Query {
-  # Get Garmin authorization URL
-  getGarminAuthUrl: String!
-
-  # Get user's Garmin account
-  getGarminAccount: GarminAccount
-
-  # Get user permissions from Garmin
-  getGarminUserPermissions: [String!]!
+query GetGarminActivities($limit: Float!, $startTime: Float, $endTime: Float) {
+  getGarminActivities(limit: $limit, startTime: $startTime, endTime: $endTime) {
+    id
+    activityId
+    activityName
+    activityType
+    startTime
+    endTime
+    duration
+    distance
+    calories
+    averageHeartRate
+    maxHeartRate
+    averageSpeed
+    maxSpeed
+    averagePace
+    maxPace
+    totalAscent
+    totalDescent
+    startLatitude
+    startLongitude
+    endLatitude
+    endLongitude
+    timeZone
+    createdAt
+    updatedAt
+  }
 }
 
-# Mutations
-extend type Mutation {
-  # Exchange authorization code for access token
-  exchangeGarminCode(code: String!, state: String!): GarminAccount!
+query GetGarminAuthUrl {
+  getGarminAuthUrl
+}
 
-  # Refresh Garmin access token
-  refreshGarminToken: GarminAccount!
-
-  # Delete user registration from Garmin
-  deleteGarminUserRegistration: Boolean!
-
-  # Disconnect Garmin account
-  disconnectGarminAccount: Boolean!
+query IsGarminConnected {
+  isGarminConnected
 }

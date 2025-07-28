@@ -85,4 +85,42 @@ export class GarminController {
       timestamp: new Date().toISOString(),
     }
   }
+
+  @Get('test-connection')
+  async testConnection(@Query('userId') userId: string) {
+    if (!userId) {
+      throw new Error('User ID is required')
+    }
+    return this.garminService.testGarminConnection(userId)
+  }
+
+  @Get('test-activities')
+  async testActivities(@Query('userId') userId: string) {
+    if (!userId) {
+      throw new Error('User ID is required')
+    }
+
+    const now = Math.floor(Date.now() / 1000)
+    const startTime = now - 7 * 24 * 3600 // Last 7 days
+
+    try {
+      const activities = await this.garminService.fetchActivities(
+        userId,
+        startTime,
+        now
+      )
+      return {
+        success: true,
+        count: activities.length,
+        activities: activities.slice(0, 3), // Return first 3 activities
+        message: `Successfully fetched ${activities.length} activities`,
+      }
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to fetch activities',
+      }
+    }
+  }
 }

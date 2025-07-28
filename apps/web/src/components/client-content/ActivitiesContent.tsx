@@ -18,9 +18,9 @@ import {
 } from 'lucide-react'
 import { ActivityCard } from '@/components/ActivityCard'
 import { ActivityDetailModal } from '@/components/ActivityDetailModal'
-import { useGetStravaActivitiesQuery } from '@/generated/graphql'
+import { useGetGarminActivitiesQuery } from '@/generated/graphql'
 import { useStravaError } from '@/hooks/use-strava-error'
-import { StravaConnectButton } from '@/components/ui/strava-connect-button'
+import { GarminConnectButton } from '@/components/ui/garmin-connect-button'
 
 const ActivitiesContent: React.FC = () => {
   const [selectedActivityId, setSelectedActivityId] = useState<string | null>(
@@ -31,20 +31,22 @@ const ActivitiesContent: React.FC = () => {
   const [selectedSport, setSelectedSport] = useState('all')
   const [selectedTimeRange, setSelectedTimeRange] = useState('all')
 
-  const { data, loading, error, refetch } = useGetStravaActivitiesQuery({
+  const { data, loading, error, refetch } = useGetGarminActivitiesQuery({
     variables: { limit: 50 },
   })
 
+  console.log(data)
+
   const { analyzeError, handleReconnect } = useStravaError()
 
-  const activities = data?.getStravaActivities || []
+  const activities = data?.getGarminActivities || []
 
   const filteredActivities = activities.filter(activity => {
-    const matchesSearch = activity.name
+    const matchesSearch = activity.activityName
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
     const matchesSport =
-      selectedSport === 'all' || activity.sport_type === selectedSport
+      selectedSport === 'all' || activity.activityType === selectedSport
     return matchesSearch && matchesSport
   })
 
@@ -63,7 +65,7 @@ const ActivitiesContent: React.FC = () => {
 
   const errorInfo = error ? analyzeError(error) : null
 
-  const sportTypes = Array.from(new Set(activities.map(a => a.sport_type)))
+  const sportTypes = Array.from(new Set(activities.map(a => a.activityType)))
 
   if (loading) {
     return (
@@ -138,7 +140,7 @@ const ActivitiesContent: React.FC = () => {
                   Try Again
                 </Button>
                 {errorInfo?.suggestedAction === 'reconnect' && (
-                  <StravaConnectButton onClick={handleReconnect} />
+                  <GarminConnectButton onClick={handleReconnect} />
                 )}
               </div>
             </div>

@@ -1,42 +1,42 @@
-query GetAthlete {
-  getAthlete {
-    id
-    username
-    resource_state
-    firstname
-    lastname
-    # city
-    # state
-    # country
-    # sex
-    premium
-    created_at
-    updated_at
-    badge_type_id
-    profile_medium
-    profile
-    follower_count
-    friend_count
-    mutual_friend_count
-    athlete_type
-    date_preference
-    measurement_preference
-    clubs
-    ftp
-    weight
-    bikes {
-      id
-      primary
-      name
-      resource_state
-      distance
-    }
-    shoes {
-      id
-      primary
-      name
-      resource_state
-      distance
-    }
-  }
-}
+# query GetAthlete {
+#   getAthlete {
+#     id
+#     username
+#     resource_state
+#     firstname
+#     lastname
+#     # city
+#     # state
+#     # country
+#     # sex
+#     premium
+#     created_at
+#     updated_at
+#     badge_type_id
+#     profile_medium
+#     profile
+#     follower_count
+#     friend_count
+#     mutual_friend_count
+#     athlete_type
+#     date_preference
+#     measurement_preference
+#     clubs
+#     ftp
+#     weight
+#     bikes {
+#       id
+#       primary
+#       name
+#       resource_state
+#       distance
+#     }
+#     shoes {
+#       id
+#       primary
+#       name
+#       resource_state
+#       distance
+#     }
+#   }
+# }
