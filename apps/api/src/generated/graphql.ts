@@ -178,6 +178,25 @@ export type DistanceStreamDto = {
   type: Maybe<Scalars['String']['output']>;
 };
 
+export type GarminAccount = {
+  __typename?: 'GarminAccount';
+  accessToken: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  dataRetentionExpiresAt: Scalars['DateTime']['output'];
+  expiresAt: Scalars['DateTime']['output'];
+  garminUserId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  isMarkedForDeletion: Scalars['Boolean']['output'];
+  lastSyncAt: Scalars['DateTime']['output'];
+  markedForDeletionAt: Scalars['DateTime']['output'];
+  refreshToken: Scalars['String']['output'];
+  refreshTokenExpiresAt: Scalars['DateTime']['output'];
+  scope: Array<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+  user: User;
+  userId: Scalars['ID']['output'];
+};
+
 export type HrZone = {
   __typename?: 'HRZone';
   timeInZone: Scalars['Float']['output'];
@@ -279,8 +298,12 @@ export type MovingStreamDto = {
 export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
+  deleteGarminUserRegistration: Scalars['Boolean']['output'];
+  disconnectGarminAccount: Scalars['Boolean']['output'];
+  exchangeGarminCode: GarminAccount;
   login: AuthResponse;
   performDataRetentionCleanup: Scalars['String']['output'];
+  refreshGarminToken: GarminAccount;
   register: AuthResponse;
   removeUser: User;
   restoreStravaAccountFromDeletion: Scalars['String']['output'];
@@ -293,6 +316,12 @@ export type Mutation = {
 
 export type MutationCreateUserArgs = {
   createUserInput: CreateUserInput;
+};
+
+
+export type MutationExchangeGarminCodeArgs = {
+  code: Scalars['String']['input'];
+  state: Scalars['String']['input'];
 };
 
 
@@ -411,6 +440,9 @@ export type Query = {
   getAthlete: DetailedAthlete;
   getAthleteStats: ActivityStats;
   getAthleteZones: Zones;
+  getGarminAccount: Maybe<GarminAccount>;
+  getGarminAuthUrl: Scalars['String']['output'];
+  getGarminUserPermissions: Array<Scalars['String']['output']>;
   getPhysicalStatus: PhysicalStatus;
   getRetentionStats: Scalars['String']['output'];
   getStravaActivities: Array<StravaActivityDto>;
@@ -840,6 +872,7 @@ export type ResolversTypes = ResolversObject<{
   DetailedSegmentEffortDto: ResolverTypeWrapper<DetailedSegmentEffortDto>;
   DistanceStreamDto: ResolverTypeWrapper<DistanceStreamDto>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  GarminAccount: ResolverTypeWrapper<GarminAccount>;
   HRZone: ResolverTypeWrapper<HrZone>;
   HeartRateZone: ResolverTypeWrapper<HeartRateZone>;
   HeartRateZoneDetail: ResolverTypeWrapper<HeartRateZoneDetail>;
@@ -904,6 +937,7 @@ export type ResolversParentTypes = ResolversObject<{
   DetailedSegmentEffortDto: DetailedSegmentEffortDto;
   DistanceStreamDto: DistanceStreamDto;
   Float: Scalars['Float']['output'];
+  GarminAccount: GarminAccount;
   HRZone: HrZone;
   HeartRateZone: HeartRateZone;
   HeartRateZoneDetail: HeartRateZoneDetail;
@@ -1100,6 +1134,25 @@ export type DistanceStreamDtoResolvers<ContextType = GraphQLContext, ParentType 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type GarminAccountResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['GarminAccount'] = ResolversParentTypes['GarminAccount']> = ResolversObject<{
+  accessToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  dataRetentionExpiresAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  expiresAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  garminUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isMarkedForDeletion?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  lastSyncAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  markedForDeletionAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  refreshToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  refreshTokenExpiresAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  scope?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type HrZoneResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['HRZone'] = ResolversParentTypes['HRZone']> = ResolversObject<{
   timeInZone?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   zone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1199,8 +1252,12 @@ export type MovingStreamDtoResolvers<ContextType = GraphQLContext, ParentType ex
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'createUserInput'>>;
+  deleteGarminUserRegistration?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  disconnectGarminAccount?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  exchangeGarminCode?: Resolver<ResolversTypes['GarminAccount'], ParentType, ContextType, RequireFields<MutationExchangeGarminCodeArgs, 'code' | 'state'>>;
   login?: Resolver<ResolversTypes['AuthResponse'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'loginInput'>>;
   performDataRetentionCleanup?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  refreshGarminToken?: Resolver<ResolversTypes['GarminAccount'], ParentType, ContextType>;
   register?: Resolver<ResolversTypes['AuthResponse'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'registerInput'>>;
   removeUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRemoveUserArgs, 'id'>>;
   restoreStravaAccountFromDeletion?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationRestoreStravaAccountFromDeletionArgs, 'accountId'>>;
@@ -1284,6 +1341,9 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
   getAthlete?: Resolver<ResolversTypes['DetailedAthlete'], ParentType, ContextType>;
   getAthleteStats?: Resolver<ResolversTypes['ActivityStats'], ParentType, ContextType>;
   getAthleteZones?: Resolver<ResolversTypes['Zones'], ParentType, ContextType>;
+  getGarminAccount?: Resolver<Maybe<ResolversTypes['GarminAccount']>, ParentType, ContextType>;
+  getGarminAuthUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  getGarminUserPermissions?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   getPhysicalStatus?: Resolver<ResolversTypes['PhysicalStatus'], ParentType, ContextType, Partial<QueryGetPhysicalStatusArgs>>;
   getRetentionStats?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   getStravaActivities?: Resolver<Array<ResolversTypes['StravaActivityDto']>, ParentType, ContextType, RequireFields<QueryGetStravaActivitiesArgs, 'limit'>>;
@@ -1508,6 +1568,7 @@ export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   DetailedInsightsResponse?: DetailedInsightsResponseResolvers<ContextType>;
   DetailedSegmentEffortDto?: DetailedSegmentEffortDtoResolvers<ContextType>;
   DistanceStreamDto?: DistanceStreamDtoResolvers<ContextType>;
+  GarminAccount?: GarminAccountResolvers<ContextType>;
   HRZone?: HrZoneResolvers<ContextType>;
   HeartRateZone?: HeartRateZoneResolvers<ContextType>;
   HeartRateZoneDetail?: HeartRateZoneDetailResolvers<ContextType>;

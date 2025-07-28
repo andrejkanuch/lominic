@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Card,
   CardContent,
@@ -24,17 +24,68 @@ import {
   Trophy,
   Users,
   Crown,
+  Watch,
 } from 'lucide-react'
 import { EditProfileDialog } from '@/components/profile/EditProfileDialog'
 import { useQuery } from '@apollo/client'
 import { GetAthleteDocument, GetAthleteQuery } from '@/generated/graphql'
-import { StravaConnectButton } from '@/components/ui/strava-connect-button'
+// import { StravaConnectButton } from '@/components/ui/strava-connect-button'
+import { GarminConnectButton } from '@/components/ui/garmin-connect-button'
 import { useRBAC } from '@/hooks/use-rbac'
 import { toast } from 'sonner'
 
 const ProfileContent = () => {
   const { user } = useRBAC()
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [garminConnected, setGarminConnected] = useState(false)
+  const [garminLoading, setGarminLoading] = useState(false)
+
+  // Check if user already has Garmin connected
+  useEffect(() => {
+    const checkGarminConnection = async () => {
+      if (!user?.id) return
+
+      try {
+        const apiBase = (
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/graphql'
+        ).replace(/\/?graphql$/, '')
+
+        const response = await fetch(
+          `${apiBase}/api/garmin/check-connection?userId=${user.id}`
+        )
+        if (response.ok) {
+          const data = await response.json()
+          if (data.connected) {
+            setGarminConnected(true)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to check Garmin connection:', error)
+      }
+    }
+
+    checkGarminConnection()
+  }, [user?.id])
+
+  // Listen for OAuth completion messages
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      console.log('event 123', event)
+      if (event.origin !== window.location.origin) return
+
+      if (event.data.type === 'GARMIN_OAUTH_SUCCESS') {
+        setGarminConnected(true)
+        toast.success('Garmin account connected successfully!')
+      } else if (event.data.type === 'GARMIN_OAUTH_ERROR') {
+        toast.error('Failed to connect Garmin account. Please try again.', {
+          description: event.data.message,
+        })
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+  }, [])
 
   // Fetch Strava athlete data
   const { data: stravaData, error: stravaError } =
@@ -466,7 +517,7 @@ const ProfileContent = () => {
       )}
 
       {/* Strava Connection Prompt */}
-      <Card>
+      {/* <Card>
         <CardContent className="pt-6">
           <div className="text-center space-y-4">
             <p className="text-sm text-muted-foreground">
@@ -496,6 +547,130 @@ const ProfileContent = () => {
               }}
             />
           </div>
+        </CardContent>
+      </Card> */}
+
+      {/* Garmin Connection Section */}
+      <Card className="border-2 border-orange-100 bg-gradient-to-br from-orange-50 to-white">
+        <CardHeader>
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-orange-100 rounded-lg">
+              <Watch className="w-5 h-5 text-orange-600" />
+            </div>
+            <div>
+              <CardTitle className="text-lg">Garmin Connect</CardTitle>
+              <CardDescription>
+                Sync your fitness activities and health data
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {garminConnected ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <Watch className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-green-800">Connected</p>
+                    <p className="text-sm text-green-600">
+                      Your Garmin account is linked
+                    </p>
+                  </div>
+                </div>
+                <Badge
+                  variant="secondary"
+                  className="bg-green-100 text-green-700"
+                >
+                  Active
+                </Badge>
+              </div>
+              <div className="flex space-x-2">
+                <Button variant="outline" size="sm" className="flex-1">
+                  Sync Activities
+                </Button>
+                <Button variant="outline" size="sm" className="flex-1">
+                  View Data
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="text-center space-y-3">
+                <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                  <Watch className="w-8 h-8 text-orange-500 mx-auto mb-2" />
+                  <p className="text-sm text-orange-700 font-medium">
+                    Connect your Garmin device
+                  </p>
+                  <p className="text-xs text-orange-600 mt-1">
+                    Get detailed insights from your fitness activities
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-center space-x-2 text-xs text-muted-foreground">
+                    <div className="w-1 h-1 bg-orange-400 rounded-full"></div>
+                    <span>Activity tracking</span>
+                    <div className="w-1 h-1 bg-orange-400 rounded-full"></div>
+                    <span>Health metrics</span>
+                    <div className="w-1 h-1 bg-orange-400 rounded-full"></div>
+                    <span>Performance insights</span>
+                  </div>
+                </div>
+              </div>
+              <GarminConnectButton
+                onClick={async () => {
+                  if (!user?.id) {
+                    toast.error('Please log in to connect your Garmin account')
+                    return
+                  }
+
+                  setGarminLoading(true)
+                  try {
+                    const apiBase =
+                      process.env.NEXT_PUBLIC_API_URL ||
+                      'http://localhost:4000/graphql'
+                    const baseUrl = apiBase.replace(/\/graphql$/, '')
+
+                    console.log(
+                      'Getting Garmin auth URL from:',
+                      `${baseUrl}/api/garmin/auth?state=${user.id}`
+                    )
+
+                    const response = await fetch(
+                      `${baseUrl}/api/garmin/auth?state=${user.id}`
+                    )
+                    if (!response.ok) {
+                      throw new Error(
+                        `Failed to get auth URL: ${response.status}`
+                      )
+                    }
+
+                    const authUrl = await response.text()
+                    console.log('Opening Garmin auth URL:', authUrl)
+
+                    window.open(
+                      authUrl,
+                      'garmin-connect',
+                      'width=500,height=600,scrollbars=yes,resizable=yes'
+                    )
+                  } catch (error) {
+                    console.error('Failed to get Garmin auth URL:', error)
+                    toast.error(
+                      'Failed to connect to Garmin. Please try again.'
+                    )
+                  } finally {
+                    setGarminLoading(false)
+                  }
+                }}
+                loading={garminLoading}
+                className="w-full"
+              >
+                Connect with Garmin
+              </GarminConnectButton>
+            </div>
+          )}
         </CardContent>
       </Card>
 

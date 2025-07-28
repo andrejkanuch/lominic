@@ -4,25 +4,65 @@ export class AddDataRetentionFields1710000002000 implements MigrationInterface {
   name = 'AddDataRetentionFields1710000002000'
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Add retention fields to users table
-    await queryRunner.query(`
-      ALTER TABLE "users" 
-      ADD COLUMN "lastLoginAt" TIMESTAMP,
-      ADD COLUMN "dataRetentionExpiresAt" TIMESTAMP,
-      ADD COLUMN "isMarkedForDeletion" BOOLEAN NOT NULL DEFAULT false,
-      ADD COLUMN "markedForDeletionAt" TIMESTAMP
-    `)
+    // Add retention fields to users table (check if columns exist first)
+    const userTable = await queryRunner.getTable('users')
+    const userColumns = userTable.columns.map(col => col.name)
 
-    // Add retention fields to strava_accounts table
-    await queryRunner.query(`
-      ALTER TABLE "strava_accounts" 
-      ADD COLUMN "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
-      ADD COLUMN "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
-      ADD COLUMN "lastSyncAt" TIMESTAMP,
-      ADD COLUMN "dataRetentionExpiresAt" TIMESTAMP,
-      ADD COLUMN "isMarkedForDeletion" BOOLEAN NOT NULL DEFAULT false,
-      ADD COLUMN "markedForDeletionAt" TIMESTAMP
-    `)
+    if (!userColumns.includes('lastLoginAt')) {
+      await queryRunner.query(
+        `ALTER TABLE "users" ADD COLUMN "lastLoginAt" TIMESTAMP`
+      )
+    }
+    if (!userColumns.includes('dataRetentionExpiresAt')) {
+      await queryRunner.query(
+        `ALTER TABLE "users" ADD COLUMN "dataRetentionExpiresAt" TIMESTAMP`
+      )
+    }
+    if (!userColumns.includes('isMarkedForDeletion')) {
+      await queryRunner.query(
+        `ALTER TABLE "users" ADD COLUMN "isMarkedForDeletion" BOOLEAN NOT NULL DEFAULT false`
+      )
+    }
+    if (!userColumns.includes('markedForDeletionAt')) {
+      await queryRunner.query(
+        `ALTER TABLE "users" ADD COLUMN "markedForDeletionAt" TIMESTAMP`
+      )
+    }
+
+    // Add retention fields to strava_accounts table (check if columns exist first)
+    const stravaTable = await queryRunner.getTable('strava_accounts')
+    const stravaColumns = stravaTable.columns.map(col => col.name)
+
+    if (!stravaColumns.includes('createdAt')) {
+      await queryRunner.query(
+        `ALTER TABLE "strava_accounts" ADD COLUMN "createdAt" TIMESTAMP NOT NULL DEFAULT now()`
+      )
+    }
+    if (!stravaColumns.includes('updatedAt')) {
+      await queryRunner.query(
+        `ALTER TABLE "strava_accounts" ADD COLUMN "updatedAt" TIMESTAMP NOT NULL DEFAULT now()`
+      )
+    }
+    if (!stravaColumns.includes('lastSyncAt')) {
+      await queryRunner.query(
+        `ALTER TABLE "strava_accounts" ADD COLUMN "lastSyncAt" TIMESTAMP`
+      )
+    }
+    if (!stravaColumns.includes('dataRetentionExpiresAt')) {
+      await queryRunner.query(
+        `ALTER TABLE "strava_accounts" ADD COLUMN "dataRetentionExpiresAt" TIMESTAMP`
+      )
+    }
+    if (!stravaColumns.includes('isMarkedForDeletion')) {
+      await queryRunner.query(
+        `ALTER TABLE "strava_accounts" ADD COLUMN "isMarkedForDeletion" BOOLEAN NOT NULL DEFAULT false`
+      )
+    }
+    if (!stravaColumns.includes('markedForDeletionAt')) {
+      await queryRunner.query(
+        `ALTER TABLE "strava_accounts" ADD COLUMN "markedForDeletionAt" TIMESTAMP`
+      )
+    }
 
     // Create indexes for better performance on retention queries
     await queryRunner.query(`

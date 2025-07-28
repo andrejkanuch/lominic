@@ -12,6 +12,7 @@ import { Field, ObjectType, ID, registerEnumType } from '@nestjs/graphql'
 import * as bcrypt from 'bcryptjs'
 import { Role } from '../common/enums/roles.enum'
 import { StravaAccount } from './strava-account.entity'
+import { GarminAccount } from './garmin-account.entity'
 
 registerEnumType(Role, {
   name: 'Role',
@@ -74,6 +75,9 @@ export class User {
 
   @OneToMany(() => StravaAccount, account => account.user)
   stravaAccounts: StravaAccount[]
+
+  @OneToMany(() => GarminAccount, account => account.user)
+  garminAccounts: GarminAccount[]
 
   @BeforeInsert()
   @BeforeUpdate()

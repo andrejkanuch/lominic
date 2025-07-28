@@ -179,6 +179,25 @@ export type DistanceStreamDto = {
   type: Maybe<Scalars['String']['output']>;
 };
 
+export type GarminAccount = {
+  __typename?: 'GarminAccount';
+  accessToken: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  dataRetentionExpiresAt: Scalars['DateTime']['output'];
+  expiresAt: Scalars['DateTime']['output'];
+  garminUserId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  isMarkedForDeletion: Scalars['Boolean']['output'];
+  lastSyncAt: Scalars['DateTime']['output'];
+  markedForDeletionAt: Scalars['DateTime']['output'];
+  refreshToken: Scalars['String']['output'];
+  refreshTokenExpiresAt: Scalars['DateTime']['output'];
+  scope: Array<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+  user: User;
+  userId: Scalars['ID']['output'];
+};
+
 export type HrZone = {
   __typename?: 'HRZone';
   timeInZone: Scalars['Float']['output'];
@@ -280,8 +299,12 @@ export type MovingStreamDto = {
 export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
+  deleteGarminUserRegistration: Scalars['Boolean']['output'];
+  disconnectGarminAccount: Scalars['Boolean']['output'];
+  exchangeGarminCode: GarminAccount;
   login: AuthResponse;
   performDataRetentionCleanup: Scalars['String']['output'];
+  refreshGarminToken: GarminAccount;
   register: AuthResponse;
   removeUser: User;
   restoreStravaAccountFromDeletion: Scalars['String']['output'];
@@ -294,6 +317,12 @@ export type Mutation = {
 
 export type MutationCreateUserArgs = {
   createUserInput: CreateUserInput;
+};
+
+
+export type MutationExchangeGarminCodeArgs = {
+  code: Scalars['String']['input'];
+  state: Scalars['String']['input'];
 };
 
 
@@ -412,6 +441,9 @@ export type Query = {
   getAthlete: DetailedAthlete;
   getAthleteStats: ActivityStats;
   getAthleteZones: Zones;
+  getGarminAccount: Maybe<GarminAccount>;
+  getGarminAuthUrl: Scalars['String']['output'];
+  getGarminUserPermissions: Array<Scalars['String']['output']>;
   getPhysicalStatus: PhysicalStatus;
   getRetentionStats: Scalars['String']['output'];
   getStravaActivities: Array<StravaActivityDto>;
