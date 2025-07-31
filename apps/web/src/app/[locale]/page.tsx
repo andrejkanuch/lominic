@@ -8,9 +8,8 @@ import SpecsSection from '../../components/SpecsSection'
 import DetailsSection from '../../components/DetailsSection'
 import ImageShowcaseSection from '../../components/ImageShowcaseSection'
 import Features from '../../components/Features'
-import Testimonials from '../../components/Testimonials'
-import Newsletter from '../../components/Newsletter'
-import MadeByHumans from '../../components/MadeByHumans'
+import GarminIntegration from '../../components/GarminIntegration'
+import GarminFAQ from '../../components/GarminFAQ'
 
 export default function HomePage() {
   // Initialize intersection observer to detect when elements enter viewport
@@ -70,9 +69,11 @@ export default function HomePage() {
         <DetailsSection />
         <ImageShowcaseSection />
         <Features />
-        <Testimonials />
-        <Newsletter />
-        <MadeByHumans />
+        <GarminIntegration />
+        <GarminFAQ />
+        {/* <Testimonials /> */}
+        {/* <Newsletter /> */}
+        {/* <MadeByHumans /> */}
       </main>
     </div>
   )

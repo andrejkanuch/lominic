@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { StravaApiLogo } from '@/components/ui/strava-api-logo'
 
 const Footer = () => {
   const t = useTranslations('Footer')
@@ -26,14 +25,6 @@ const Footer = () => {
               {t('terms')}
             </Link>
           </div>
-        </div>
-        <div className="flex justify-center py-2 border-t border-border">
-          <StravaApiLogo
-            type="powered"
-            variant="horizontal"
-            color="black"
-            size="1x"
-          />
         </div>
       </div>
     </footer>
