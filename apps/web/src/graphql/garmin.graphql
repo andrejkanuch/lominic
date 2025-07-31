@@ -34,3 +34,20 @@ query GetGarminAuthUrl {
 query IsGarminConnected {
   isGarminConnected
 }
+
+query GetGarminAccount {
+  getGarminAccount {
+    id
+    garminUserId
+    scope
+    createdAt
+    updatedAt
+    expiresAt
+    refreshTokenExpiresAt
+    isMarkedForDeletion
+  }
+}
+
+mutation DisconnectGarminAccount {
+  disconnectGarminAccount
+}

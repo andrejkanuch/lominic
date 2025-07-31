@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
 import { AppModule } from './app.module'
+import session from 'express-session'
 
 async function bootstrap() {
   console.log('🚀 Starting Lominic API...')
@@ -27,6 +28,22 @@ async function bootstrap() {
       allowedHeaders: ['Content-Type', 'Authorization'],
     })
     console.log('✅ CORS configured for origins:', allowedOrigins)
+
+    // Session middleware
+    console.log('🔐 Setting up session middleware...')
+    app.use(
+      session({
+        secret: process.env.SESSION_SECRET || 'your-secret-key',
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+          secure: process.env.NODE_ENV === 'production',
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        },
+      })
+    )
+    console.log('✅ Session middleware configured')
 
     // Global validation pipe
     console.log('🔍 Setting up validation pipe...')

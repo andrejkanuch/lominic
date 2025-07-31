@@ -29,41 +29,41 @@ export class GarminActivity {
   @Field()
   calories: number
 
-  @Field()
-  averageHeartRate: number
+  @Field({ nullable: true })
+  averageHeartRate?: number
 
-  @Field()
-  maxHeartRate: number
+  @Field({ nullable: true })
+  maxHeartRate?: number
 
-  @Field()
-  averageSpeed: number
+  @Field({ nullable: true })
+  averageSpeed?: number
 
-  @Field()
-  maxSpeed: number
+  @Field({ nullable: true })
+  maxSpeed?: number
 
-  @Field()
-  averagePace: number
+  @Field({ nullable: true })
+  averagePace?: number
 
-  @Field()
-  maxPace: number
+  @Field({ nullable: true })
+  maxPace?: number
 
-  @Field()
-  totalAscent: number
+  @Field({ nullable: true })
+  totalAscent?: number
 
-  @Field()
-  totalDescent: number
+  @Field({ nullable: true })
+  totalDescent?: number
 
-  @Field()
-  startLatitude: number
+  @Field({ nullable: true })
+  startLatitude?: number
 
-  @Field()
-  startLongitude: number
+  @Field({ nullable: true })
+  startLongitude?: number
 
-  @Field()
-  endLatitude: number
+  @Field({ nullable: true })
+  endLatitude?: number
 
-  @Field()
-  endLongitude: number
+  @Field({ nullable: true })
+  endLongitude?: number
 
   @Field()
   timeZone: string
@@ -73,4 +73,4 @@ export class GarminActivity {
 
   @Field()
   updatedAt: Date
-}
+} 

@@ -40,7 +40,27 @@ export class GarminAccount {
   refreshTokenExpiresAt: Date
 
   @Field(() => [String])
-  @Column({ type: 'json' })
+  @Column({
+    type: 'json',
+    transformer: {
+      to: (value: string[]) => value,
+      from: (value: any) => {
+        if (Array.isArray(value)) {
+          return value
+        }
+        if (typeof value === 'string') {
+          return [value]
+        }
+        // Handle case where value is {"permissions":["ACTIVITY_EXPORT","HEALTH_EXPORT"]}
+        if (value && typeof value === 'object' && value.permissions) {
+          return Array.isArray(value.permissions)
+            ? value.permissions
+            : [value.permissions]
+        }
+        return []
+      },
+    },
+  })
   scope: string[]
 
   @Field()
@@ -55,11 +75,11 @@ export class GarminAccount {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'timestamp', nullable: true })
   lastSyncAt: Date
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'timestamp', nullable: true })
   dataRetentionExpiresAt: Date
 
@@ -67,7 +87,7 @@ export class GarminAccount {
   @Column({ default: false })
   isMarkedForDeletion: boolean
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'timestamp', nullable: true })
   markedForDeletionAt: Date
 }

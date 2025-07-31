@@ -19,35 +19,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Call your API to exchange the code for tokens
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
-    const baseUrl = apiBase.replace(/\/graphql$/, '')
+    console.log('Garmin OAuth callback received:', { code, state })
 
-    console.log(
-      'Making token exchange request to:',
-      `${baseUrl}/api/garmin/exchange-token`
-    )
-
-    const response = await fetch(`${baseUrl}/api/garmin/exchange-token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ code, state }),
-    })
-
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error('Token exchange failed:', response.status, errorText)
-      throw new Error(
-        `Token exchange failed: ${response.status} - ${errorText}`
-      )
-    }
-
-    const result = await response.json()
-    console.log('Token exchange successful:', result)
-
-    // Send success message to parent window and close popup
+    // Create HTML page that sends message to parent and closes
     const html = `
       <!DOCTYPE html>
       <html>
@@ -89,10 +63,16 @@ export async function GET(request: NextRequest) {
           </div>
           <script>
             if (window.opener) {
-              window.opener.postMessage({ type: 'GARMIN_OAUTH_SUCCESS' }, '*');
+              window.opener.postMessage({ 
+                type: 'GARMIN_OAUTH_SUCCESS',
+                code: '${code}',
+                state: '${state}'
+              }, '*');
               setTimeout(() => window.close(), 2000);
             } else {
-              window.location.href = '/client?success=garmin_connected';
+              window.location.href = '/client?success=garmin_connected&code=${encodeURIComponent(
+                code
+              )}&state=${encodeURIComponent(state)}';
             }
           </script>
         </body>

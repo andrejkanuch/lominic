@@ -194,7 +194,6 @@ export type GarminAccount = {
   refreshTokenExpiresAt: Scalars['DateTime']['output'];
   scope: Array<Scalars['String']['output']>;
   updatedAt: Scalars['DateTime']['output'];
-  user: User;
   userId: Scalars['ID']['output'];
 };
 
@@ -203,27 +202,35 @@ export type GarminActivity = {
   activityId: Scalars['String']['output'];
   activityName: Scalars['String']['output'];
   activityType: Scalars['String']['output'];
-  averageHeartRate: Scalars['Float']['output'];
-  averagePace: Scalars['Float']['output'];
-  averageSpeed: Scalars['Float']['output'];
+  averageHeartRate: Maybe<Scalars['Float']['output']>;
+  averagePace: Maybe<Scalars['Float']['output']>;
+  averageSpeed: Maybe<Scalars['Float']['output']>;
   calories: Scalars['Float']['output'];
   createdAt: Scalars['DateTime']['output'];
   distance: Scalars['Float']['output'];
   duration: Scalars['Float']['output'];
-  endLatitude: Scalars['Float']['output'];
-  endLongitude: Scalars['Float']['output'];
+  endLatitude: Maybe<Scalars['Float']['output']>;
+  endLongitude: Maybe<Scalars['Float']['output']>;
   endTime: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
-  maxHeartRate: Scalars['Float']['output'];
-  maxPace: Scalars['Float']['output'];
-  maxSpeed: Scalars['Float']['output'];
-  startLatitude: Scalars['Float']['output'];
-  startLongitude: Scalars['Float']['output'];
+  maxHeartRate: Maybe<Scalars['Float']['output']>;
+  maxPace: Maybe<Scalars['Float']['output']>;
+  maxSpeed: Maybe<Scalars['Float']['output']>;
+  startLatitude: Maybe<Scalars['Float']['output']>;
+  startLongitude: Maybe<Scalars['Float']['output']>;
   startTime: Scalars['DateTime']['output'];
   timeZone: Scalars['String']['output'];
-  totalAscent: Scalars['Float']['output'];
-  totalDescent: Scalars['Float']['output'];
+  totalAscent: Maybe<Scalars['Float']['output']>;
+  totalDescent: Maybe<Scalars['Float']['output']>;
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type GarminAuthUrlData = {
+  __typename?: 'GarminAuthUrlData';
+  state: Scalars['String']['output'];
+  url: Scalars['String']['output'];
+  userId: Scalars['String']['output'];
+  verifier: Scalars['String']['output'];
 };
 
 export type HrZone = {
@@ -351,6 +358,7 @@ export type MutationCreateUserArgs = {
 export type MutationExchangeGarminCodeArgs = {
   code: Scalars['String']['input'];
   state: Scalars['String']['input'];
+  verifier: Scalars['String']['input'];
 };
 
 
@@ -471,6 +479,7 @@ export type Query = {
   getAthleteZones: Zones;
   getGarminAccount: Maybe<GarminAccount>;
   getGarminActivities: Array<GarminActivity>;
+  getGarminAuthData: Maybe<GarminAuthUrlData>;
   getGarminAuthUrl: Maybe<Scalars['String']['output']>;
   getGarminUserPermissions: Array<Scalars['String']['output']>;
   getPhysicalStatus: PhysicalStatus;
@@ -851,7 +860,7 @@ export type GetGarminActivitiesQueryVariables = Exact<{
 }>;
 
 
-export type GetGarminActivitiesQuery = { __typename?: 'Query', getGarminActivities: Array<{ __typename?: 'GarminActivity', id: string, activityId: string, activityName: string, activityType: string, startTime: string, endTime: string, duration: number, distance: number, calories: number, averageHeartRate: number, maxHeartRate: number, averageSpeed: number, maxSpeed: number, averagePace: number, maxPace: number, totalAscent: number, totalDescent: number, startLatitude: number, startLongitude: number, endLatitude: number, endLongitude: number, timeZone: string, createdAt: string, updatedAt: string }> };
+export type GetGarminActivitiesQuery = { __typename?: 'Query', getGarminActivities: Array<{ __typename?: 'GarminActivity', id: string, activityId: string, activityName: string, activityType: string, startTime: string, endTime: string, duration: number, distance: number, calories: number, averageHeartRate: number | null, maxHeartRate: number | null, averageSpeed: number | null, maxSpeed: number | null, averagePace: number | null, maxPace: number | null, totalAscent: number | null, totalDescent: number | null, startLatitude: number | null, startLongitude: number | null, endLatitude: number | null, endLongitude: number | null, timeZone: string, createdAt: string, updatedAt: string }> };
 
 export type GetGarminAuthUrlQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -862,6 +871,16 @@ export type IsGarminConnectedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type IsGarminConnectedQuery = { __typename?: 'Query', isGarminConnected: boolean };
+
+export type GetGarminAccountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGarminAccountQuery = { __typename?: 'Query', getGarminAccount: { __typename?: 'GarminAccount', id: string, garminUserId: string, scope: Array<string>, createdAt: string, updatedAt: string, expiresAt: string, refreshTokenExpiresAt: string, isMarkedForDeletion: boolean } | null };
+
+export type DisconnectGarminAccountMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DisconnectGarminAccountMutation = { __typename?: 'Mutation', disconnectGarminAccount: boolean };
 
 export type GetActivityInsightsQueryVariables = Exact<{
   activityId: Scalars['String']['input'];
@@ -1201,6 +1220,82 @@ export type IsGarminConnectedQueryHookResult = ReturnType<typeof useIsGarminConn
 export type IsGarminConnectedLazyQueryHookResult = ReturnType<typeof useIsGarminConnectedLazyQuery>;
 export type IsGarminConnectedSuspenseQueryHookResult = ReturnType<typeof useIsGarminConnectedSuspenseQuery>;
 export type IsGarminConnectedQueryResult = ApolloReactCommon.QueryResult<IsGarminConnectedQuery, IsGarminConnectedQueryVariables>;
+export const GetGarminAccountDocument = gql`
+    query GetGarminAccount {
+  getGarminAccount {
+    id
+    garminUserId
+    scope
+    createdAt
+    updatedAt
+    expiresAt
+    refreshTokenExpiresAt
+    isMarkedForDeletion
+  }
+}
+    `;
+
+/**
+ * __useGetGarminAccountQuery__
+ *
+ * To run a query within a React component, call `useGetGarminAccountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGarminAccountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGarminAccountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetGarminAccountQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetGarminAccountQuery, GetGarminAccountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetGarminAccountQuery, GetGarminAccountQueryVariables>(GetGarminAccountDocument, options);
+      }
+export function useGetGarminAccountLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetGarminAccountQuery, GetGarminAccountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetGarminAccountQuery, GetGarminAccountQueryVariables>(GetGarminAccountDocument, options);
+        }
+export function useGetGarminAccountSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetGarminAccountQuery, GetGarminAccountQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetGarminAccountQuery, GetGarminAccountQueryVariables>(GetGarminAccountDocument, options);
+        }
+export type GetGarminAccountQueryHookResult = ReturnType<typeof useGetGarminAccountQuery>;
+export type GetGarminAccountLazyQueryHookResult = ReturnType<typeof useGetGarminAccountLazyQuery>;
+export type GetGarminAccountSuspenseQueryHookResult = ReturnType<typeof useGetGarminAccountSuspenseQuery>;
+export type GetGarminAccountQueryResult = ApolloReactCommon.QueryResult<GetGarminAccountQuery, GetGarminAccountQueryVariables>;
+export const DisconnectGarminAccountDocument = gql`
+    mutation DisconnectGarminAccount {
+  disconnectGarminAccount
+}
+    `;
+export type DisconnectGarminAccountMutationFn = ApolloReactCommon.MutationFunction<DisconnectGarminAccountMutation, DisconnectGarminAccountMutationVariables>;
+
+/**
+ * __useDisconnectGarminAccountMutation__
+ *
+ * To run a mutation, you first call `useDisconnectGarminAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDisconnectGarminAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [disconnectGarminAccountMutation, { data, loading, error }] = useDisconnectGarminAccountMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDisconnectGarminAccountMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DisconnectGarminAccountMutation, DisconnectGarminAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<DisconnectGarminAccountMutation, DisconnectGarminAccountMutationVariables>(DisconnectGarminAccountDocument, options);
+      }
+export type DisconnectGarminAccountMutationHookResult = ReturnType<typeof useDisconnectGarminAccountMutation>;
+export type DisconnectGarminAccountMutationResult = ApolloReactCommon.MutationResult<DisconnectGarminAccountMutation>;
+export type DisconnectGarminAccountMutationOptions = ApolloReactCommon.BaseMutationOptions<DisconnectGarminAccountMutation, DisconnectGarminAccountMutationVariables>;
 export const GetActivityInsightsDocument = gql`
     query getActivityInsights($activityId: String!) {
   getActivityInsights(activityId: $activityId)

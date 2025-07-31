@@ -1,12 +1,13 @@
 import {
   Controller,
-  Post,
-  Body,
-  UseGuards,
-  Request,
   Get,
+  Post,
   Query,
+  Req,
+  Res,
+  UseGuards,
 } from '@nestjs/common'
+import { Request, Response } from 'express'
 import { GarminService } from './garmin.service'
 import { JwtAuthGuard } from '../../common/guards/jwt.guard'
 
@@ -14,113 +15,108 @@ import { JwtAuthGuard } from '../../common/guards/jwt.guard'
 export class GarminController {
   constructor(private readonly garminService: GarminService) {}
 
-  @Get('auth')
-  async getAuthUrl(@Query('state') state: string) {
-    if (!state) {
-      throw new Error('State parameter is required')
-    }
+  @Get('auth-url')
+  @UseGuards(JwtAuthGuard)
+  async getAuthUrl(@Req() req: Request, @Res() res: Response) {
     try {
-      return this.garminService.getAuthorizationUrl(state)
+      const userId = req.user['id']
+      const { url, state, verifier } = this.garminService.buildAuthUrl(userId)
+
+      // Store state and verifier in session for verification
+      req.session['garminState'] = state
+      req.session['garminVerifier'] = verifier
+      req.session['garminUserId'] = userId
+
+      res.json({ url, state })
     } catch (error) {
-      console.error('Garmin auth error:', error)
-      throw error
+      console.error('Error generating auth URL:', error)
+      res.status(500).json({ error: 'Failed to generate authorization URL' })
     }
   }
 
   @Post('exchange-token')
-  async exchangeToken(@Body() body: { code: string; state: string }) {
+  @UseGuards(JwtAuthGuard)
+  async exchangeToken(@Req() req: Request, @Res() res: Response) {
     try {
-      return this.garminService.exchangeCodeForToken(body.code, body.state)
+      const { code, state } = req.body
+      const userId = req.user['id']
+
+      if (!code || !state) {
+        return res.status(400).json({
+          error: 'Missing required parameters: code, state',
+        })
+      }
+
+      // Exchange code for tokens
+      const { tokens: tokenData, userId: storedUserId } =
+        await this.garminService.exchangeCodeForTokens(code, state)
+
+      // Fetch additional data
+      const garminUserId = await this.garminService.fetchGarminUserId(
+        tokenData.access_token
+      )
+      const permissions = await this.garminService.fetchUserPermissions(
+        tokenData.access_token
+      )
+
+      // Store in database
+      const garminAccount = await this.garminService.storeGarminAccount(
+        storedUserId,
+        garminUserId,
+        tokenData,
+        permissions
+      )
+
+      res.json({
+        success: true,
+        garminAccount: {
+          id: garminAccount.id,
+          garminUserId: garminAccount.garminUserId,
+          scope: garminAccount.scope,
+        },
+      })
     } catch (error) {
       console.error('Token exchange error:', error)
-      throw error
+      res.status(500).json({ error: 'Failed to exchange authorization code' })
     }
   }
 
-  @Get('user-permissions')
-  async getUserPermissions(@Query('accessToken') accessToken: string) {
+  @Get('connection-status')
+  @UseGuards(JwtAuthGuard)
+  async getConnectionStatus(@Req() req: Request, @Res() res: Response) {
     try {
-      return this.garminService.getUserPermissions(accessToken)
-    } catch (error) {
-      console.error('Get user permissions error:', error)
-      throw error
-    }
-  }
+      const userId = req.user['id']
+      const isConnected = await this.garminService.isGarminConnected(userId)
+      const account = await this.garminService.getGarminAccount(userId)
 
-  @Get('user-id')
-  async getUserId(@Query('accessToken') accessToken: string) {
-    try {
-      return { userId: await this.garminService.getUserId(accessToken) }
-    } catch (error) {
-      console.error('Get user ID error:', error)
-      throw error
-    }
-  }
-
-  @Get('check-connection')
-  async checkConnection(@Query('userId') userId: string) {
-    try {
-      const account = await this.garminService.getUserAccount(userId)
-      return {
-        connected: !!account,
+      res.json({
+        isConnected,
         account: account
           ? {
               id: account.id,
               garminUserId: account.garminUserId,
-              lastSyncAt: account.lastSyncAt,
               scope: account.scope,
+              createdAt: account.createdAt,
             }
           : null,
-      }
+      })
     } catch (error) {
-      console.error('Check connection error:', error)
-      throw error
+      console.error('Error getting connection status:', error)
+      res.status(500).json({ error: 'Failed to get connection status' })
     }
   }
 
-  @Get('test')
-  async test() {
-    return {
-      message: 'Garmin API is working!',
-      timestamp: new Date().toISOString(),
-    }
-  }
-
-  @Get('test-connection')
-  async testConnection(@Query('userId') userId: string) {
-    if (!userId) {
-      throw new Error('User ID is required')
-    }
-    return this.garminService.testGarminConnection(userId)
-  }
-
-  @Get('test-activities')
-  async testActivities(@Query('userId') userId: string) {
-    if (!userId) {
-      throw new Error('User ID is required')
-    }
-
-    const now = Math.floor(Date.now() / 1000)
-    const startTime = now - 7 * 24 * 3600 // Last 7 days
-
+  @Post('disconnect')
+  @UseGuards(JwtAuthGuard)
+  async disconnect(@Req() req: Request, @Res() res: Response) {
     try {
-      const activities = await this.garminService.fetchActivities(
-        userId,
-        startTime,
-        now
-      )
-      return {
-        success: true,
-        count: activities.length,
-        activities: activities.slice(0, 3), // Return first 3 activities
-        message: `Successfully fetched ${activities.length} activities`,
-      }
-    } catch (error: any) {
-      return {
-        success: false,
-        error: error.message,
-        message: 'Failed to fetch activities',
-      }
+      const userId = req.user['id']
+      const success = await this.garminService.disconnectGarminAccount(userId)
+
+      res.json({ success })
+    } catch (error) {
+      console.error('Error disconnecting Garmin account:', error)
+      res.status(500).json({ error: 'Failed to disconnect Garmin account' })
     }
   }
 }
